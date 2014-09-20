@@ -33,7 +33,7 @@
 
 - (void)setHeaderTitle
 {
-    self.title = NSLocalizedString(@"全事業者", nil);
+    self.navigationItem.title = NSLocalizedString(@"全事業者", nil);
 }
 
 - (void)reloadGroups

@@ -297,7 +297,7 @@
 
 - (void)setHeaderTitle
 {
-    self.title = self.headerGroup.headerTitle;
+    self.navigationItem.title = self.headerGroup.headerTitle;
 }
 
 - (BOOL)needsReload

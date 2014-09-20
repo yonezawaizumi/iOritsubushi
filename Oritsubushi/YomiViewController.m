@@ -25,7 +25,7 @@
 
 - (void)setHeaderTitle
 {
-    self.title = @"読み";
+    self.navigationItem.title = @"読み";
 }
 
 - (void)reloadHeaderGroup

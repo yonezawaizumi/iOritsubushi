@@ -25,7 +25,7 @@
 
 - (void)setHeaderTitle
 {
-    self.title = NSLocalizedString(@"全都道府県", nil);
+    self.navigationItem.title = NSLocalizedString(@"全都道府県", nil);
 }
 
 - (void)reloadHeaderGroup
