@@ -41,7 +41,7 @@
 {
     if(self.timer) {
         dispatch_source_cancel(self.timer);
-        dispatch_release(self.timer);
+        //dispatch_release(self.timer);
         self.timer = nil;
     }
 }

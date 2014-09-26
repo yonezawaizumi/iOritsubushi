@@ -55,6 +55,11 @@ static NSString *visibilityTypeLabel[] = {
     @"済",
     @"未",
 };
+static CGFloat visibilityTypeLabelWidth[] = {
+    40,
+    32,
+    32,
+};
 
 static BOOL stringsAreLocalized = NO;
 
@@ -148,7 +153,7 @@ static void *settingsContext = (void *)2;
 - (void)dealloc
 {
     if(queue) {
-        dispatch_release(queue);
+        //dispatch_release(queue);
         queue = nil;    //20111229
     }
     self.mapView.delegate = nil;
@@ -272,14 +277,20 @@ static void *settingsContext = (void *)2;
         stringsAreLocalized = YES;
     }
     
-    self.searchBar = [[SearchBar alloc] initWithFrame:CGRectMake(0, 0, SEARCH_BAR_WIDTH, SEARCH_BAR_HEIGHT)];
-    self.searchBar.delegate = self;
-    self.searchKeyword = @"";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
-    
     self.presentButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:100 target:self action:@selector(present)];
     self.presentButton.style = UIBarButtonItemStyleBordered;
     self.navigationItem.leftBarButtonItem = self.presentButton;
+    
+    NSInteger searchBarWidth;
+    if (os7) {
+        searchBarWidth = SEARCH_BAR_WIDTH - 24;
+    } else {
+        searchBarWidth = SEARCH_BAR_WIDTH;
+    }
+    self.searchBar = [[SearchBar alloc] initWithFrame:CGRectMake(0, 0, searchBarWidth, SEARCH_BAR_HEIGHT)];
+    self.searchBar.delegate = self;
+    self.searchKeyword = @"";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
     
     self.mapStyleModeSegmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:mapStyleModeLabel count:countof(mapStyleModeLabel)]];
     self.mapStyleModeSegmentedControl.selectedSegmentIndex = MapStyleMap;
@@ -298,6 +309,12 @@ static void *settingsContext = (void *)2;
                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                          [[UIBarButtonItem alloc] initWithCustomView:self.mapStyleModeSegmentedControl],
                          nil];
+    
+    if (os7) {
+        for (int index = 0; index < sizeof visibilityTypeLabelWidth / sizeof visibilityTypeLabelWidth[0]; ++index) {
+            [self.visibilitySegmentedControl setWidth:visibilityTypeLabelWidth[index] forSegmentAtIndex:index];
+        }
+    }
 
     [self updateFilterWithFilterType:recentFilterType filterValue:self.searchKeyword];
     
@@ -355,7 +372,7 @@ static void *settingsContext = (void *)2;
 - (void)viewDidUnload
 {
     if(queue) {
-        dispatch_release(queue);
+        //dispatch_release(queue);
         queue = nil;    //20111229
     }
     
@@ -649,6 +666,7 @@ static void *settingsContext = (void *)2;
             [self.stations setObject:station forKey:station.code];
             [self.mapView addAnnotation:station];
         }
+        [self.tableView reloadData];
     } else {
         [self.navigationController popToRootViewControllerAnimated:NO];
         [self.mapView removeAnnotations:[self.stations allValues]]; 
@@ -932,7 +950,7 @@ static void *settingsContext = (void *)2;
 - (void)visibilityWantsToChange
 {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate.database updateVisibilityType:self.visibilitySegmentedControl.selectedSegmentIndex];
+    [appDelegate.database updateVisibilityType:(VisibilityType)self.visibilitySegmentedControl.selectedSegmentIndex];
     //[self updateAnnotations];
     //if(!self.tableView.hidden) {
         //[self.tableView reloadData];

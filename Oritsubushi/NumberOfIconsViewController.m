@@ -71,7 +71,7 @@ static int selectionList[] = NUMBER_OF_ICONS_LIST;
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:self.numberOfIcons] forKey:SETTINGS_KEY_NUMBER_OF_ICONS];
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInteger:self.numberOfIcons] forKey:SETTINGS_KEY_NUMBER_OF_ICONS];
     [super viewWillDisappear:animated];
 }
 

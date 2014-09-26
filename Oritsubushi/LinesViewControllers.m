@@ -94,7 +94,7 @@
     self.controllerIsEnabled = NO;
     [super viewDidUnload];
     if(queue) {
-        dispatch_release(queue);
+        //dispatch_release(queue);
         queue = nil;
     }
 }
@@ -103,7 +103,7 @@
 {
     self.cacheKey = nil;
     if(queue) {
-        dispatch_release(queue);
+        //dispatch_release(queue);
     }
 }
 

@@ -65,9 +65,9 @@ static NSDateFormatter *updatedDateFormatter;
         self.coordinate = CLLocationCoordinate2DMake((CLLocationDegrees)[resultSet intForColumnIndex:6] / 1e6,
                                                      (CLLocationDegrees)[resultSet intForColumnIndex:7] / 1e6);
         self.operatorCode = [resultSet intForColumnIndex:8];
-        self.completionDate = [resultSet intForColumnIndex:completionDateIndex];
-        self.memo = [resultSet stringForColumnIndex:memoIndex];
-        self.updatedDate = [resultSet intForColumnIndex:updatedDateIndex];
+        self.completionDate = [resultSet intForColumnIndex:(int)completionDateIndex];
+        self.memo = [resultSet stringForColumnIndex:(int)memoIndex];
+        self.updatedDate = [resultSet intForColumnIndex:(int)updatedDateIndex];
         
         self.distance_ = -1;
         self.distanceString_ = nil;
@@ -190,7 +190,7 @@ static NSDateFormatter *updatedDateFormatter;
 {
     if(!self.operator_) {
         AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-        self.operator_ = [delegate.database operatorWithCode:[NSNumber numberWithInt:self.operatorCode]];
+        self.operator_ = [delegate.database operatorWithCode:[NSNumber numberWithInteger:self.operatorCode]];
     }
     return self.operator_;
 }
@@ -211,9 +211,9 @@ static NSDateFormatter *updatedDateFormatter;
     } else if(0 < self.completionDate && self.completionDate < 19000000) {
         return NSLocalizedString(@"乗下車済 (日付不明)", nil);
     }
-    NSInteger year = self.completionDate / 10000;
-    NSInteger month = self.completionDate % 10000 / 100;
-    NSInteger day = self.completionDate % 100;
+    int year = (int)(self.completionDate / 10000);
+    int month = self.completionDate % 10000 / 100;
+    int day = self.completionDate % 100;
     if(!month) {
         return [NSString stringWithFormat:NSLocalizedString(@"%d年頃", nil), year];
     } else if(!day) {
@@ -230,9 +230,9 @@ static NSDateFormatter *updatedDateFormatter;
     } else if(0 < self.completionDate && self.completionDate < 19000000) {
         return NSLocalizedString(@"日付不明", nil);
     }
-    NSInteger year = self.completionDate / 10000 % 100;
-    NSInteger month = self.completionDate % 10000 / 100;
-    NSInteger day = self.completionDate % 100;
+    int year = self.completionDate / 10000 % 100;
+    int month = self.completionDate % 10000 / 100;
+    int day = self.completionDate % 100;
     if(!month) {
         return [NSString stringWithFormat:NSLocalizedString(@"%02d年頃", nil), year];
     } else if(!day) {

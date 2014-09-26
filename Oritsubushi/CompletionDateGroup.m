@@ -26,15 +26,15 @@
     } else if(!date) {
         return @"年月日不明";
     } else if(date <= 9999) {
-        return [NSString stringWithFormat:@"%d年", date];
+        return [NSString stringWithFormat:@"%d年", (int)date];
     } else if(date <= 999912) {
-        NSInteger year = date / 100;
-        NSInteger month = date % 100;
+        int year = (int)(date / 100);
+        int month = date % 100;
         return month ? [NSString stringWithFormat:@"%d年%d月", year, month] : [NSString stringWithFormat:@"%d年 月日不明", year];
     } else {
-        NSInteger year = date / 10000;
-        NSInteger month = date / 100 % 100;
-        NSInteger day = date % 100;
+        int year = (int)(date / 10000);
+        int month = date / 100 % 100;
+        int day = date % 100;
         return day ? [NSString stringWithFormat:@"%d年%d月%d日", year, month, day] : [NSString stringWithFormat:@"%d年%d月 日付不明", year, month];
     }
 }
@@ -45,8 +45,8 @@
     if(date <= 999912) {
         return self.title;
     } else {
-        NSInteger month = date / 100 % 100;
-        NSInteger day = date % 100;
+        int month = date / 100 % 100;
+        int day = date % 100;
         return day ? [NSString stringWithFormat:@"%d月%d日", month, day] : [NSString stringWithFormat:@"%d月 日付不明", month];
     }
 }
@@ -57,10 +57,10 @@
     if(date <= 9999) {
         return self.title;
     } else if(date <= 999912) {
-        NSInteger month = date % 100;
+        int month = date % 100;
         return month ? [NSString stringWithFormat:@"%d月", month] : @"月日不明";
     } else {
-        NSInteger day = date % 100;
+        int day = date % 100;
         return day ? [NSString stringWithFormat:@"%d日", day] : @"日付不明";
     }
 }
@@ -77,7 +77,7 @@
     while(![scanner isAtEnd]) {
         NSInteger value;
         if([scanner scanInteger:&value] && value > 0) {
-            [ints addObject:[NSNumber numberWithInt:value]];
+            [ints addObject:[NSNumber numberWithInteger:value]];
         } else {
             break;
         }

@@ -139,7 +139,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
         operator.code = [result intForColumnIndex:0];
         operator.name = [result stringForColumnIndex:1];
         operator.type = [result intForColumnIndex:2];
-        [ops setObject:operator forKey:[NSNumber numberWithInt:operator.code]];
+        [ops setObject:operator forKey:[NSNumber numberWithInteger:operator.code]];
     }
     self.operators = ops;
     [result close];
@@ -289,9 +289,9 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
                 if(![CompletionDateGroup completionDateRangeWithSearchKeyword:value range:&range]) {
                     self.wordSQLCondition = @"1 ";
                 } else if(range.length) {
-                    self.wordSQLCondition = [NSString stringWithFormat:@"completions.comp_date BETWEEN %d AND %d ", range.location, NSMaxRange(range)];
+                    self.wordSQLCondition = [NSString stringWithFormat:@"completions.comp_date BETWEEN %lu AND %lu", (unsigned long)range.location, (unsigned long)NSMaxRange(range)];
                 } else {
-                    self.wordSQLCondition = [NSString stringWithFormat:@"completions.comp_date = %d ", range.location];
+                    self.wordSQLCondition = [NSString stringWithFormat:@"completions.comp_date = %lu", (unsigned long)range.location];
                 }
                 escape = NO;
                 formatted = YES;
@@ -321,19 +321,19 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     NSInteger lng = (NSInteger)(region.center.longitude * 1e6) - lngDelta / 2; 
     
     
-    NSNumber *minLat = [NSNumber numberWithInt:lat];
-    NSNumber *maxLat = [NSNumber numberWithInt:(lat + latDelta)];
-    NSNumber *minLng = [NSNumber numberWithInt:lng];
-    NSNumber *maxLng = [NSNumber numberWithInt:(lng + lngDelta)];
-    NSNumber *centerLat = [NSNumber numberWithInt:(NSInteger)(region.center.latitude * 1e6)];
-    NSNumber *centerLng = [NSNumber numberWithInt:(NSInteger)(region.center.longitude * 1e6)];
+    NSNumber *minLat = [NSNumber numberWithInteger:lat];
+    NSNumber *maxLat = [NSNumber numberWithInteger:(lat + latDelta)];
+    NSNumber *minLng = [NSNumber numberWithInteger:lng];
+    NSNumber *maxLng = [NSNumber numberWithInteger:(lng + lngDelta)];
+    NSNumber *centerLat = [NSNumber numberWithInteger:(NSInteger)(region.center.latitude * 1e6)];
+    NSNumber *centerLng = [NSNumber numberWithInteger:(NSInteger)(region.center.longitude * 1e6)];
     NSString *sql = [NSString stringWithFormat:@"SELECT stations.*, completions.comp_date, completions.memo, completions.update_date, "
                      @"(lat - ?1) * (lat - ?1) + (lng - ?2) * (lng - ?2) AS distance FROM %@ "
                      @"WHERE stations.lat >= ?3 AND stations.lat < ?4 AND stations.lng >= ?5 AND stations.lng < ?6 "
                      @"AND %@ ORDER BY stations.weight, distance LIMIT ?7",  
                      self.tablesForFilterCondition, self.filterSQLCondition];
 
-    FMResultSet *result = [self.database executeQuery:sql, centerLat, centerLng, minLat, maxLat, minLng, maxLng, [NSNumber numberWithInt:limitCount]];    
+    FMResultSet *result = [self.database executeQuery:sql, centerLat, centerLng, minLat, maxLat, minLng, maxLng, [NSNumber numberWithInteger:limitCount]];
     NSMutableArray *results = [NSMutableArray arrayWithCapacity:limitCount];
     while([result next]) {
         Station *station = [[Station alloc] initWithFMResultSet:result];
@@ -364,7 +364,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
 - (NSArray *)linesWithOperatorCode:(NSInteger)code
 {
     NSMutableArray *results = [NSMutableArray array];
-    FMResultSet *result = [self.database executeQuery:@"SELECT * FROM 'lines' WHERE enabled = 1 AND o_id = ? ORDER BY l_id", [NSNumber numberWithInt:code]];
+    FMResultSet *result = [self.database executeQuery:@"SELECT * FROM 'lines' WHERE enabled = 1 AND o_id = ? ORDER BY l_id", [NSNumber numberWithInteger:code]];
     while([result next]) {
         Line *line = [[Line alloc] initWithFMResultSet:result];
         [results addObject:line];
@@ -433,9 +433,9 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     } else if(!date) {
         completionDate = @1;
     } else if(date <= 9999) {
-        completionDate = [NSNumber numberWithInt:date * 10000];
+        completionDate = [NSNumber numberWithInteger:date * 10000];
     } else if(date <= 999912) {
-        completionDate = [NSNumber numberWithInt:date * 100];
+        completionDate = [NSNumber numberWithInteger:date * 100];
     }
     NSMutableArray *results = [NSMutableArray array];
     FMResultSet *result = [self.database executeQuery:@"SELECT stations.*, completions.comp_date, completions.memo, completions.update_date FROM stations, completions WHERE completions.comp_date = ? AND stations.enabled = 1 AND completions.s_id = stations.s_id ORDER BY stations.s_id", completionDate];
@@ -450,7 +450,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
 - (void)updateCompletion:(Station *)station
 {
     [self.database executeUpdate:@"BEGIN TRANSACTION"];
-    FMResultSet *result = [self.database executeQuery:@"SELECT s_id FROM completions WHERE s_id = ? AND comp_date = ? AND memo = ?", station.code, [NSNumber numberWithInt:station.completionDate], station.memo];
+    FMResultSet *result = [self.database executeQuery:@"SELECT s_id FROM completions WHERE s_id = ? AND comp_date = ? AND memo = ?", station.code, [NSNumber numberWithInteger:station.completionDate], station.memo];
     BOOL changed = ![result next] || ![result intForColumnIndex:0];
     [result close];
     if(changed) {
@@ -458,7 +458,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
         [self.database executeUpdate:
          @"REPLACE INTO completions VALUES (?, ?, ?, ?)",
          station.code,
-         [NSNumber numberWithInt:station.completionDate],
+         [NSNumber numberWithInteger:station.completionDate],
          [NSNumber numberWithUnsignedInteger:(NSUInteger)station.updatedDate],
          station.memo
          ];
@@ -483,7 +483,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
 
 - (BOOL)writeSyncFileWithHandle:(NSFileHandle *)handle recentUpdateDate:(NSInteger)updateDate;
 {
-    FMResultSet *result = [self.database executeQuery:@"SELECT * FROM completions WHERE update_date > ?", [NSNumber numberWithInt:updateDate]];
+    FMResultSet *result = [self.database executeQuery:@"SELECT * FROM completions WHERE update_date > ?", [NSNumber numberWithInteger:updateDate]];
     while([result next]) {
         NSString *string = [NSString stringWithFormat:@"%d\t%d\t%d\t%@\n",
                             [result intForColumnIndex:0],
@@ -523,8 +523,8 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     while([result next]) {
         Group *group = [[Group alloc] init];
         NSInteger code = [result intForColumnIndex:0];
-        group.code = [NSNumber numberWithInt:code];
-        group.title = [OperatorTypes stringWithType:code];
+        group.code = [NSNumber numberWithInteger:code];
+        group.title = [OperatorTypes stringWithType:(int)code];
         group.total = [result intForColumnIndex:1];
         group.completions = 0;
         [groups setObject:group forKey:group.code];
@@ -567,7 +567,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     while([result next]) {
         Group *group = [[Group alloc] init];
         NSInteger code = [result intForColumnIndex:0];
-        group.code = [NSNumber numberWithInt:code];
+        group.code = [NSNumber numberWithInteger:code];
         group.title = [result stringForColumnIndex:1];
         group.total = 0;
         group.completions = 0;
@@ -590,7 +590,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     while([result next]) {
         Group *group = [[Group alloc] init];
         NSInteger code = [result intForColumnIndex:0];
-        group.code = [NSNumber numberWithInt:code];
+        group.code = [NSNumber numberWithInteger:code];
         group.title = [result stringForColumnIndex:1];
         group.total = [result intForColumnIndex:2];
         group.completions = 0;
@@ -639,7 +639,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     while([result next]) {
         Group *group = [[Group alloc] init];
         NSInteger code = [result intForColumnIndex:0];
-        group.code = [NSNumber numberWithInt:code];
+        group.code = [NSNumber numberWithInteger:code];
         group.title = [result stringForColumnIndex:1];
         group.total = [result intForColumnIndex:2];
         group.completions = 0;
@@ -684,7 +684,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     NSInteger index = 0;
     while([result next]) {
         Group *group = [[Group alloc] init];
-        group.code = [NSNumber numberWithInt:++index];
+        group.code = [NSNumber numberWithInteger:++index];
         group.title = [result stringForColumnIndex:0];
         group.total = [result intForColumnIndex:1];
         group.completions = 0;
@@ -705,13 +705,13 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
 
 - (NSArray *)yomiGroupsWithYomiGroup:(Group *)group
 {
-    NSNumber *length = [NSNumber numberWithInt:[group.title length]];
+    NSNumber *length = [NSNumber numberWithInteger:[group.title length]];
     FMResultSet *result = [self.database executeQuery:@"SELECT SUBSTR(stations.yomi, 1, ?1 + 1) AS yomi1, COUNT(stations.s_id) FROM stations WHERE stations.enabled = 1 AND SUBSTR(stations.yomi, 1, ?1) = ?2 GROUP BY yomi1 ORDER BY yomi1", length, group.title];
     NSMutableDictionary *groups = [NSMutableDictionary dictionary];
     NSInteger index = 0;
     while([result next]) {
         Group *group = [[Group alloc] init];
-        group.code = [NSNumber numberWithInt:++index];
+        group.code = [NSNumber numberWithInteger:++index];
         group.title = [result stringForColumnIndex:0];
         group.total = [result intForColumnIndex:1];
         group.completions = 0;
@@ -732,7 +732,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
 
 - (void)reloadYomiGroup:(Group *)group
 {
-    NSNumber *length = [NSNumber numberWithInt:[group.title length]];
+    NSNumber *length = [NSNumber numberWithInteger:[group.title length]];
     FMResultSet *result = [self.database executeQuery:@"SELECT COUNT(*) FROM stations WHERE SUBSTR(stations.yomi, 1, ?) = ? AND enabled = 1", length, group.title];
     if([result next]) {
         group.total = [result intForColumnIndex:0];
@@ -813,7 +813,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     while([result next]) {
         CompletionDateGroup *group = [[CompletionDateGroup alloc] init];
         NSInteger year = [result intForColumnIndex:0];
-        group.code = [NSNumber numberWithInt:year];
+        group.code = [NSNumber numberWithInteger:year];
         group.total = completions;
         group.completions = [result intForColumnIndex:1];
         [groups addObject:group];
@@ -845,7 +845,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
         } else {
             minYear = maxYear = 1;
         }
-        result = [self.database executeQuery:@"SELECT COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ?", [NSNumber numberWithInt:minYear], [NSNumber numberWithInt:maxYear]];
+        result = [self.database executeQuery:@"SELECT COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ?", [NSNumber numberWithInteger:minYear], [NSNumber numberWithInteger:maxYear]];
         group.completions = [result next] ? [result intForColumnIndex:0] : 0;
         [result close];
     } else {
@@ -860,13 +860,13 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     NSInteger completions = group.completions;
     NSInteger minDate = [group.code intValue] * 10000;
     NSInteger maxDate = minDate + 1231;
-    FMResultSet *result = [self.database executeQuery:@"SELECT completions.comp_date / 100 AS month, COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ? GROUP BY month ORDER BY month", [NSNumber numberWithInt:minDate], [NSNumber numberWithInt:maxDate]];
+    FMResultSet *result = [self.database executeQuery:@"SELECT completions.comp_date / 100 AS month, COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ? GROUP BY month ORDER BY month", [NSNumber numberWithInteger:minDate], [NSNumber numberWithInteger:maxDate]];
     NSMutableArray* groups = [NSMutableArray array];
     Group* ambiguous = nil;
     while([result next]) {
         CompletionDateGroup *group = [[CompletionDateGroup alloc] init];
         NSInteger month = [result intForColumnIndex:0];
-        group.code = [NSNumber numberWithInt:month];
+        group.code = [NSNumber numberWithInteger:month];
         group.total = completions;
         group.completions = [result intForColumnIndex:1];
         if(month % 100) {
@@ -889,12 +889,12 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     NSInteger month = [group.code intValue] * 100;
     NSInteger minDate = month - (month % 10000);
     NSInteger maxDate = minDate + 1231;
-    FMResultSet *result = [self.database executeQuery:@"SELECT COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ? GROUP BY month ORDER BY month", [NSNumber numberWithInt:minDate], [NSNumber numberWithInt:maxDate]];
+    FMResultSet *result = [self.database executeQuery:@"SELECT COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ? GROUP BY month ORDER BY month", [NSNumber numberWithInteger:minDate], [NSNumber numberWithInteger:maxDate]];
     group.total = [result next] ? [result intForColumnIndex:0] : 0;
     if(group.completions) {
         minDate = month;
         maxDate = month + 31;
-        result = [self.database executeQuery:@"SELECT COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ? GROUP BY month ORDER BY month", [NSNumber numberWithInt:minDate], [NSNumber numberWithInt:maxDate]];
+        result = [self.database executeQuery:@"SELECT COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ? GROUP BY month ORDER BY month", [NSNumber numberWithInteger:minDate], [NSNumber numberWithInteger:maxDate]];
         group.completions = [result next] ? [result intForColumnIndex:0] : 0;
     } else {
         group.completions = 0;
@@ -906,13 +906,13 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     NSInteger completions = group.completions;
     NSInteger minDate = [group.code intValue] * 100;
     NSInteger maxDate = minDate + 31;
-    FMResultSet *result = [self.database executeQuery:@"SELECT completions.comp_date, COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ? GROUP BY completions.comp_date ORDER BY completions.comp_date", [NSNumber numberWithInt:minDate], [NSNumber numberWithInt:maxDate]];
+    FMResultSet *result = [self.database executeQuery:@"SELECT completions.comp_date, COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ? GROUP BY completions.comp_date ORDER BY completions.comp_date", [NSNumber numberWithInteger:minDate], [NSNumber numberWithInteger:maxDate]];
     NSMutableArray* groups = [NSMutableArray array];
     Group* ambiguous = nil;
     while([result next]) {
         CompletionDateGroup *group = [[CompletionDateGroup alloc] init];
         NSInteger date = [result intForColumnIndex:0];
-        group.code = [NSNumber numberWithInt:date];
+        group.code = [NSNumber numberWithInteger:date];
         group.total = completions;
         group.completions = [result intForColumnIndex:1];
         if(date % 100) {
@@ -935,7 +935,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     NSInteger day = [group.code intValue];
     NSInteger minDate = day - (day % 10000);
     NSInteger maxDate = day + 31;
-    FMResultSet *result = [self.database executeQuery:@"SELECT COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ?", [NSNumber numberWithInt:minDate], [NSNumber numberWithInt:maxDate]];
+    FMResultSet *result = [self.database executeQuery:@"SELECT COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date BETWEEN ? AND ?", [NSNumber numberWithInteger:minDate], [NSNumber numberWithInteger:maxDate]];
     group.total = [result next] ? [result intForColumnIndex:0] : 0;
     if(group.completions) {
         result = [self.database executeQuery:@"SELECT COUNT(stations.s_id) FROM stations, completions WHERE completions.s_id = stations.s_id AND stations.enabled = 1 AND completions.comp_date = ?", group.code];

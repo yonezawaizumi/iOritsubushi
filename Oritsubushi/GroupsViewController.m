@@ -87,15 +87,15 @@
     
     if(os7) {
         tableY = 0;
-        tableHeight = screenSize.height;
+        tableHeight = screenSize.height + 24;
         //AD HOC!!!
-        insets = UIEdgeInsetsMake(promptHeight, 0, -promptHeight / 2 - 6, 0);
+        insets = UIEdgeInsetsMake(promptHeight, 0, -promptHeight / 2 - 6 + 24, 0);
     } else {
         tableY = promptHeight;
         tableHeight = screenSize.height - promptHeight - tabBarHeight - navBarHeight;
         insets = UIEdgeInsetsZero;
         self.prompt = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, screenSize.width, promptHeight)];
-        self.prompt.textAlignment = UITextAlignmentCenter;
+        self.prompt.textAlignment = NSTextAlignmentCenter;
         self.prompt.font = PROMPT_FONT;
         self.prompt.textColor = PROMPT_TEXT_COLOR;
         self.prompt.backgroundColor = PROMPT_COLOR;
@@ -112,7 +112,7 @@
         //self.promptHolder = [[Prompt7View alloc] initWithFrame:CGRectMake(0, navBarHeight + 20, screenSize.width, promptHeight) parent:self.tableView];
         //self.prompt = self.promptHolder.textLabel;
         self.prompt = [[UILabel alloc] initWithFrame:CGRectMake(0, navBarHeight + 20, screenSize.width, promptHeight)];
-        self.prompt.textAlignment = UITextAlignmentCenter;
+        self.prompt.textAlignment = NSTextAlignmentCenter;
         self.prompt.font = PROMPT_FONT;
         self.prompt.textColor = OS7_PROMPT_TEXT_COLOR;
         self.prompt.backgroundColor = OS7_PROMPT_COLOR_TEMP;

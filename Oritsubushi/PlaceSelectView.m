@@ -39,7 +39,7 @@
         [self addButtonWithTitle:NSLocalizedString(@"キャンセル", nil)];
         self.cancelButtonIndex = 0;
         
-        int numRows = [candidates count];
+        NSInteger numRows = [candidates count];
         CGRect frame = CGRectMake(0,
                                   0,
                                   100,

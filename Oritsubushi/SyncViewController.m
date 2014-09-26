@@ -113,7 +113,7 @@ static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     if(queue) {
-        dispatch_release(queue);
+        //dispatch_release(queue);
         queue = nil;
     }
     NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
@@ -155,7 +155,7 @@ static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     if(queue) {
-        dispatch_release(queue);
+        //dispatch_release(queue);
         queue = nil;
     }
     NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
@@ -330,8 +330,8 @@ static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
     state = SyncStateUploadFile;
     [self setLabelString:NSLocalizedString(@"データアップロード中", nil) tag:HeaderViewTagTitle];
     ASIFormDataRequest *request =[ASIFormDataRequest requestWithURL:[NSURL URLWithString:SyncURL]];
-    [request setPostValue:[NSString stringWithFormat:@"%d", recentUpdateDate] forKey:@"d"];
-    [request setPostValue:[NSString stringWithFormat:@"%d", version] forKey:@"v"];
+    [request setPostValue:[NSString stringWithFormat:@"%d", (int)recentUpdateDate] forKey:@"d"];
+    [request setPostValue:[NSString stringWithFormat:@"%d", (int)version] forKey:@"v"];
     NSString *tempDir = NSTemporaryDirectory();
     [request setFile:[tempDir stringByAppendingPathComponent:UploadFileName] forKey:@"f"];
     NSString *downloadFilePath = [tempDir stringByAppendingPathComponent:DownloadFileName];
@@ -535,7 +535,7 @@ static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
     switch(state) {
         case SyncStateDone:
             recentUpdateDate = newUpdateDate;
-            [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:recentUpdateDate] forKey:SETTINGS_KEY_RECENT_UPDATED_DATE];
+            [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInteger:recentUpdateDate] forKey:SETTINGS_KEY_RECENT_UPDATED_DATE];
             title = NSLocalizedString(@"降りつぶし.net と同期しました", nil);
             dateFormat = NSLocalizedString(@"同期日時: %@", nil);
             break;

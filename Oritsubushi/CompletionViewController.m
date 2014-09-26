@@ -114,7 +114,7 @@
 {
     AppDelegate *delegate = [UIApplication sharedApplication].delegate;
     [delegate.database updateCompletion:self.station];
-    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:[self intPickerValue]] forKey:SETTINGS_KEY_RECENT_DATE];
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInteger:[self intPickerValue]] forKey:SETTINGS_KEY_RECENT_DATE];
     [super viewWillDisappear:animated];
 }
 
@@ -260,9 +260,9 @@ static const NSInteger ROW_MAX = 16384;
 
 - (void)setPickerValueWithInteger:(NSInteger)date animated:(BOOL)animated
 {
-    int year = [self optimizedRowWithRow:date <= 1 ? 0 : date / 10000 - 1900 component:0];
-    int month = [self optimizedRowWithRow:date % 10000 / 100 component:1];
-    int day = [self optimizedRowWithRow:date == 1 ? 0 : date % 100 component:2];
+    NSInteger year = [self optimizedRowWithRow:date <= 1 ? 0 : date / 10000 - 1900 component:0];
+    NSInteger month = [self optimizedRowWithRow:date % 10000 / 100 component:1];
+    NSInteger day = [self optimizedRowWithRow:date == 1 ? 0 : date % 100 component:2];
     [self.pickerView selectRow:year inComponent:0 animated:animated];
     [self.pickerView selectRow:month inComponent:1 animated:animated];
     [self.pickerView selectRow:day inComponent:2 animated:animated];

@@ -123,9 +123,9 @@ static BOOL initialized = NO;
         DatabaseFilterTypeDate,
         DatabaseFilterTypeNone,
     };
-    int typeIndex = self.typeControl.selectedSegmentIndex;
+    NSInteger typeIndex = self.typeControl.selectedSegmentIndex;
     if(typeIndex < 0)   typeIndex = 0;
-    int matchIndex = self.matchControl.selectedSegmentIndex > 0;
+    NSInteger matchIndex = self.matchControl.selectedSegmentIndex > 0;
     return filterType_ = types[typeIndex * 2 + matchIndex];
 }
 
@@ -136,7 +136,7 @@ static BOOL initialized = NO;
 
 - (void)setFilterType:(DatabaseFilterType)filterType
 {
-    int typeIndex, matchIndex;
+    NSInteger typeIndex, matchIndex;
     switch(filterType) {
         case DatabaseFilterTypeNameForward:
             typeIndex = TypeIndexName;
