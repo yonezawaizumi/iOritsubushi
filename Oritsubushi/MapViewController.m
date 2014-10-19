@@ -100,6 +100,8 @@ static void *settingsContext = (void *)2;
 
 @property(assign) MKCoordinateRegion recentRegion;
 
+@property(nonatomic,strong) CLLocationManager *locationManager;
+
 - (void)present;
 - (void)swapMapAndList;
 - (void)mapStyleModeWantsToChange;
@@ -319,10 +321,10 @@ static void *settingsContext = (void *)2;
     [self updateFilterWithFilterType:recentFilterType filterValue:self.searchKeyword];
     
     // 位置変化
-    [self.mapView.userLocation addObserver:self forKeyPath:@"location" options:0 context:locationContext];
-    firstLocatingStatus = FirstLocatingWait;
-    [self performSelector:@selector(finishFirstLocatingIfDecided) withObject:nil afterDelay:FIRST_LOCATING_DECIDE_DELAY];
-    [self performSelector:@selector(terminateFirstLocating) withObject:nil afterDelay:FIRST_LOCATING_TERMINATE_DELAY];    
+    //[self.mapView.userLocation addObserver:self forKeyPath:@"location" options:0 context:locationContext];
+    //firstLocatingStatus = FirstLocatingWait;
+    //[self performSelector:@selector(finishFirstLocatingIfDecided) withObject:nil afterDelay:FIRST_LOCATING_DECIDE_DELAY];
+    //[self performSelector:@selector(terminateFirstLocating) withObject:nil afterDelay:FIRST_LOCATING_TERMINATE_DELAY];
 }
 
 #pragma mark - View lifecycle
@@ -342,6 +344,14 @@ static void *settingsContext = (void *)2;
     //AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     //[appDelegate addDatabaseUpdateNotificationObserver:self];
     [Database addObserver:self];
+    if (!self.locationManager) {
+        self.locationManager = [CLLocationManager new];
+    }
+    self.locationManager.delegate = self;
+    firstLocatingStatus = FirstLocatingWait;
+    [self performSelector:@selector(finishFirstLocatingIfDecided) withObject:nil afterDelay:FIRST_LOCATING_DECIDE_DELAY];
+    [self performSelector:@selector(terminateFirstLocating) withObject:nil afterDelay:FIRST_LOCATING_TERMINATE_DELAY];
+
     [self setLocation:[self.mapView.userLocation.location coordinate] setDelta:YES];
 }
 
@@ -366,6 +376,13 @@ static void *settingsContext = (void *)2;
     if(self.selectedIndexPath) {
         [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
         self.selectedIndexPath = nil;
+    }
+    if (firstLocatingStatus != FirstLocatingDone) {
+        if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [self.locationManager requestWhenInUseAuthorization];
+        } else {
+            [self.locationManager startUpdatingLocation];
+        }
     }
 }
 
@@ -406,6 +423,7 @@ static void *settingsContext = (void *)2;
     self.placeSelectView = nil;
     self.GMapService = nil;
     self.mapIndicator = nil;
+    self.locationManager = nil;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -460,10 +478,36 @@ static void *settingsContext = (void *)2;
 {
     if(firstLocatingStatus != FirstLocatingDone) {
         firstLocatingStatus = FirstLocatingDone;
-        [self.mapView.userLocation removeObserver:self forKeyPath:@"location"];
+        //[self.mapView.userLocation removeObserver:self forKeyPath:@"location"];
         [self setButtonsEnabled:YES];
         [self mapView:self.mapView regionDidChangeAnimated:NO];
     }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        [self.locationManager startUpdatingLocation];
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    CLLocation *location = [locations lastObject];
+    NSLog(@"%f %f",
+          location.coordinate.latitude,
+          location.coordinate.longitude);
+    CLLocationCoordinate2D currentLocation = [location coordinate];
+    switch(firstLocatingStatus) {
+        case FirstLocatingWait:
+            [self setLocation:currentLocation setDelta:NO];
+            break;
+        case FirstLocatingTemporary:
+            [self terminateFirstLocating];
+            break;
+        default:
+            break;
+    }    [self terminateFirstLocating];
+    [self.locationManager stopUpdatingLocation];
 }
 
 - (void)requestUpdateForce:(BOOL)force

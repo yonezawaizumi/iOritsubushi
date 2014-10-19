@@ -16,7 +16,8 @@
 
 @interface MapViewController : UIViewController <MapViewDelegate, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, /*DatabaseUpdateNotificationProtocol*/DatabaseUpdateNotificationObserverProtocol, MapWrapperTouchDelegate, GoogleMapsServiceDelegate,
     PlaceSelectViewDelegate,
-    PlaceSelectViewControllerDelegate
+    PlaceSelectViewControllerDelegate,
+    CLLocationManagerDelegate
 >
 
 - (void)moveToStation:(Station *)station;

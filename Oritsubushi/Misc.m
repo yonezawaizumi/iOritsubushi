@@ -8,7 +8,8 @@
 
 #import "Misc.h"
 
-static NSDateFormatter *dateFormatter;
+// 内容が壊れることあり？？(?_?) キャッシュ中止
+// static NSDateFormatter *dateFormatter;
 
 @implementation Misc
 
@@ -19,10 +20,12 @@ static NSDateFormatter *dateFormatter;
 
 + (NSInteger)today
 {
-    if(!dateFormatter) {
+    /*if(!dateFormatter) {
         dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyyMMdd";
-    }
+    }*/
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyyMMdd";
     return [[dateFormatter stringFromDate:[NSDate date]] intValue];
 }
 
