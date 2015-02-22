@@ -985,8 +985,12 @@ static void *settingsContext = (void *)2;
 - (void)mapWrapperWasTouched:(MapWrapper *)mapWrapper
 {
     if(!inAnimation) {
-        self.searchBar.text = self.searchKeyword;
-        mustSearch = NO;
+        if ([self.searchBar.text length] || ![self.searchKeyword length]) {
+            self.searchBar.text = self.searchKeyword;
+            mustSearch = NO;
+        } else {
+            mustSearch = YES;
+        }
         [self.searchBar endEditing:NO];
     } 
 }
