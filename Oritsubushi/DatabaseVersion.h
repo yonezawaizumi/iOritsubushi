@@ -9,7 +9,16 @@
 #ifndef Oritsubushi_DatabaseVersion_h
 #define Oritsubushi_DatabaseVersion_h
 
-#define DATABASE_USER_VERSION           71
+#define DATABASE_USER_VERSION           73
 
+typedef struct Duplicater {
+    int version;
+    int newKey;
+    int oldKey;
+    int oldKey2;
+    int oldKey3;
+} Duplicater;
+
+extern Duplicater duplicaters[];
 
 #endif

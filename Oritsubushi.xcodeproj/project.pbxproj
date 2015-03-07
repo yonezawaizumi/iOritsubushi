@@ -60,6 +60,7 @@
 		064D4676148838D600066924 /* GroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 064D4675148838D600066924 /* GroupsViewController.m */; };
 		064D467A14884A5E00066924 /* LinesViewControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 064D467914884A5E00066924 /* LinesViewControllers.m */; };
 		064D46811488B3C000066924 /* StationsViewControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 064D46801488B3C000066924 /* StationsViewControllers.m */; };
+		0652070A1AAACE5200C7A4DF /* DatabaseVersion.c in Sources */ = {isa = PBXBuildFile; fileRef = 065207091AAACE5200C7A4DF /* DatabaseVersion.c */; };
 		065C0F74148A7980001D443C /* LoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 065C0F73148A7980001D443C /* LoadingView.m */; };
 		06661F0E17E885B200861C52 /* PlaceSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06661F0C17E885B200861C52 /* PlaceSelectViewController.m */; };
 		06661F0F17E885B200861C52 /* PlaceSelectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06661F0D17E885B200861C52 /* PlaceSelectViewController.xib */; };
@@ -221,6 +222,7 @@
 		064D467914884A5E00066924 /* LinesViewControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LinesViewControllers.m; path = Oritsubushi/LinesViewControllers.m; sourceTree = "<group>"; };
 		064D467F1488B3C000066924 /* StationsViewControllers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StationsViewControllers.h; path = Oritsubushi/StationsViewControllers.h; sourceTree = "<group>"; };
 		064D46801488B3C000066924 /* StationsViewControllers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StationsViewControllers.m; path = Oritsubushi/StationsViewControllers.m; sourceTree = "<group>"; };
+		065207091AAACE5200C7A4DF /* DatabaseVersion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = DatabaseVersion.c; sourceTree = "<group>"; };
 		065C0F72148A7980001D443C /* LoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingView.h; path = Oritsubushi/LoadingView.h; sourceTree = "<group>"; };
 		065C0F73148A7980001D443C /* LoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoadingView.m; path = Oritsubushi/LoadingView.m; sourceTree = "<group>"; };
 		06661F0B17E885B200861C52 /* PlaceSelectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlaceSelectViewController.h; path = Oritsubushi/PlaceSelectViewController.h; sourceTree = "<group>"; };
@@ -635,6 +637,7 @@
 			children = (
 				06B4BEAF146199E000F57858 /* Consts.h */,
 				06CA69F714C0A3DB008C5F43 /* DatabaseVersion.h */,
+				065207091AAACE5200C7A4DF /* DatabaseVersion.c */,
 				06C73F2A14872DBD002AEB71 /* Settings.h */,
 				06B4BE08145F639E00F57858 /* AppDelegate.h */,
 				06B4BE09145F639E00F57858 /* AppDelegate.m */,
@@ -920,6 +923,7 @@
 				067A6018148D0BF300CD0DCE /* SBJsonStreamWriter.m in Sources */,
 				067A6019148D0BF300CD0DCE /* SBJsonStreamWriterAccumulator.m in Sources */,
 				067A601A148D0BF300CD0DCE /* SBJsonStreamWriterState.m in Sources */,
+				0652070A1AAACE5200C7A4DF /* DatabaseVersion.c in Sources */,
 				067A601B148D0BF300CD0DCE /* SBJsonTokeniser.m in Sources */,
 				067A601C148D0BF300CD0DCE /* SBJsonUTF8Stream.m in Sources */,
 				067A601D148D0BF300CD0DCE /* SBJsonWriter.m in Sources */,

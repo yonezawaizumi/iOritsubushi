@@ -116,6 +116,23 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
             [database close];
             [self.database executeUpdate:[NSString stringWithFormat:@"ATTACH DATABASE \"%@\" AS completions", writableDBPath]];
             if(copied) {
+                for(int i = 0; ; ++i) {
+                    if (!duplicaters[i].version) {
+                        break;
+                    } else if (duplicaters[i].version > DATABASE_USER_VERSION) {
+                        continue;
+                    }
+                    NSString *query = [NSString stringWithFormat:@"INSERT OR IGNORE INTO completions SELECT %d, comp_date, strftime('%%s', 'now'), memo FROM completions WHERE s_id = %d AND comp_date > 0", duplicaters[i].newKey, duplicaters[i].oldKey];
+                    [self.database executeUpdate:query];
+                    if (duplicaters[i].oldKey2) {
+                        query = [NSString stringWithFormat:@"INSERT OR IGNORE INTO completions SELECT %d, comp_date, strftime('%%s', 'now'), memo FROM completions WHERE s_id = %d AND comp_date > 0", duplicaters[i].newKey, duplicaters[i].oldKey2];
+                        [self.database executeUpdate:query];
+                    }
+                    if (duplicaters[i].oldKey3) {
+                        query = [NSString stringWithFormat:@"INSERT OR IGNORE INTO completions SELECT %d, comp_date, strftime('%%s', 'now'), memo FROM completions WHERE s_id = %d AND comp_date > 0", duplicaters[i].newKey, duplicaters[i].oldKey3];
+                        [self.database executeUpdate:query];
+                    }
+                }
                 [self.database executeUpdate:@"INSERT OR IGNORE INTO completions SELECT s_id, 0, 0, \"\" FROM stations"];
             }
             [self reloadDatabase];
