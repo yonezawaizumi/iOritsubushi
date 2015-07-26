@@ -9,10 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GoogleMapsLocation.h"
 
-enum {
-    PlaceSelectViewControllerIndexCancelled = -1,
-    PlaceSelectViewControllerIndexKilled = -2
-} PlaceSelectViewControllerIndex;
+enum PlaceSelectViewControllerIndex;
 
 @class PlaceSelectViewController;
 

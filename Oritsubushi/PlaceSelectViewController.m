@@ -10,6 +10,11 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Consts.h"
 
+enum {
+    PlaceSelectViewControllerIndexCancelled = -1,
+    PlaceSelectViewControllerIndexKilled = -2
+} PlaceSelectViewControllerIndex;
+
 @interface PlaceSelectViewController ()
 
 @property(nonatomic,strong) NSArray *placeCandidates;
