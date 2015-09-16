@@ -66,7 +66,7 @@ static BOOL initialized = NO;
 + (void)initialize
 {
     for(int i = 0; i < countof(prefs); ++i) {
-        if(prefs) prefs[i] = NSLocalizedString(prefs[i], nil);
+        if(prefs[i]) prefs[i] = NSLocalizedString(prefs[i], nil);
     }
     initialized = YES;
 }

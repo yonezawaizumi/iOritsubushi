@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>AFAC81F6-6435-4E68-87B4-4806F8468E68</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Oritsubushi</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2EB1C729D91970687D878DE7A776AAE35D610A68</key>
+		<string>https://github.com/yonezawaizumi/iOritsubushi</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Oritsubushi.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2EB1C729D91970687D878DE7A776AAE35D610A68</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/yonezawaizumi/iOritsubushi</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2EB1C729D91970687D878DE7A776AAE35D610A68</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2EB1C729D91970687D878DE7A776AAE35D610A68</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iOritsubushi</string>
+		</dict>
+	</array>
+</dict>
+</plist>
