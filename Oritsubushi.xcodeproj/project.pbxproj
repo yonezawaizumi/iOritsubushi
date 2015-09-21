@@ -11,17 +11,6 @@
 		060258471623CB0D007184F4 /* tabicon_date@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 060258451623CB0D007184F4 /* tabicon_date@2x.png */; };
 		060258481623CB0D007184F4 /* tabicon_date.png in Resources */ = {isa = PBXBuildFile; fileRef = 060258461623CB0D007184F4 /* tabicon_date.png */; };
 		0603B04B1BA99A06005F3C99 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0603B04A1BA99A06005F3C99 /* Images.xcassets */; settings = {ASSET_TAGS = (); }; };
-		0603B0571BA99A60005F3C99 /* statusicon_comp@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B04C1BA99A60005F3C99 /* statusicon_comp@3x.png */; settings = {ASSET_TAGS = (); }; };
-		0603B0581BA99A60005F3C99 /* statusicon_incomp@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B04D1BA99A60005F3C99 /* statusicon_incomp@3x.png */; settings = {ASSET_TAGS = (); }; };
-		0603B0591BA99A60005F3C99 /* statusicon_notload@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B04E1BA99A60005F3C99 /* statusicon_notload@3x.png */; settings = {ASSET_TAGS = (); }; };
-		0603B05A1BA99A60005F3C99 /* tabicon_date@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B04F1BA99A60005F3C99 /* tabicon_date@3x.png */; settings = {ASSET_TAGS = (); }; };
-		0603B05B1BA99A60005F3C99 /* tabicon_information@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0501BA99A60005F3C99 /* tabicon_information@3x.png */; settings = {ASSET_TAGS = (); }; };
-		0603B05C1BA99A60005F3C99 /* tabicon_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0511BA99A60005F3C99 /* tabicon_map@3x.png */; settings = {ASSET_TAGS = (); }; };
-		0603B05D1BA99A60005F3C99 /* tabicon_operator@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0521BA99A60005F3C99 /* tabicon_operator@3x.png */; settings = {ASSET_TAGS = (); }; };
-		0603B05E1BA99A60005F3C99 /* tabicon_place@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0531BA99A60005F3C99 /* tabicon_place@3x.png */; settings = {ASSET_TAGS = (); }; };
-		0603B05F1BA99A60005F3C99 /* tabicon_settings@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0541BA99A60005F3C99 /* tabicon_settings@3x.png */; settings = {ASSET_TAGS = (); }; };
-		0603B0601BA99A60005F3C99 /* tabicon_sync@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0551BA99A60005F3C99 /* tabicon_sync@3x.png */; settings = {ASSET_TAGS = (); }; };
-		0603B0611BA99A60005F3C99 /* tabicon_yomi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0561BA99A60005F3C99 /* tabicon_yomi@3x.png */; settings = {ASSET_TAGS = (); }; };
 		0603B0631BA99AC4005F3C99 /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0621BA99AC4005F3C99 /* Icon-60@2x.png */; settings = {ASSET_TAGS = (); }; };
 		0603B0651BA99AD3005F3C99 /* 78x78.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0641BA99AD3005F3C99 /* 78x78.png */; settings = {ASSET_TAGS = (); }; };
 		0603B06B1BA99AE3005F3C99 /* Icon-29.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0661BA99AE3005F3C99 /* Icon-29.png */; settings = {ASSET_TAGS = (); }; };
@@ -164,17 +153,6 @@
 		060258451623CB0D007184F4 /* tabicon_date@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tabicon_date@2x.png"; path = "Oritsubushi/assets/tabicon_date@2x.png"; sourceTree = "<group>"; };
 		060258461623CB0D007184F4 /* tabicon_date.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tabicon_date.png; path = Oritsubushi/assets/tabicon_date.png; sourceTree = "<group>"; };
 		0603B04A1BA99A06005F3C99 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		0603B04C1BA99A60005F3C99 /* statusicon_comp@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusicon_comp@3x.png"; path = "Oritsubushi/assets/statusicon_comp@3x.png"; sourceTree = "<group>"; };
-		0603B04D1BA99A60005F3C99 /* statusicon_incomp@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusicon_incomp@3x.png"; path = "Oritsubushi/assets/statusicon_incomp@3x.png"; sourceTree = "<group>"; };
-		0603B04E1BA99A60005F3C99 /* statusicon_notload@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusicon_notload@3x.png"; path = "Oritsubushi/assets/statusicon_notload@3x.png"; sourceTree = "<group>"; };
-		0603B04F1BA99A60005F3C99 /* tabicon_date@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tabicon_date@3x.png"; path = "Oritsubushi/assets/tabicon_date@3x.png"; sourceTree = "<group>"; };
-		0603B0501BA99A60005F3C99 /* tabicon_information@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tabicon_information@3x.png"; path = "Oritsubushi/assets/tabicon_information@3x.png"; sourceTree = "<group>"; };
-		0603B0511BA99A60005F3C99 /* tabicon_map@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tabicon_map@3x.png"; path = "Oritsubushi/assets/tabicon_map@3x.png"; sourceTree = "<group>"; };
-		0603B0521BA99A60005F3C99 /* tabicon_operator@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tabicon_operator@3x.png"; path = "Oritsubushi/assets/tabicon_operator@3x.png"; sourceTree = "<group>"; };
-		0603B0531BA99A60005F3C99 /* tabicon_place@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tabicon_place@3x.png"; path = "Oritsubushi/assets/tabicon_place@3x.png"; sourceTree = "<group>"; };
-		0603B0541BA99A60005F3C99 /* tabicon_settings@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tabicon_settings@3x.png"; path = "Oritsubushi/assets/tabicon_settings@3x.png"; sourceTree = "<group>"; };
-		0603B0551BA99A60005F3C99 /* tabicon_sync@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tabicon_sync@3x.png"; path = "Oritsubushi/assets/tabicon_sync@3x.png"; sourceTree = "<group>"; };
-		0603B0561BA99A60005F3C99 /* tabicon_yomi@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tabicon_yomi@3x.png"; path = "Oritsubushi/assets/tabicon_yomi@3x.png"; sourceTree = "<group>"; };
 		0603B0621BA99AC4005F3C99 /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@2x.png"; path = "Oritsubushi/icon/Icon-60@2x.png"; sourceTree = "<group>"; };
 		0603B0641BA99AD3005F3C99 /* 78x78.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 78x78.png; path = Oritsubushi/icon/78x78.png; sourceTree = "<group>"; };
 		0603B0661BA99AE3005F3C99 /* Icon-29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-29.png"; path = "Oritsubushi/icon/Icon-29.png"; sourceTree = "<group>"; };
@@ -766,17 +744,6 @@
 				0603B06A1BA99AE3005F3C99 /* Icon-60@3x.png */,
 				0603B0641BA99AD3005F3C99 /* 78x78.png */,
 				0603B0621BA99AC4005F3C99 /* Icon-60@2x.png */,
-				0603B04C1BA99A60005F3C99 /* statusicon_comp@3x.png */,
-				0603B04D1BA99A60005F3C99 /* statusicon_incomp@3x.png */,
-				0603B04E1BA99A60005F3C99 /* statusicon_notload@3x.png */,
-				0603B04F1BA99A60005F3C99 /* tabicon_date@3x.png */,
-				0603B0501BA99A60005F3C99 /* tabicon_information@3x.png */,
-				0603B0511BA99A60005F3C99 /* tabicon_map@3x.png */,
-				0603B0521BA99A60005F3C99 /* tabicon_operator@3x.png */,
-				0603B0531BA99A60005F3C99 /* tabicon_place@3x.png */,
-				0603B0541BA99A60005F3C99 /* tabicon_settings@3x.png */,
-				0603B0551BA99A60005F3C99 /* tabicon_sync@3x.png */,
-				0603B0561BA99A60005F3C99 /* tabicon_yomi@3x.png */,
 				0618FF6A17E9800700467C2D /* Icon-40.png */,
 				0677CAF417E97B7D00994164 /* Icon@2x.png */,
 				06BDC7FE17E96FE70024BCB0 /* Icon-40@2x.png */,
@@ -891,19 +858,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				06B4BE04145F639E00F57858 /* InfoPlist.strings in Resources */,
-				0603B05B1BA99A60005F3C99 /* tabicon_information@3x.png in Resources */,
 				06195EDB147A5BD100C97DB8 /* oritsubushi.sqlite in Resources */,
 				0603B0721BA99B2E005F3C99 /* Defaults-667h@2x.png in Resources */,
-				0603B05A1BA99A60005F3C99 /* tabicon_date@3x.png in Resources */,
 				06195EDC147A5BD100C97DB8 /* tabicon_information.png in Resources */,
 				06195EDD147A5BD100C97DB8 /* tabicon_map.png in Resources */,
 				0603B06E1BA99AE3005F3C99 /* Icon-40@3x.png in Resources */,
 				06195EDE147A5BD100C97DB8 /* tabicon_operator.png in Resources */,
 				0603B0731BA99B2E005F3C99 /* Defaults-736h@3x.png in Resources */,
 				06195EDF147A5BD100C97DB8 /* tabicon_place.png in Resources */,
-				0603B0591BA99A60005F3C99 /* statusicon_notload@3x.png in Resources */,
 				06195EE0147A5BD100C97DB8 /* tabicon_settings.png in Resources */,
-				0603B0581BA99A60005F3C99 /* statusicon_incomp@3x.png in Resources */,
 				06195EE1147A5BD100C97DB8 /* tabicon_sync.png in Resources */,
 				06661F0F17E885B200861C52 /* PlaceSelectViewController.xib in Resources */,
 				06195EE2147A5BD100C97DB8 /* tabicon_yomi.png in Resources */,
@@ -922,8 +885,6 @@
 				06A5649B1482FCEC001A041D /* Default@2x.png in Resources */,
 				06BDC71817E96E160024BCB0 /* Icon-72.png in Resources */,
 				0603B06D1BA99AE3005F3C99 /* Icon-29@3x.png in Resources */,
-				0603B05F1BA99A60005F3C99 /* tabicon_settings@3x.png in Resources */,
-				0603B0611BA99A60005F3C99 /* tabicon_yomi@3x.png in Resources */,
 				0603B04B1BA99A06005F3C99 /* Images.xcassets in Resources */,
 				06A564B71484597C001A041D /* StationInformationViewController.xib in Resources */,
 				067241691485BA0100B49CCC /* statusicon_comp@2x.png in Resources */,
@@ -931,9 +892,6 @@
 				06C73F1C1486F530002AEB71 /* MemoViewController.xib in Resources */,
 				0603B0631BA99AC4005F3C99 /* Icon-60@2x.png in Resources */,
 				06C73F2614870907002AEB71 /* CompletionViewController.xib in Resources */,
-				0603B0571BA99A60005F3C99 /* statusicon_comp@3x.png in Resources */,
-				0603B05D1BA99A60005F3C99 /* tabicon_operator@3x.png in Resources */,
-				0603B05E1BA99A60005F3C99 /* tabicon_place@3x.png in Resources */,
 				06CC92BA17E1C319000DB811 /* CompletionViewController7.xib in Resources */,
 				06BDC71717E96E160024BCB0 /* Icon-Small@2x.png in Resources */,
 				06C73F2D14877E98002AEB71 /* statusicon_comp.png in Resources */,
@@ -948,12 +906,10 @@
 				0603B06C1BA99AE3005F3C99 /* Icon-29@2x.png in Resources */,
 				06BDC7FF17E96FE70024BCB0 /* Icon-40@2x.png in Resources */,
 				0603B06B1BA99AE3005F3C99 /* Icon-29.png in Resources */,
-				0603B05C1BA99A60005F3C99 /* tabicon_map@3x.png in Resources */,
 				06FDE1E31609E3EC00EABCB0 /* Default-568h@2x.png in Resources */,
 				06BDC71317E96E160024BCB0 /* Icon-76.png in Resources */,
 				06BDC71517E96E160024BCB0 /* Icon-Small-50.png in Resources */,
 				0603B06F1BA99AE3005F3C99 /* Icon-60@3x.png in Resources */,
-				0603B0601BA99A60005F3C99 /* tabicon_sync@3x.png in Resources */,
 				060258471623CB0D007184F4 /* tabicon_date@2x.png in Resources */,
 				060258481623CB0D007184F4 /* tabicon_date.png in Resources */,
 			);
@@ -1066,8 +1022,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: W.S.F. GSK";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Izumi Yonezawa (C8SHAGJQBX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1095,7 +1051,7 @@
 					"-ObjC",
 					"-all_load",
 				);
-				PROVISIONING_PROFILE = "68B7214E-EDC8-4D98-B70E-B844D57A4FF9";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/usr/local/include/** $(INSTALL_DIR)/usr/local/include/**";
@@ -1136,7 +1092,7 @@
 					"-ObjC",
 					"-all_load",
 				);
-				PROVISIONING_PROFILE = "68B7214E-EDC8-4D98-B70E-B844D57A4FF9";
+				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				USER_HEADER_SEARCH_PATHS = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/usr/local/include/** $(INSTALL_DIR)/usr/local/include/**";
@@ -1150,7 +1106,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Izumi Yonezawa (C8SHAGJQBX)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Oritsubushi/Oritsubushi-Prefix.pch";
@@ -1159,7 +1115,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.wsf-lp.i${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "f451cecc-6cf9-4a36-8f22-47a7dd8aee36";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1170,15 +1126,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: W.S.F. GSK";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Oritsubushi/Oritsubushi-Prefix.pch";
 				INFOPLIST_FILE = "Oritsubushi/Oritsubushi-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.wsf-lp.i${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "10cfe3ee-7806-4836-8523-a1e43ac06a0d";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

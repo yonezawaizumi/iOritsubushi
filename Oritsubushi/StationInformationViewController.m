@@ -69,7 +69,7 @@
     self.memoCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
     self.memoCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     self.memoCell.textLabel.text = NSLocalizedString(@"メモ", nil);
-    
+
     //自前管理する
     self.clearsSelectionOnViewWillAppear = NO;
     /*NSLog(@"%d:%p:%ld", __LINE__, (__bridge void*)self, CFGetRetainCount((__bridge void*)self));
