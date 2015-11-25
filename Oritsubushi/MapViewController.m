@@ -55,11 +55,11 @@ static NSString *visibilityTypeLabel[] = {
     @"済",
     @"未",
 };
-static CGFloat visibilityTypeLabelWidth[] = {
+/*static CGFloat visibilityTypeLabelWidth[] = {
     40,
     32,
     32,
-};
+};*/
 
 static BOOL stringsAreLocalized = NO;
 
@@ -283,13 +283,7 @@ static void *settingsContext = (void *)2;
     self.presentButton.style = UIBarButtonItemStyleBordered;
     self.navigationItem.leftBarButtonItem = self.presentButton;
     
-    NSInteger searchBarWidth;
-    if (os7) {
-        searchBarWidth = SEARCH_BAR_WIDTH - 24;
-    } else {
-        searchBarWidth = SEARCH_BAR_WIDTH;
-    }
-    self.searchBar = [[SearchBar alloc] initWithFrame:CGRectMake(0, 0, searchBarWidth, SEARCH_BAR_HEIGHT)];
+    self.searchBar = [[SearchBar alloc] initWithFrame:CGRectMake(0, 0, 100/*仮の値、横幅決定後に修正*/, SEARCH_BAR_HEIGHT)];
     self.searchBar.delegate = self;
     self.searchKeyword = @"";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchBar];
@@ -312,11 +306,11 @@ static void *settingsContext = (void *)2;
                          [[UIBarButtonItem alloc] initWithCustomView:self.mapStyleModeSegmentedControl],
                          nil];
     
-    if (os7) {
+    /*if (os7) {
         for (int index = 0; index < sizeof visibilityTypeLabelWidth / sizeof visibilityTypeLabelWidth[0]; ++index) {
             [self.visibilitySegmentedControl setWidth:visibilityTypeLabelWidth[index] forSegmentAtIndex:index];
         }
-    }
+    }*/
 
     [self updateFilterWithFilterType:recentFilterType filterValue:self.searchKeyword];
     
@@ -353,6 +347,14 @@ static void *settingsContext = (void *)2;
     [self performSelector:@selector(terminateFirstLocating) withObject:nil afterDelay:FIRST_LOCATING_TERMINATE_DELAY];
 
     [self setLocation:[self.mapView.userLocation.location coordinate] setDelta:YES];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    CGRect frame = self.searchBar.frame;
+    frame.size.width = self.view.frame.size.width - SEARCH_BAR_LEFT_MARGIN;
+    self.searchBar.frame = frame;
 }
 
 - (void)viewWillAppear:(BOOL)animated

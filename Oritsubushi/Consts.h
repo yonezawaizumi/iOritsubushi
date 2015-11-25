@@ -49,7 +49,7 @@
 #define OS7_PROMPT_COLOR_TEMP           [UIColor colorWithRed:(239.0/255) green:(239.0/255) blue:(244.0/255) alpha:0.98]
 #define OS7_PROPMT_BOTTOM_EDGE_COLOR    /*[UIColor colorWithRed:(167.0/255) green:(167.0/255) blue:(170.0/255) alpha:1.0]*/[UIColor lightGrayColor]
 
-#define SEARCH_BAR_WIDTH                268
+#define SEARCH_BAR_LEFT_MARGIN          88
 #define SEARCH_BAR_HEIGHT               44
 
 #define MAP_WRAPPER_COLOR               [UIColor darkGrayColor]
