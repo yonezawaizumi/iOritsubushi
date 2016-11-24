@@ -71,11 +71,10 @@
 
 - (void)addTabViewControllerWithClass:(Class)class viewControllers:(NSMutableArray *)viewControllers customizedViewControllers:(NSMutableArray *)customizedViewControllers
 {
-    BOOL os7 = self.osVersion >= 7;
     UIViewController *viewController = [[class alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-    navigationController.navigationBar.tintColor = os7 ? OS7_TINT_COLOR : BAR_COLOR;
-    navigationController.toolbar.tintColor = os7 ? OS7_TINT_COLOR : BAR_COLOR;
+    navigationController.navigationBar.tintColor = OS7_TINT_COLOR;
+    navigationController.toolbar.tintColor = OS7_TINT_COLOR;
     navigationController.tabBarItem = viewController.tabBarItem;
     [viewControllers addObject:navigationController];
     if(customizedViewControllers) {
@@ -118,12 +117,10 @@
         [self addTabViewControllerWithClass:[SyncViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         [self addTabViewControllerWithClass:[SettingsViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         
-        self.tabBarController = [[TabBarController alloc] initWithTintColor:(self.osVersion >= 7 ? OS7_TINT_COLOR : BAR_COLOR)];
+        self.tabBarController = [[TabBarController alloc] initWithTintColor:OS7_TINT_COLOR];
         self.tabBarController.viewControllers = viewControllers;
         self.tabBarController.customizableViewControllers = customizableViewControllers;
-        if(self.osVersion >= 7) {
-            self.tabBarController.tabBar.tintColor = OS7_TINT_COLOR;
-        }
+        self.tabBarController.tabBar.tintColor = OS7_TINT_COLOR;
 
         self.window.rootViewController = self.tabBarController;
     }

@@ -215,17 +215,9 @@ static void *settingsContext = (void *)2;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     CGRect frame = appDelegate.window.frame;
 
-    BOOL os7 = appDelegate.osVersion >= 7;
-
-    //20120120
-    if(!os7) {
-        frame.size.height -= 69;
-    }
     self.view = [[UIView alloc] initWithFrame:frame];
     self.navigationItem.titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
     self.mapView = [[MapView alloc] initWithFrame:frame];
-    //20120120 cut
-    //self.mapView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.mapView.delegate = self;
     self.mapView.showsUserLocation = YES;
     
@@ -238,7 +230,7 @@ static void *settingsContext = (void *)2;
     self.mapIndicator.hidesWhenStopped = YES;
     self.mapIndicator.frame = CGRectMake(4, 48, 21, 21);
     [self.view addSubview:self.mapIndicator];
-    self.loadingView = [[LoadingView alloc] initWithFrame:CGRectMake(0, os7 ? 0 : 44, frame.size.width, frame.size.height - (os7 ? 0 : 88))];
+    self.loadingView = [[LoadingView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
     [self.view addSubview:self.loadingView];
 
     //TODO: 仮の実装 iPad版では動的に算出しなければならない！
@@ -248,19 +240,18 @@ static void *settingsContext = (void *)2;
     self.listView.hidden = YES;
     [self.view addSubview:self.listView];
     //20120919 corrected
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, os7 ? 0 : 44, frame.size.width, frame.size.height  - (os7 ? 0 : /*156*/88)) style:UITableViewStylePlain];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height) style:UITableViewStylePlain];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    if(os7) {
-        //AD HOC!!!
-        self.tableView.scrollIndicatorInsets = self.tableView.contentInset = UIEdgeInsetsMake(69, 0, 88 + 4, 0);
-    }
+    //AD HOC!!!
+    self.tableView.scrollIndicatorInsets = self.tableView.contentInset = UIEdgeInsetsMake(69, 0, 88 + 4, 0);
+
     [self.listView addSubview:self.tableView];
     
-    self.mapWrapper = [[MapWrapper alloc] initWithFrame:CGRectMake(0, os7 ? 0 : 44, frame.size.width, frame.size.height - (os7 ? 0 : 88))];
+    self.mapWrapper = [[MapWrapper alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
     self.mapWrapper.delegate = self;
     [self.view addSubview:self.mapWrapper];
-    self.searchScopeBar = [[SearchScopeBar alloc] initWithFrame:CGRectMake(0, os7 ? 64 - SCOPE_BAR_HEIGHT : (44 - SCOPE_BAR_HEIGHT), frame.size.width, SCOPE_BAR_HEIGHT)];
+    self.searchScopeBar = [[SearchScopeBar alloc] initWithFrame:CGRectMake(0, 64 - SCOPE_BAR_HEIGHT, frame.size.width, SCOPE_BAR_HEIGHT)];
     [self.view addSubview:self.searchScopeBar];
     self.searchScopeBar.filterType = recentFilterType = DatabaseFilterTypeNone;
     
@@ -290,12 +281,12 @@ static void *settingsContext = (void *)2;
     
     self.mapStyleModeSegmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:mapStyleModeLabel count:countof(mapStyleModeLabel)]];
     self.mapStyleModeSegmentedControl.selectedSegmentIndex = MapStyleMap;
-    self.mapStyleModeSegmentedControl.tintColor = os7 ? OS7_TINT_COLOR : BAR_COLOR;
+    self.mapStyleModeSegmentedControl.tintColor = OS7_TINT_COLOR;
     [self.mapStyleModeSegmentedControl addTarget:self action:@selector(mapStyleModeWantsToChange) forControlEvents:UIControlEventValueChanged];
     
     self.visibilitySegmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:visibilityTypeLabel count:NUM_VISIBILITY_TYPES]];
     self.visibilitySegmentedControl.selectedSegmentIndex = VisibilityAllStations;
-    self.visibilitySegmentedControl.tintColor = os7 ? OS7_TINT_COLOR : BAR_COLOR;
+    self.visibilitySegmentedControl.tintColor = OS7_TINT_COLOR;
     [self.visibilitySegmentedControl addTarget:self action:@selector(visibilityWantsToChange) forControlEvents:UIControlEventValueChanged];
 
     self.toolbarItems = [NSArray arrayWithObjects:
@@ -358,11 +349,6 @@ static void *settingsContext = (void *)2;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    BOOL os6 = ((AppDelegate *)[UIApplication sharedApplication].delegate).osVersion < 7;
-    if(os6) {
-        self.navigationController.navigationBar.translucent = YES;
-        self.navigationController.toolbar.translucent = YES;
-    }
     [self showHideBars:isShowBars animated:animated];
     [self mapStyleModeWantsToChange];
     if(!self.logoInitialized) {
@@ -871,13 +857,8 @@ static void *settingsContext = (void *)2;
     if(service.errorMessage) {
         [MapViewController alertWithTitle:@"検索エラー" message:NSLocalizedString(service.errorMessage, nil)];
     } else if([service.locations count] > 1) {
-        if(((AppDelegate *)([UIApplication sharedApplication].delegate)).osVersion >= 7) {
-            PlaceSelectViewController *placeSelectViewController = [[PlaceSelectViewController alloc] initWithPlaceCandidates:service.locations delegate:self];
-            [self presentPopupViewController:placeSelectViewController animationType:MJPopupViewAnimationFade];
-        } else {
-            self.placeSelectView = [[PlaceSelectView alloc] initWithPlaceCandidates:service.locations delegate:self];
-            [self.placeSelectView show];
-        }
+        PlaceSelectViewController *placeSelectViewController = [[PlaceSelectViewController alloc] initWithPlaceCandidates:service.locations delegate:self];
+        [self presentPopupViewController:placeSelectViewController animationType:MJPopupViewAnimationFade];
     } else {
         self.mapView.centerCoordinate = ((GoogleMapsLocation *)[service.locations objectAtIndex:0]).coordinate;
     }

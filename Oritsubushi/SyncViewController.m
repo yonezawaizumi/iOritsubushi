@@ -94,13 +94,7 @@ static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
 
 - (id)init
 {
-    NSString *nibName;
-    if(((AppDelegate *)[UIApplication sharedApplication].delegate).osVersion >= 7) {
-        nibName = @"SyncViewController7";
-    } else {
-        nibName = @"SyncViewController";
-    }
-    self = [super initWithNibName:nibName bundle:nil];
+    self = [super initWithNibName:@"SyncViewController7" bundle:nil];
     if (self) {
         self.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"同期", nil) image:[UIImage imageNamed:@"tabicon_sync"] tag:0];
         self.title = NSLocalizedString(@"同期", nil);

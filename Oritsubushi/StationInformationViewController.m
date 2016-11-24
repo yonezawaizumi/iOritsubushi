@@ -113,9 +113,6 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [self.navigationController setToolbarHidden:YES animated:animated];
-    if(((AppDelegate *)[UIApplication sharedApplication].delegate).osVersion < 7) {
-        self.navigationController.navigationBar.translucent = NO;
-    }
     self.completionCell.detailTextLabel.text = self.station.completionDateString;
     self.memoCell.detailTextLabel.text = [self.station.memo stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
     if(self.selectedIndexPath) {

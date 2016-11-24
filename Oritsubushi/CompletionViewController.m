@@ -36,13 +36,7 @@
 
 - (id)initWithStation:(Station *)station
 {
-    NSString *nibName;
-    if(((AppDelegate *)[UIApplication sharedApplication].delegate).osVersion >= 7) {
-        nibName = @"CompletionViewController7";
-    } else {
-        nibName = @"CompletionViewController";
-    }
-    self = [super initWithNibName:nibName bundle:nil];
+    self = [super initWithNibName:@"CompletionViewController7" bundle:nil];
     if (self) {
         // Custom initialization
         self.station = station;

@@ -20,11 +20,7 @@
         
         //iOS 5.0以下では、UITextFieldの実態はUISearchBarの子ビュー
         //iOS7ではこの処理はなくても求める動作になってる
-        if(((AppDelegate *)[UIApplication sharedApplication].delegate).osVersion >= 7) {
-            //self.backgroundColor = [UIColor clearColor];
-            //self.tintColor = [UIColor lightGrayColor];
-        } else {
-            self.backgroundColor = [UIColor clearColor];
+            /*self.backgroundColor = [UIColor clearColor];
             self.tintColor = [UIColor lightGrayColor];
             for(UIView *view in self.subviews) {
                 if([view isKindOfClass:[UITextField class]]) {
@@ -32,8 +28,7 @@
                     searchBarTextField.enablesReturnKeyAutomatically = NO;
                     break;
                 }
-            }
-        }
+            }*/
     }
     return self;
 }
@@ -41,9 +36,9 @@
 - (void)drawRect:(CGRect)rect
 {
     //iOS5.0以下では、UIScopeBarの無いUISearchBarの最初の子ビューは背景を表している
-    if(((AppDelegate *)[UIApplication sharedApplication].delegate).osVersion < 7) {
+    /*if(((AppDelegate *)[UIApplication sharedApplication].delegate).osVersion < 7) {
         [[self.subviews objectAtIndex:0] setHidden:YES];
-    }
+    }*/
 }
 
 @end

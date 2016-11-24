@@ -60,11 +60,6 @@ static int selectionList[] = NUMBER_OF_ICONS_LIST;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    BOOL os6 = ((AppDelegate *)[UIApplication sharedApplication].delegate).osVersion < 7;
-    if(os6) {
-        self.navigationController.navigationBar.translucent = NO;
-        self.navigationController.toolbar.translucent = NO;
-    }
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [self.navigationController setToolbarHidden:YES animated:animated];
 }

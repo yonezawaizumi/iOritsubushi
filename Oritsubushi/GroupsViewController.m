@@ -73,34 +73,20 @@
 {
     [super loadView];
     // Custom initialization
-    BOOL os7 = ((AppDelegate *)[UIApplication sharedApplication].delegate).osVersion >= 7;
     
     NSInteger promptHeight = PROMPT_HEIGHT;
     
     //20120919
     CGSize screenSize = [[UIScreen mainScreen] applicationFrame].size;
     CGFloat navBarHeight = self.navigationController.navigationBar.frame.size.height;
-    CGFloat tabBarHeight = self.tabBarController.tabBar.frame.size.height;
     CGFloat tableY;
     CGFloat tableHeight;
     UIEdgeInsets insets;
     
-    if(os7) {
-        tableY = 0;
-        tableHeight = screenSize.height + 24;
-        //AD HOC!!!
-        insets = UIEdgeInsetsMake(promptHeight, 0, -promptHeight / 2 - 6 + 24, 0);
-    } else {
-        tableY = promptHeight;
-        tableHeight = screenSize.height - promptHeight - tabBarHeight - navBarHeight;
-        insets = UIEdgeInsetsZero;
-        self.prompt = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, screenSize.width, promptHeight)];
-        self.prompt.textAlignment = NSTextAlignmentCenter;
-        self.prompt.font = PROMPT_FONT;
-        self.prompt.textColor = PROMPT_TEXT_COLOR;
-        self.prompt.backgroundColor = PROMPT_COLOR;
-        [self.view addSubview:self.prompt];
-    }
+    tableY = 0;
+    tableHeight = screenSize.height + 24;
+    //AD HOC!!!
+    insets = UIEdgeInsetsMake(promptHeight, 0, -promptHeight / 2 - 6 + 24, 0);
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, tableY, screenSize.width, tableHeight) style:UITableViewStylePlain];
     self.tableView.dataSource = self;
@@ -108,21 +94,19 @@
     self.tableView.contentInset = self.tableView.scrollIndicatorInsets = insets;
     [self.view addSubview:self.tableView];
     
-    if(os7) {
-        //self.promptHolder = [[Prompt7View alloc] initWithFrame:CGRectMake(0, navBarHeight + 20, screenSize.width, promptHeight) parent:self.tableView];
-        //self.prompt = self.promptHolder.textLabel;
-        self.prompt = [[UILabel alloc] initWithFrame:CGRectMake(0, navBarHeight + 20, screenSize.width, promptHeight)];
-        self.prompt.textAlignment = NSTextAlignmentCenter;
-        self.prompt.font = PROMPT_FONT;
-        self.prompt.textColor = OS7_PROMPT_TEXT_COLOR;
-        self.prompt.backgroundColor = OS7_PROMPT_COLOR_TEMP;
-        //self.prompt.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.0];
-        UIView *edge = [[UIView alloc] initWithFrame:CGRectMake(0, promptHeight - 0.5, screenSize.width, 0.5)];
-        edge.backgroundColor = OS7_PROPMT_BOTTOM_EDGE_COLOR;
-        [self.prompt addSubview:edge];
-        //[self.view addSubview:self.promptHolder];
-        [self.view addSubview:self.prompt];
-    }
+    //self.promptHolder = [[Prompt7View alloc] initWithFrame:CGRectMake(0, navBarHeight + 20, screenSize.width, promptHeight) parent:self.tableView];
+    //self.prompt = self.promptHolder.textLabel;
+    self.prompt = [[UILabel alloc] initWithFrame:CGRectMake(0, navBarHeight + 20, screenSize.width, promptHeight)];
+    self.prompt.textAlignment = NSTextAlignmentCenter;
+    self.prompt.font = PROMPT_FONT;
+    self.prompt.textColor = OS7_PROMPT_TEXT_COLOR;
+    self.prompt.backgroundColor = OS7_PROMPT_COLOR_TEMP;
+    //self.prompt.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.0];
+    UIView *edge = [[UIView alloc] initWithFrame:CGRectMake(0, promptHeight - 0.5, screenSize.width, 0.5)];
+    edge.backgroundColor = OS7_PROPMT_BOTTOM_EDGE_COLOR;
+    [self.prompt addSubview:edge];
+    //[self.view addSubview:self.promptHolder];
+    [self.view addSubview:self.prompt];
     
     self.indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     self.indicator.hidesWhenStopped = YES;
@@ -171,13 +155,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    BOOL os6 = ((AppDelegate *)[UIApplication sharedApplication].delegate).osVersion < 7;
-    if(os6) {
-        self.navigationController.navigationBar.translucent = NO;
-        self.navigationController.toolbar.translucent = NO;
-    } else {
-        //[self.promptHolder blurWithColor:[BLRColorComponents defaultEffect] updateInterval:0.2f];
-    }
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [self.navigationController setToolbarHidden:YES animated:animated];
     [self.tableView flashScrollIndicators];

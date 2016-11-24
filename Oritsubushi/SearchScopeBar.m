@@ -71,15 +71,14 @@ static BOOL initialized = NO;
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        BOOL os7 = ((AppDelegate *)([UIApplication sharedApplication].delegate)).osVersion >= 7;
         originalOriginY = frame.origin.y;
         self.hidden = YES;
-        self.backgroundColor = os7 ? OS7_PROMPT_COLOR : SCOPE_BAR_COLOR;
+        self.backgroundColor = OS7_PROMPT_COLOR;
         self.typeControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:typeLabels count:countof(typeLabels)]];
-        self.typeControl.tintColor = os7 ? OS7_TINT_COLOR : SCOPE_BAR_COLOR;
+        self.typeControl.tintColor = OS7_TINT_COLOR;
         [self.typeControl addTarget:self action:@selector(valueDidChange) forControlEvents:UIControlEventValueChanged];
         self.matchControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:matchLabels count:countof(matchLabels)]];
-        self.matchControl.tintColor = os7 ? OS7_TINT_COLOR : SCOPE_BAR_COLOR;
+        self.matchControl.tintColor = OS7_TINT_COLOR;
         [self.matchControl addTarget:self action:@selector(valueDidChange) forControlEvents:UIControlEventValueChanged];
         CGRect typeRect = self.typeControl.frame;
         CGRect matchRect = self.matchControl.frame;
