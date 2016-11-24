@@ -189,7 +189,7 @@ static NSDateFormatter *updatedDateFormatter;
 - (Operator *)operator
 {
     if(!self.operator_) {
-        AppDelegate *delegate = [UIApplication sharedApplication].delegate;
+        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         self.operator_ = [delegate.database operatorWithCode:[NSNumber numberWithInteger:self.operatorCode]];
     }
     return self.operator_;
@@ -198,7 +198,7 @@ static NSDateFormatter *updatedDateFormatter;
 - (NSArray *)lines
 {
     if(!self.lines_) {
-        AppDelegate *delegate = [UIApplication sharedApplication].delegate;
+        AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         self.lines_ = [delegate.database linesWithStation:self];
     }
     return self.lines_;

@@ -327,7 +327,7 @@
 - (void)updateCompletion
 {
     self.station.completionDate = [Misc today];
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database updateCompletion:self.station];
 //    [self performSelector:@selector(reloadData) withObject:nil afterDelay:ANIMATION_DURATION];
 }

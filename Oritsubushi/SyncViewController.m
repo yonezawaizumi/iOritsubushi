@@ -194,7 +194,7 @@ static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
             break;            
         default:
         {
-            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             [appDelegate showAlertViewWithTitle:nil message:NSLocalizedString(@"同期は中断されました", nil) buttonTitle:nil];
             [self.request cancel];
             break;

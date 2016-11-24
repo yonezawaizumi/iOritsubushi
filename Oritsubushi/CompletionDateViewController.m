@@ -27,7 +27,7 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.headerGroup = [appDelegate.database allTotalGroup];
     self.headerGroup.title = NSLocalizedString(@"乗下車年別", nil);
     [super reloadHeaderGroup];
@@ -35,7 +35,7 @@
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.groups = [appDelegate.database completionYearGroups];
     [super reloadGroups];
 }
@@ -93,14 +93,14 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database reloadCompletionYearGroup:self.headerGroup];
     [super reloadHeaderGroup];
 }
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.groups = [appDelegate.database completionMonthGroupsWithYearGroup:self.headerGroup];
     [super reloadGroups];
 }
@@ -159,14 +159,14 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database reloadCompletionMonthGroup:self.headerGroup];
     [super reloadHeaderGroup];
 }
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.groups = [appDelegate.database completionDateGroupsWithMonthGroup:self.headerGroup];
     [super reloadGroups];
 }

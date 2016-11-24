@@ -26,7 +26,7 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.headerGroup = [appDelegate.database allTotalGroup];
     [super reloadHeaderGroup];
 }
@@ -38,7 +38,7 @@
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.groups = [appDelegate.database operatorTypeGroups];
     [super reloadGroups];
 }
@@ -120,7 +120,7 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database reloadOperatorTypeGroup:self.headerGroup];
     [super reloadHeaderGroup];
 }
@@ -136,7 +136,7 @@
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     Database *database = appDelegate.database;
     self.groups = [database operatorGroupsNoStatisticsWithOperatorTypeGroup:self.headerGroup cacheKey:self.cacheKey];
     if(self.groups) {
@@ -173,14 +173,14 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database reloadOperatorGroup:self.headerGroup];
     [super reloadHeaderGroup];
 }
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.groups = [appDelegate.database lineGroupsWithOperatorGroup:self.headerGroup];
     [super reloadGroups];
 }

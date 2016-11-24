@@ -71,7 +71,7 @@
 {
     UITextView *textView = (UITextView *)[self.cell viewWithTag:1];
     self.station.memo = textView.text;
-    AppDelegate *delegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [delegate.database updateCompletion:self.station];
     [super viewWillDisappear:animated];
 }

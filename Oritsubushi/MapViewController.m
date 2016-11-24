@@ -212,7 +212,7 @@ static void *settingsContext = (void *)2;
 {
     [super loadView];
     // ビュー初期化
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     CGRect frame = appDelegate.window.frame;
 
     BOOL os7 = appDelegate.osVersion >= 7;
@@ -280,7 +280,7 @@ static void *settingsContext = (void *)2;
     }
     
     self.presentButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:100 target:self action:@selector(present)];
-    self.presentButton.style = UIBarButtonItemStyleBordered;
+    self.presentButton.style = UIBarButtonItemStylePlain;
     self.navigationItem.leftBarButtonItem = self.presentButton;
     
     self.searchBar = [[SearchBar alloc] initWithFrame:CGRectMake(0, 0, 100/*仮の値、横幅決定後に修正*/, SEARCH_BAR_HEIGHT)];
@@ -291,11 +291,9 @@ static void *settingsContext = (void *)2;
     self.mapStyleModeSegmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:mapStyleModeLabel count:countof(mapStyleModeLabel)]];
     self.mapStyleModeSegmentedControl.selectedSegmentIndex = MapStyleMap;
     self.mapStyleModeSegmentedControl.tintColor = os7 ? OS7_TINT_COLOR : BAR_COLOR;
-    self.mapStyleModeSegmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [self.mapStyleModeSegmentedControl addTarget:self action:@selector(mapStyleModeWantsToChange) forControlEvents:UIControlEventValueChanged];
     
     self.visibilitySegmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:visibilityTypeLabel count:NUM_VISIBILITY_TYPES]];
-    self.visibilitySegmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     self.visibilitySegmentedControl.selectedSegmentIndex = VisibilityAllStations;
     self.visibilitySegmentedControl.tintColor = os7 ? OS7_TINT_COLOR : BAR_COLOR;
     [self.visibilitySegmentedControl addTarget:self action:@selector(visibilityWantsToChange) forControlEvents:UIControlEventValueChanged];
@@ -442,7 +440,7 @@ static void *settingsContext = (void *)2;
 
 + (void)alertWithTitle:(NSString *)title message:(NSString *)message
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate showAlertViewWithTitle:NSLocalizedString(title, nil) message:message buttonTitle:nil];
 }
 
@@ -518,7 +516,7 @@ static void *settingsContext = (void *)2;
         return;
     }
     //[self performSelector:@selector(updateAnnotations) withObject:nil afterDelay:0];
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     Database *database = appDelegate.database;
     [self.mapIndicator startAnimating];
     NSInteger numberOfIcons_ = numberOfIcons;
@@ -890,7 +888,7 @@ static void *settingsContext = (void *)2;
     recentFilterType = type;
     self.searchKeyword = value ? value : @"";
     [self setFormattedSearchText];
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database updateFilterWithFilterType:recentFilterType filterValue:self.searchKeyword];
 }
 
@@ -999,7 +997,7 @@ static void *settingsContext = (void *)2;
 
 - (void)visibilityWantsToChange
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database updateVisibilityType:(VisibilityType)self.visibilitySegmentedControl.selectedSegmentIndex];
     //[self updateAnnotations];
     //if(!self.tableView.hidden) {

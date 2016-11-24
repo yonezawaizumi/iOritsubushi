@@ -59,14 +59,14 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database reloadLineGroup:self.headerGroup];
     [super reloadHeaderGroup];
 }
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.groups = [appDelegate.database stationsWithLineCode:self.headerGroup.code];
     [super reloadGroups];
 }
@@ -104,14 +104,14 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database reloadPrefGroup:self.headerGroup];
     [super reloadHeaderGroup];
 }
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.groups = [appDelegate.database stationsWithPref:[self.headerGroup.code intValue]];
     [super reloadGroups];
 }
@@ -145,14 +145,14 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database reloadYomiGroup:self.headerGroup];
     [super reloadHeaderGroup];
 }
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.groups = [appDelegate.database stationsWithYomiPrefix:self.headerGroup.title];
     [super reloadGroups];
 }
@@ -182,14 +182,14 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate.database reloadCompletionDateGroup:self.headerGroup];
     [super reloadHeaderGroup];
 }
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.groups = [appDelegate.database stationsWithCompletionDate:self.headerGroup.code];
     [super reloadGroups];
 }

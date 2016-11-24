@@ -112,7 +112,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    AppDelegate *delegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [delegate.database updateCompletion:self.station];
     [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInteger:[self intPickerValue]] forKey:SETTINGS_KEY_RECENT_DATE];
     [super viewWillDisappear:animated];

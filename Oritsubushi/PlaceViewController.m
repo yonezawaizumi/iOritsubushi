@@ -30,14 +30,14 @@
 
 - (void)reloadHeaderGroup
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.headerGroup = [appDelegate.database allTotalGroup];
     [super reloadHeaderGroup];
 }
 
 - (void)reloadGroups
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     self.groups = [appDelegate.database prefGroups];
     [super reloadGroups];
 }

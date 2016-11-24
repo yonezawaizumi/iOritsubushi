@@ -56,7 +56,7 @@
 - (void)loadView
 {
     [super loadView];
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     CGRect frame = appDelegate.window.frame;
     self.view = [[UIView alloc] initWithFrame:frame];
     self.webView = [[UIWebView alloc] initWithFrame:frame];
@@ -122,7 +122,7 @@
 
 + (void)showLoadingError:(NSString *)errorMessage
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate showAlertViewWithTitle:NSLocalizedString(@"エラー", nil) message:errorMessage buttonTitle:nil];
 }
 

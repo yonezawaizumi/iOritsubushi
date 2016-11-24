@@ -271,14 +271,14 @@
 
 - (void)setMapFilter
 {
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [appDelegate mapViewUpdateFilterWithFilterType:self.mapFilterType filterValue:self.mapFilterWord];
     [appDelegate mapViewRequestUpdate];
 }
 
 - (void)setMapFilterButtonWithFilterType:(DatabaseFilterType)filterType word:(NSString *)word
 {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"地図選択", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(setMapFilter)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"地図選択", nil) style:UIBarButtonItemStylePlain target:self action:@selector(setMapFilter)];
     self.mapFilterType = filterType;
     self.mapFilterWord = word;
 }
