@@ -98,7 +98,6 @@
 		067A601C148D0BF300CD0DCE /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 067A600C148D0BF300CD0DCE /* SBJsonUTF8Stream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		067A601D148D0BF300CD0DCE /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 067A600E148D0BF300CD0DCE /* SBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		0697326A148D25D10042F3D5 /* SyncViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06973268148D25D10042F3D5 /* SyncViewController.m */; };
-		0697326B148D25D10042F3D5 /* SyncViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06973269148D25D10042F3D5 /* SyncViewController.xib */; };
 		06A5649A1482FCEC001A041D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 06A564981482FCEC001A041D /* Default.png */; };
 		06A5649B1482FCEC001A041D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06A564991482FCEC001A041D /* Default@2x.png */; };
 		06A564AF1483B5EE001A041D /* InformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06A564AE1483B5ED001A041D /* InformationViewController.m */; };
@@ -136,7 +135,6 @@
 		06C73F1B1486F530002AEB71 /* MemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06C73F191486F530002AEB71 /* MemoViewController.m */; };
 		06C73F1C1486F530002AEB71 /* MemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06C73F1A1486F530002AEB71 /* MemoViewController.xib */; };
 		06C73F2514870907002AEB71 /* CompletionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06C73F2314870907002AEB71 /* CompletionViewController.m */; };
-		06C73F2614870907002AEB71 /* CompletionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06C73F2414870907002AEB71 /* CompletionViewController.xib */; };
 		06C73F2D14877E98002AEB71 /* statusicon_comp.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C73F2B14877E98002AEB71 /* statusicon_comp.png */; };
 		06C73F2E14877E99002AEB71 /* statusicon_incomp.png in Resources */ = {isa = PBXBuildFile; fileRef = 06C73F2C14877E98002AEB71 /* statusicon_incomp.png */; };
 		06CA69F014B50B8B008C5F43 /* statusicon_notload.png in Resources */ = {isa = PBXBuildFile; fileRef = 06CA69EE14B50B8B008C5F43 /* statusicon_notload.png */; };
@@ -295,7 +293,6 @@
 		067A600E148D0BF300CD0DCE /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		06973267148D25D10042F3D5 /* SyncViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncViewController.h; path = Oritsubushi/SyncViewController.h; sourceTree = "<group>"; };
 		06973268148D25D10042F3D5 /* SyncViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SyncViewController.m; path = Oritsubushi/SyncViewController.m; sourceTree = "<group>"; };
-		06973269148D25D10042F3D5 /* SyncViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SyncViewController.xib; path = Oritsubushi/SyncViewController.xib; sourceTree = "<group>"; };
 		06A564981482FCEC001A041D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Oritsubushi/Default.png; sourceTree = "<group>"; };
 		06A564991482FCEC001A041D /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Oritsubushi/Default@2x.png"; sourceTree = "<group>"; };
 		06A564AD1483B5ED001A041D /* InformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InformationViewController.h; path = Oritsubushi/InformationViewController.h; sourceTree = "<group>"; };
@@ -358,7 +355,6 @@
 		06C73F1A1486F530002AEB71 /* MemoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MemoViewController.xib; path = Oritsubushi/MemoViewController.xib; sourceTree = "<group>"; };
 		06C73F2214870907002AEB71 /* CompletionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompletionViewController.h; path = Oritsubushi/CompletionViewController.h; sourceTree = "<group>"; };
 		06C73F2314870907002AEB71 /* CompletionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompletionViewController.m; path = Oritsubushi/CompletionViewController.m; sourceTree = "<group>"; };
-		06C73F2414870907002AEB71 /* CompletionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CompletionViewController.xib; path = Oritsubushi/CompletionViewController.xib; sourceTree = "<group>"; };
 		06C73F2A14872DBD002AEB71 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		06C73F2B14877E98002AEB71 /* statusicon_comp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = statusicon_comp.png; path = Oritsubushi/assets/statusicon_comp.png; sourceTree = "<group>"; };
 		06C73F2C14877E98002AEB71 /* statusicon_incomp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = statusicon_incomp.png; path = Oritsubushi/assets/statusicon_incomp.png; sourceTree = "<group>"; };
@@ -406,7 +402,6 @@
 				06A564AE1483B5ED001A041D /* InformationViewController.m */,
 				06973267148D25D10042F3D5 /* SyncViewController.h */,
 				06973268148D25D10042F3D5 /* SyncViewController.m */,
-				06973269148D25D10042F3D5 /* SyncViewController.xib */,
 				06661F2117E93E8B00861C52 /* SyncViewController7.xib */,
 				065C0F75148B2535001D443C /* Settings */,
 			);
@@ -494,7 +489,6 @@
 				06A564B51484597C001A041D /* StationInformationViewController.xib */,
 				06C73F2214870907002AEB71 /* CompletionViewController.h */,
 				06C73F2314870907002AEB71 /* CompletionViewController.m */,
-				06C73F2414870907002AEB71 /* CompletionViewController.xib */,
 				06CC92B917E1C319000DB811 /* CompletionViewController7.xib */,
 				06C73F181486F530002AEB71 /* MemoViewController.h */,
 				06C73F191486F530002AEB71 /* MemoViewController.m */,
@@ -891,13 +885,11 @@
 				0672416A1485BA0100B49CCC /* statusicon_incomp@2x.png in Resources */,
 				06C73F1C1486F530002AEB71 /* MemoViewController.xib in Resources */,
 				0603B0631BA99AC4005F3C99 /* Icon-60@2x.png in Resources */,
-				06C73F2614870907002AEB71 /* CompletionViewController.xib in Resources */,
 				06CC92BA17E1C319000DB811 /* CompletionViewController7.xib in Resources */,
 				06BDC71717E96E160024BCB0 /* Icon-Small@2x.png in Resources */,
 				06C73F2D14877E98002AEB71 /* statusicon_comp.png in Resources */,
 				06C73F2E14877E99002AEB71 /* statusicon_incomp.png in Resources */,
 				0618FF6B17E9800700467C2D /* Icon-40.png in Resources */,
-				0697326B148D25D10042F3D5 /* SyncViewController.xib in Resources */,
 				0606395C149F737000B454BC /* GroupsCell.xib in Resources */,
 				06CA69F014B50B8B008C5F43 /* statusicon_notload.png in Resources */,
 				06CA69F114B50B8B008C5F43 /* statusicon_notload@2x.png in Resources */,
