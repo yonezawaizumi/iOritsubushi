@@ -68,6 +68,7 @@
 		06272933148EF9C400BB3B58 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06272932148EF9C300BB3B58 /* MobileCoreServices.framework */; };
 		06373D091B649C740079284C /* FMDatabasePool.m in Sources */ = {isa = PBXBuildFile; fileRef = 06373D051B649C740079284C /* FMDatabasePool.m */; };
 		06373D0A1B649C740079284C /* FMDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 06373D071B649C740079284C /* FMDatabaseQueue.m */; };
+		063B50DF1DE877F8009156AC /* MapTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 063B50DE1DE877F8009156AC /* MapTableViewCell.xib */; };
 		064D466B14882E6600066924 /* Group.m in Sources */ = {isa = PBXBuildFile; fileRef = 064D466A14882E6600066924 /* Group.m */; };
 		064D4676148838D600066924 /* GroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 064D4675148838D600066924 /* GroupsViewController.m */; };
 		064D467A14884A5E00066924 /* LinesViewControllers.m in Sources */ = {isa = PBXBuildFile; fileRef = 064D467914884A5E00066924 /* LinesViewControllers.m */; };
@@ -238,6 +239,7 @@
 		06373D061B649C740079284C /* FMDatabaseQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDatabaseQueue.h; sourceTree = "<group>"; };
 		06373D071B649C740079284C /* FMDatabaseQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMDatabaseQueue.m; sourceTree = "<group>"; };
 		06373D081B649C740079284C /* FMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMDB.h; sourceTree = "<group>"; };
+		063B50DE1DE877F8009156AC /* MapTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MapTableViewCell.xib; path = Oritsubushi/MapTableViewCell.xib; sourceTree = "<group>"; };
 		064D466914882E6600066924 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Group.h; path = Oritsubushi/Group.h; sourceTree = "<group>"; };
 		064D466A14882E6600066924 /* Group.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Group.m; path = Oritsubushi/Group.m; sourceTree = "<group>"; };
 		064D4674148838D600066924 /* GroupsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GroupsViewController.h; path = Oritsubushi/GroupsViewController.h; sourceTree = "<group>"; };
@@ -396,6 +398,7 @@
 			children = (
 				06B4BE14145F63F200F57858 /* MapViewController.h */,
 				06B4BE15145F63F200F57858 /* MapViewController.m */,
+				063B50DE1DE877F8009156AC /* MapTableViewCell.xib */,
 				064D467714884A2100066924 /* Verbose */,
 				064D467E14889A1300066924 /* List */,
 				06A564AD1483B5ED001A041D /* InformationViewController.h */,
@@ -903,6 +906,7 @@
 				06BDC71517E96E160024BCB0 /* Icon-Small-50.png in Resources */,
 				0603B06F1BA99AE3005F3C99 /* Icon-60@3x.png in Resources */,
 				060258471623CB0D007184F4 /* tabicon_date@2x.png in Resources */,
+				063B50DF1DE877F8009156AC /* MapTableViewCell.xib in Resources */,
 				060258481623CB0D007184F4 /* tabicon_date.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

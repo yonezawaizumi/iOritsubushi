@@ -142,6 +142,8 @@ static void *settingsContext = (void *)2;
 
 @synthesize recentRegion;
 
+@synthesize cell = cell_;
+
 - (id)init
 {
     self = [super init];
@@ -610,19 +612,28 @@ static void *settingsContext = (void *)2;
     return [self.stationsForList count];
 }
 
+- (UITableViewCell *)tableViewCell
+{
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"GroupsCell"];
+    if(!self.cell) {
+        [[NSBundle mainBundle] loadNibNamed:@"MapTableViewCell" owner:self options:nil];
+        cell = self.cell;
+        self.cell = nil;
+    }
+    return cell;
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView_ cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *identifier = @"MapListCell";
     [self refleshStationsForList];
-    UITableViewCell *cell = [tableView_ dequeueReusableCellWithIdentifier:identifier];
-    if(!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-    }
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
     Station *station = [self.stationsForList objectAtIndex:indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:station.statusIconName];
-    cell.textLabel.text = station.name;
-    cell.detailTextLabel.text = station.operator.name;
+
+    UITableViewCell *cell = [self tableViewCell];
+    UIImageView *imageView = (UIImageView *)[cell viewWithTag:1];
+    imageView.image = [UIImage imageNamed:station.statusIconName];
+    ((UILabel *)[cell viewWithTag:2]).text = station.name;
+    ((UILabel *)[cell viewWithTag:3]).text = station.operator.name;
+
     return cell;
 }
 

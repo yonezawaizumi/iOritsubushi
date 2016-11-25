@@ -20,6 +20,8 @@
     CLLocationManagerDelegate
 >
 
+@property(nonatomic,strong) IBOutlet UITableViewCell *cell;
+
 - (void)moveToStation:(Station *)station;
 - (void)updateFilterWithFilterType:(DatabaseFilterType)type filterValue:(NSString *)value;
 - (void)requestUpdate;
