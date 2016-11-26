@@ -278,7 +278,7 @@
                     deselect = YES;
                     break;
                 case 1:
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://ja.m.wikipedia.org/wiki/%@", [Misc URLEncode:self.station.wiki]]]];
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://ja.m.wikipedia.org/wiki/%@", [Misc URLEncode:self.station.wiki]]]];
                     deselect = YES;
                     break;
                 case 2:

@@ -51,7 +51,8 @@ enum {
     [self.view.layer setCornerRadius:5.0f];
     [self.view setClipsToBounds:YES];
 
-    CGFloat margin = self.locationsTableView.frame.size.height - self.locationsTableView.rowHeight * self.placeCandidates.count;
+    // iOS8から self.locationTableView.rowHeightが0になってしまう？ のでやむなく即値
+    CGFloat margin = self.locationsTableView.frame.size.height - 44 * self.placeCandidates.count;
     if(margin > 0) {
         CGRect frame = self.view.frame;
         frame.size.height -= margin;

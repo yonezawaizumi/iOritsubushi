@@ -1,8 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4504" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <deployment defaultVersion="1072" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3734.1"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlaceSelectViewController">
@@ -17,44 +21,70 @@
             <rect key="frame" x="0.0" y="0.0" width="270" height="306"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="もしかして…" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" id="a4b-Od-Rva">
+                <label autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="もしかして…" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a4b-Od-Rva">
                     <rect key="frame" x="0.0" y="4" width="270" height="45"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="W51-e0-Qm9"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Je9-Zi-MXS">
-                    <rect key="frame" x="0.0" y="261" width="270" height="45"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                    <state key="normal" title="キャンセル">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="cancel:" destination="-1" eventType="touchUpInside" id="HWT-QP-9tf"/>
-                    </connections>
-                </button>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="DdE-hH-l5F">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="DdE-hH-l5F">
                     <rect key="frame" x="34" y="69" width="202" height="174"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="sectionIndexTrackingBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="Goa-uO-2g1"/>
                         <outlet property="delegate" destination="-1" id="KER-GT-sjh"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" id="Ko8-0p-tRy" userLabel="Button Separator">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ko8-0p-tRy" userLabel="Button Separator">
                     <rect key="frame" x="0.0" y="259" width="270" height="0.0"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" id="dUX-LM-iba"/>
+                    </constraints>
                 </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Je9-Zi-MXS">
+                    <rect key="frame" x="0.0" y="261" width="270" height="45"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="zaw-1Y-8iq"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                    <state key="normal" title="キャンセル">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="cancel:" destination="-1" eventType="touchUpInside" id="HWT-QP-9tf"/>
+                    </connections>
+                </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Ko8-0p-tRy" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="7vr-CN-1HX"/>
+                <constraint firstAttribute="trailing" secondItem="Ko8-0p-tRy" secondAttribute="trailing" id="9Gr-Q1-V9Q"/>
+                <constraint firstAttribute="trailing" secondItem="Je9-Zi-MXS" secondAttribute="trailing" id="KQu-Zw-wVt"/>
+                <constraint firstAttribute="trailing" secondItem="a4b-Od-Rva" secondAttribute="trailing" id="U5j-K3-3Fz"/>
+                <constraint firstItem="Je9-Zi-MXS" firstAttribute="top" secondItem="Ko8-0p-tRy" secondAttribute="bottom" constant="2" id="Uty-oH-De7"/>
+                <constraint firstItem="Je9-Zi-MXS" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="W8Y-V6-B1f"/>
+                <constraint firstItem="a4b-Od-Rva" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="XJl-Ll-ODI"/>
+                <constraint firstItem="DdE-hH-l5F" firstAttribute="top" secondItem="a4b-Od-Rva" secondAttribute="bottom" constant="20" id="YW6-I3-hMa"/>
+                <constraint firstItem="Ko8-0p-tRy" firstAttribute="top" secondItem="DdE-hH-l5F" secondAttribute="bottom" constant="16" id="eI8-3p-nIB"/>
+                <constraint firstAttribute="trailing" secondItem="DdE-hH-l5F" secondAttribute="trailing" constant="34" id="gZH-96-sdb"/>
+                <constraint firstItem="DdE-hH-l5F" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="34" id="rig-8U-LUZ"/>
+                <constraint firstItem="a4b-Od-Rva" firstAttribute="top" secondItem="1" secondAttribute="top" constant="4" id="zCK-Nu-oyj"/>
+                <constraint firstAttribute="bottom" secondItem="Je9-Zi-MXS" secondAttribute="bottom" id="zEj-g4-HRQ"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
+    </simulatedMetricsContainer>
 </document>
