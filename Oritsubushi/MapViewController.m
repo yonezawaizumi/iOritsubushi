@@ -746,8 +746,9 @@ static void *settingsContext = (void *)2;
     //NSLog(@"total:%d", [mapView.annotations count]);
 
     self.stationsForList = nil;
+    // 常に呼び出さないとリストの更新中に通知が来たときに矛盾が起こる
+    [self.tableView reloadData];
     if(!self.listView.hidden) {
-        [self.tableView reloadData];
         [self.tableView flashScrollIndicators];
     }
     [self.mapIndicator stopAnimating];
