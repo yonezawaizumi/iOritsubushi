@@ -7,7 +7,7 @@
 //
 
 #import "GoogleMapsService.h"
-#import "SBJson.h"
+#import "SBJson4.h"
 #import "GoogleMapsLocation.h"
 #import "Misc.h"
 
@@ -67,56 +67,75 @@
     [self geocodeWithAddress:address country:[[NSLocale preferredLanguages] objectAtIndex:0]];
 }
 
-- (NSString *)parseData:(NSData *)data;
+- (void)parseData:(NSData *)data;
 {
-    if(!data) {
-        return @"サーバーにつながりません";
-    }
-    SBJsonParser *parser = [[SBJsonParser alloc] init];
-    NSDictionary *dict = [parser objectWithData:data];
-    if(!dict) {
-        return @"サーバーからの結果が不正です";
-    }
-    id value = [dict objectForKey:@"status"];
-    if(![value isKindOfClass:[NSString class]]) {
-        return @"検索できませんでした";
-    } else if([@"OK" isEqualToString:value]) {
-        id results = [dict objectForKey:@"results"];
-        if([results isKindOfClass:[NSArray class]]) {
-            NSMutableArray *locations = [[NSMutableArray alloc] init];
-            for (NSDictionary *placemark in results) {
-                id address = [placemark objectForKey:@"formatted_address"];
-                if(![address isKindOfClass:[NSString class]] || ![(NSString *)address length]) {
-                    continue;
+    if(data) {
+        id parser = [SBJson4Parser parserWithBlock:^(id v, BOOL *stop) {
+            if ([(NSObject *)v isKindOfClass:[NSDictionary class]]) {
+                id value = [(NSDictionary *)v objectForKey:@"status"];
+                if(![value isKindOfClass:[NSString class]]) {
+                    [self delegateResult:@"検索できませんでした"];
+                } else if([@"OK" isEqualToString:value]) {
+                    id results = [(NSDictionary *)v objectForKey:@"results"];
+                    if([results isKindOfClass:[NSArray class]]) {
+                        NSMutableArray *locations = [[NSMutableArray alloc] init];
+                        for (NSDictionary *placemark in results) {
+                            id address = [placemark objectForKey:@"formatted_address"];
+                            if(![address isKindOfClass:[NSString class]] || ![(NSString *)address length]) {
+                                continue;
+                            }
+                            id loc = [[placemark objectForKey:@"geometry"] objectForKey:@"location"];
+                            id lat = [loc objectForKey:@"lat"];
+                            id lng = [loc objectForKey:@"lng"];
+                            if(![lat isKindOfClass:[NSNumber class]] || ![lng isKindOfClass:[NSNumber class]]) {
+                                continue;
+                            }
+                            GoogleMapsLocation *location = [[GoogleMapsLocation alloc] initWithAddress:address coordinate:CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue])];
+                            [locations addObject:location];
+                        }
+                        if([locations count]) {
+                            self.locations = locations;
+                            [self delegateResult:nil];
+                            return;
+                        }
+                    }
+                    [self delegateResult:@"地点が見つかりません"];
+                } else if([@"ZERO_RESULTS" isEqualToString:value]) {
+                    [self delegateResult:@"地点が見つかりません"];
+                } else if([@"REQUEST_DENIED" isEqualToString:value]) {
+                    [self delegateResult:@"実行制限回数に達しました"];
+                } else {
+                    [self delegateResult:@"サーバーエラー"];
                 }
-                id loc = [[placemark objectForKey:@"geometry"] objectForKey:@"location"];
-                id lat = [loc objectForKey:@"lat"];
-                id lng = [loc objectForKey:@"lng"];
-                if(![lat isKindOfClass:[NSNumber class]] || ![lng isKindOfClass:[NSNumber class]]) {
-                    continue;
-                }
-                GoogleMapsLocation *location = [[GoogleMapsLocation alloc] initWithAddress:address coordinate:CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue])];
-                [locations addObject:location];
-            }
-            if([locations count]) {
-                self.locations = locations;
-                return nil;
             }
         }
-        return @"地点が見つかりません";
-    } else if([@"ZERO_RESULTS" isEqualToString:value]) {
-        return @"地点が見つかりません";
-    } else if([@"REQUEST_DENIED" isEqualToString:value]) {
-        return @"実行制限回数に達しました";
+                                    allowMultiRoot:NO
+                                   unwrapRootArray:NO
+                                      errorHandler:^(NSError *err) {
+                                          [self delegateResult:@"サーバーからの結果が不正です"];
+                                      }];
+        if ([parser parse:data] != SBJson4ParserComplete) {
+            [self delegateResult:@"サーバーからの結果が不正です"];
+        }
     } else {
-        return @"サーバーエラー";
+        [self delegateResult:@"サーバーにつながりません"];
     }
+}
+
+- (void)delegateResult:(NSString *)errorMessage
+{
+    dispatch_async(
+                   dispatch_get_main_queue(),
+                   ^{
+                       self.errorMessage = errorMessage;
+                       [self.delegate GoogleMapsServiceDidFinish:self];
+                   }
+                   );
 }
 
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
-    self.errorMessage = [self parseData:request.responseData];
-    [self.delegate GoogleMapsServiceDidFinish:self];
+    [self parseData:request.responseData];
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request

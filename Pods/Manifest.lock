@@ -1,0 +1,37 @@
+PODS:
+  - ASIHTTPRequest (1.8.2):
+    - ASIHTTPRequest/ASIWebPageRequest (= 1.8.2)
+    - ASIHTTPRequest/CloudFiles (= 1.8.2)
+    - ASIHTTPRequest/Core (= 1.8.2)
+    - ASIHTTPRequest/S3 (= 1.8.2)
+  - ASIHTTPRequest/ASIWebPageRequest (1.8.2):
+    - ASIHTTPRequest/Core
+  - ASIHTTPRequest/CloudFiles (1.8.2):
+    - ASIHTTPRequest/Core
+  - ASIHTTPRequest/Core (1.8.2):
+    - Reachability
+  - ASIHTTPRequest/S3 (1.8.2):
+    - ASIHTTPRequest/Core
+  - FMDB (2.6.2):
+    - FMDB/standard (= 2.6.2)
+  - FMDB/standard (2.6.2)
+  - MJPopupViewController (0.4)
+  - Reachability (3.2)
+  - SBJson (4.0.5)
+
+DEPENDENCIES:
+  - ASIHTTPRequest
+  - FMDB
+  - MJPopupViewController
+  - SBJson (~> 4.0)
+
+SPEC CHECKSUMS:
+  ASIHTTPRequest: ec013992946676b7978dcbde6396d57312d21db4
+  FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
+  MJPopupViewController: e9ad553a3145eb8126ba2748e872ae7fb25cc605
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  SBJson: af3137ccda22be3004487524da0a071c75d4251b
+
+PODFILE CHECKSUM: d8f19ec23e6c28b028956dc249307f7c4be052c3
+
+COCOAPODS: 1.1.1

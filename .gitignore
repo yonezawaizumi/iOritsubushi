@@ -6,5 +6,11 @@ build/
 *.pbxuser
 *.perspective
 *.perspectivev3
+*.xcuserstate
+*.xcbkptlist
 
 UserInterfaceState.xcuserstate
+
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcworkspace/contents.xcworkspacedata

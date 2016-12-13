@@ -1,0 +1,9 @@
+ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2" $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/ASIHTTPRequest" "${PODS_ROOT}/Headers/Public/FMDB" "${PODS_ROOT}/Headers/Public/MJPopupViewController" "${PODS_ROOT}/Headers/Public/Reachability" "${PODS_ROOT}/Headers/Public/SBJson"
+LIBRARY_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/ASIHTTPRequest" "$PODS_CONFIGURATION_BUILD_DIR/FMDB" "$PODS_CONFIGURATION_BUILD_DIR/MJPopupViewController" "$PODS_CONFIGURATION_BUILD_DIR/Reachability" "$PODS_CONFIGURATION_BUILD_DIR/SBJson"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/ASIHTTPRequest" -isystem "${PODS_ROOT}/Headers/Public/FMDB" -isystem "${PODS_ROOT}/Headers/Public/MJPopupViewController" -isystem "${PODS_ROOT}/Headers/Public/Reachability" -isystem "${PODS_ROOT}/Headers/Public/SBJson"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"ASIHTTPRequest" -l"FMDB" -l"MJPopupViewController" -l"Reachability" -l"SBJson" -l"sqlite3" -l"xml2.2" -l"z.1" -framework "CFNetwork" -framework "CoreGraphics" -framework "MobileCoreServices" -framework "QuartzCore" -framework "SystemConfiguration"
+PODS_BUILD_DIR = $BUILD_DIR
+PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_ROOT = ${SRCROOT}/Pods
