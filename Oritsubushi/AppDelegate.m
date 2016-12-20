@@ -17,6 +17,7 @@
 #import "SyncViewController.h"
 #import "Consts.h"
 #import "Settings.h"
+#import "Firebase.h"
 
 @interface TabBarController : UITabBarController<UITabBarControllerDelegate>
 
@@ -43,7 +44,12 @@
 
 @end
 
-@interface AppDelegate ()
+@interface AppDelegate () {
+    id<LocationUpdatedDelegate> _locationDelegate;
+    CLLocationCoordinate2D currentLocation;
+    BOOL locatingEnabled;
+    BOOL firstLocatingDone;
+}
 
 @property(nonatomic,strong) TabBarController *tabBarController;
 @property(nonatomic,strong) MapViewController *mapViewController;
@@ -52,6 +58,8 @@
 @property(nonatomic,strong) NSMutableArray *memoryWarningNotificationObservers;
 @property(nonatomic,strong) UIAlertView *alertView;
 @property(nonatomic,readwrite) NSInteger osVersion;
+@property(nonatomic,strong) CLLocationManager *locationManager;
+
 
 - (void)setDefaultSettings;
 - (void)loadCookies;
@@ -68,6 +76,7 @@
 @synthesize database;
 @synthesize databaseUpdateNotificationObservers;
 @synthesize memoryWarningNotificationObservers;
+@synthesize locationManager;
 
 - (void)addTabViewControllerWithClass:(Class)class viewControllers:(NSMutableArray *)viewControllers customizedViewControllers:(NSMutableArray *)customizedViewControllers
 {
@@ -87,8 +96,18 @@
     NSArray *aOsVersions = [[[UIDevice currentDevice]systemVersion] componentsSeparatedByString:@"."];
     self.osVersion = [[aOsVersions objectAtIndex:0] intValue];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(memoryWarningDidReceive) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+    UIUserNotificationType types = UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+    [application registerUserNotificationSettings:mySettings];
     
+    [FIRApp configure];
+
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager requestWhenInUseAuthorization];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(memoryWarningDidReceive) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+
     self.databaseUpdateNotificationObservers = [NSMutableArray array];
     self.memoryWarningNotificationObservers = [NSMutableArray array];
     
@@ -155,6 +174,64 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     [self saveCookies];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    switch (status) {
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            [self.locationManager startUpdatingLocation];
+            break;
+        case kCLAuthorizationStatusDenied:
+            locatingEnabled = NO;
+            [self locatingWasUpdated];
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    CLLocation *location = [locations lastObject];
+    locatingEnabled = YES;
+    NSLog(@"%f %f",
+          location.coordinate.latitude,
+          location.coordinate.longitude);
+    currentLocation = [location coordinate];
+    [self locatingWasUpdated];
+}
+
+- (void)locatingWasUpdated {
+    firstLocatingDone = YES;
+    [self.locationDelegate locationWasUpdated:locatingEnabled location:currentLocation];
+    [self.locationManager stopUpdatingLocation];
+}
+
+- (void)setLocationDelegate:(id<LocationUpdatedDelegate>)locationDelegate {
+    _locationDelegate = locationDelegate;
+    if (firstLocatingDone) {
+        [locationDelegate locationWasUpdated:locatingEnabled location:currentLocation];
+    }
+}
+
+- (id<LocationUpdatedDelegate>)getLocationDelegate {
+    return _locationDelegate;
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+    [application registerForRemoteNotifications];
+    [[FIRMessaging messaging] subscribeToTopic:@"/topics/ioritsubushi"];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    // If you are receiving a notification message while your app is in the background,
+    // this callback will not be fired till the user taps on the notification launching the application.
+    // TODO: Handle data of notification
+    
+    // Print message ID.
+    NSLog(@"Message ID: %@", userInfo[@"gcm.message_id"]);
+    
+    // Pring full message.
+    NSLog(@"%@", userInfo);
 }
 
 - (void)memoryWarningDidReceive

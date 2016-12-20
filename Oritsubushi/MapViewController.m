@@ -75,6 +75,8 @@ static void *settingsContext = (void *)2;
     DatabaseFilterType recentFilterType;
     NSInteger numberOfIcons;
     
+    BOOL locatingEnabled;
+    
     dispatch_queue_t queue;
 }
 
@@ -99,8 +101,6 @@ static void *settingsContext = (void *)2;
 @property(nonatomic,assign) BOOL logoInitialized;
 
 @property(assign) MKCoordinateRegion recentRegion;
-
-@property(nonatomic,strong) CLLocationManager *locationManager;
 
 - (void)present;
 - (void)swapMapAndList;
@@ -326,18 +326,15 @@ static void *settingsContext = (void *)2;
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     numberOfIcons = [userDefaults integerForKey:SETTINGS_KEY_NUMBER_OF_ICONS];
     [userDefaults addObserver:self forKeyPath:SETTINGS_KEY_NUMBER_OF_ICONS options:0 context:settingsContext];
-    //AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    //[appDelegate addDatabaseUpdateNotificationObserver:self];
+
     [Database addObserver:self];
-    if (!self.locationManager) {
-        self.locationManager = [CLLocationManager new];
-    }
-    self.locationManager.delegate = self;
     firstLocatingStatus = FirstLocatingWait;
     [self performSelector:@selector(finishFirstLocatingIfDecided) withObject:nil afterDelay:FIRST_LOCATING_DECIDE_DELAY];
     [self performSelector:@selector(terminateFirstLocating) withObject:nil afterDelay:FIRST_LOCATING_TERMINATE_DELAY];
-
+    
     [self setLocation:[self.mapView.userLocation.location coordinate] setDelta:YES];
+
+    ((AppDelegate *)[UIApplication sharedApplication].delegate).locationDelegate = self;
 }
 
 - (void)viewDidLayoutSubviews
@@ -364,13 +361,6 @@ static void *settingsContext = (void *)2;
     if(self.selectedIndexPath) {
         [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
         self.selectedIndexPath = nil;
-    }
-    if (firstLocatingStatus != FirstLocatingDone) {
-        if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-            [self.locationManager requestWhenInUseAuthorization];
-        } else {
-            [self.locationManager startUpdatingLocation];
-        }
     }
 }
 
@@ -411,7 +401,6 @@ static void *settingsContext = (void *)2;
     self.placeSelectView = nil;
     self.GMapService = nil;
     self.mapIndicator = nil;
-    self.locationManager = nil;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -472,30 +461,19 @@ static void *settingsContext = (void *)2;
     }
 }
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    
-    if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
-        [self.locationManager startUpdatingLocation];
-    }
-}
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    CLLocation *location = [locations lastObject];
-    NSLog(@"%f %f",
-          location.coordinate.latitude,
-          location.coordinate.longitude);
-    CLLocationCoordinate2D currentLocation = [location coordinate];
+- (void)locationWasUpdated:(BOOL)enabled location:(CLLocationCoordinate2D)location {
     switch(firstLocatingStatus) {
         case FirstLocatingWait:
-            [self setLocation:currentLocation setDelta:NO];
-            break;
         case FirstLocatingTemporary:
-            [self terminateFirstLocating];
+            if (enabled) {
+                [self setLocation:location setDelta:NO];
+                locatingEnabled = YES;
+            }
             break;
         default:
             break;
-    }    [self terminateFirstLocating];
-    [self.locationManager stopUpdatingLocation];
+    }
+    [self terminateFirstLocating];
 }
 
 - (void)requestUpdateForce:(BOOL)force
@@ -777,7 +755,7 @@ static void *settingsContext = (void *)2;
 - (void)setButtonsEnabled:(BOOL)enabled
 {
     enabled = enabled && self.mapWrapper.hidden;
-    self.presentButton.enabled = enabled;
+    self.presentButton.enabled = enabled && locatingEnabled;
     self.visibilitySegmentedControl.enabled = enabled;
     self.mapStyleModeSegmentedControl.enabled = enabled;
 }

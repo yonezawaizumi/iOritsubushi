@@ -21,6 +21,7 @@
 		0603B0721BA99B2E005F3C99 /* Defaults-667h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0701BA99B2E005F3C99 /* Defaults-667h@2x.png */; };
 		0603B0731BA99B2E005F3C99 /* Defaults-736h@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0603B0711BA99B2E005F3C99 /* Defaults-736h@3x.png */; };
 		0606395C149F737000B454BC /* GroupsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0606395B149F737000B454BC /* GroupsCell.xib */; };
+		060DBAD11E02D12800CAE1CE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 060DBAD01E02D12800CAE1CE /* GoogleService-Info.plist */; };
 		060E921D148C340200002D81 /* DatabaseFilterTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 060E921C148C340200002D81 /* DatabaseFilterTypes.m */; };
 		060E921F148C4F6600002D81 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 060E921E148C4F6500002D81 /* libxml2.dylib */; };
 		0618FF6B17E9800700467C2D /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 0618FF6A17E9800700467C2D /* Icon-40.png */; };
@@ -134,6 +135,7 @@
 		0603B0701BA99B2E005F3C99 /* Defaults-667h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Defaults-667h@2x.png"; path = "Oritsubushi/Defaults-667h@2x.png"; sourceTree = "<group>"; };
 		0603B0711BA99B2E005F3C99 /* Defaults-736h@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Defaults-736h@3x.png"; path = "Oritsubushi/Defaults-736h@3x.png"; sourceTree = "<group>"; };
 		0606395B149F737000B454BC /* GroupsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GroupsCell.xib; path = Oritsubushi/GroupsCell.xib; sourceTree = "<group>"; };
+		060DBAD01E02D12800CAE1CE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Oritsubushi/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		060E921B148C340200002D81 /* DatabaseFilterTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DatabaseFilterTypes.h; path = Oritsubushi/DatabaseFilterTypes.h; sourceTree = "<group>"; };
 		060E921C148C340200002D81 /* DatabaseFilterTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DatabaseFilterTypes.m; path = Oritsubushi/DatabaseFilterTypes.m; sourceTree = "<group>"; };
 		060E921E148C4F6500002D81 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -203,6 +205,7 @@
 		067241671485BA0100B49CCC /* statusicon_comp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusicon_comp@2x.png"; path = "Oritsubushi/assets/statusicon_comp@2x.png"; sourceTree = "<group>"; };
 		067241681485BA0100B49CCC /* statusicon_incomp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusicon_incomp@2x.png"; path = "Oritsubushi/assets/statusicon_incomp@2x.png"; sourceTree = "<group>"; };
 		0677CAF417E97B7D00994164 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Oritsubushi/icon/Icon@2x.png"; sourceTree = "<group>"; };
+		0685479B1E02DCB900C70A6E /* Oritsubushi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Oritsubushi.entitlements; sourceTree = "<group>"; };
 		06973267148D25D10042F3D5 /* SyncViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncViewController.h; path = Oritsubushi/SyncViewController.h; sourceTree = "<group>"; };
 		06973268148D25D10042F3D5 /* SyncViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SyncViewController.m; path = Oritsubushi/SyncViewController.m; sourceTree = "<group>"; };
 		06A564981482FCEC001A041D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Oritsubushi/Default.png; sourceTree = "<group>"; };
@@ -305,6 +308,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		060DBACF1E02D11600CAE1CE /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				060DBAD01E02D12800CAE1CE /* GoogleService-Info.plist */,
+			);
+			name = Firebase;
+			sourceTree = "<group>";
+		};
 		06195EB714772CCE00C97DB8 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -394,6 +405,7 @@
 		06B4BDEA145F639E00F57858 = {
 			isa = PBXGroup;
 			children = (
+				060DBACF1E02D11600CAE1CE /* Firebase */,
 				06B4BDFF145F639E00F57858 /* Oritsubushi */,
 				06195F6C147F096300C97DB8 /* Database & Loaded Objects */,
 				06195EB714772CCE00C97DB8 /* View Controllers */,
@@ -439,6 +451,7 @@
 		06B4BDFF145F639E00F57858 /* Oritsubushi */ = {
 			isa = PBXGroup;
 			children = (
+				0685479B1E02DCB900C70A6E /* Oritsubushi.entitlements */,
 				06B4BEAF146199E000F57858 /* Consts.h */,
 				06CA69F714C0A3DB008C5F43 /* DatabaseVersion.h */,
 				065207091AAACE5200C7A4DF /* DatabaseVersion.c */,
@@ -615,6 +628,14 @@
 				TargetAttributes = {
 					06B4BDF4145F639E00F57858 = {
 						DevelopmentTeam = YQ9QLVPTA3;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -693,6 +714,7 @@
 				06BDC71517E96E160024BCB0 /* Icon-Small-50.png in Resources */,
 				0603B06F1BA99AE3005F3C99 /* Icon-60@3x.png in Resources */,
 				060258471623CB0D007184F4 /* tabicon_date@2x.png in Resources */,
+				060DBAD11E02D12800CAE1CE /* GoogleService-Info.plist in Resources */,
 				063B50DF1DE877F8009156AC /* MapTableViewCell.xib in Resources */,
 				060258481623CB0D007184F4 /* tabicon_date.png in Resources */,
 			);
@@ -915,6 +937,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = Oritsubushi/Oritsubushi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -936,6 +959,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = Oritsubushi/Oritsubushi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

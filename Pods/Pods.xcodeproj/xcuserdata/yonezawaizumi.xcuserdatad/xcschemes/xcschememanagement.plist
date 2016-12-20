@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>GoogleToolboxForMac.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MJPopupViewController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -37,7 +42,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>306396A4A6CD55B850E77DE8DBA38D5E</key>
+		<key>26610589775C7D8BFF8E25D77C3CF779</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -47,12 +52,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9C623D1AF8229419BA603B3C66BE24B9</key>
+		<key>907515B389E496BA95A2882A17F9E380</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C6E508D9CD33E54F4D7DA9E35B6F8612</key>
+		<key>9C623D1AF8229419BA603B3C66BE24B9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -63,6 +68,11 @@
 			<true/>
 		</dict>
 		<key>F0EA78F8F3362DEBC9840500226DA5E7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FA9D13261AF395CF5D54BB3203DF2A6E</key>
 		<dict>
 			<key>primary</key>
 			<true/>

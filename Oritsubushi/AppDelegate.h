@@ -9,16 +9,22 @@
 #import <UIKit/UIKit.h>
 #import "Database.h"
 #import "Settings.h"
+#import <CoreLocation/CoreLocation.h>
+
+@protocol LocationUpdatedDelegate
+
+- (void)locationWasUpdated:(BOOL)enabled location:(CLLocationCoordinate2D)location;
+
+@end
 
 @class Station;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder<UIApplicationDelegate, CLLocationManagerDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
-
+@property(strong, nonatomic) UIWindow *window;
 @property(nonatomic,strong,readonly) Database *database;
-
 @property(nonatomic,readonly) NSInteger osVersion;
+@property(nonatomic) id<LocationUpdatedDelegate> locationDelegate;
 
 - (void)mapViewUpdateFilterWithFilterType:(DatabaseFilterType)type filterValue:(NSString *)value;
 - (void)mapViewMoveToStation:(Station *)station;

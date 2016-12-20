@@ -17,7 +17,7 @@
 @interface MapViewController : UIViewController <MapViewDelegate, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, /*DatabaseUpdateNotificationProtocol*/DatabaseUpdateNotificationObserverProtocol, MapWrapperTouchDelegate, GoogleMapsServiceDelegate,
     PlaceSelectViewDelegate,
     PlaceSelectViewControllerDelegate,
-    CLLocationManagerDelegate
+    LocationUpdatedDelegate
 >
 
 @property(nonatomic,strong) IBOutlet UITableViewCell *cell;

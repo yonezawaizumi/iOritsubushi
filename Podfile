@@ -10,4 +10,5 @@ target 'Oritsubushi' do
   pod 'SBJson',       '~> 4.0'
   pod 'MJPopupViewController'
   pod 'ASIHTTPRequest'
+  pod 'Firebase/Messaging'
 end
