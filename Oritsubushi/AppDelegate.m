@@ -55,7 +55,7 @@
 @property(nonatomic,strong,readwrite) Database *database;
 @property(nonatomic,strong) NSMutableArray *databaseUpdateNotificationObservers;
 @property(nonatomic,strong) NSMutableArray *memoryWarningNotificationObservers;
-@property(nonatomic,strong) UIAlertView *alertView;
+@property(nonatomic,strong) UIAlertController *alertController;
 @property(nonatomic,readwrite) NSInteger osVersion;
 @property(nonatomic,strong) CLLocationManager *locationManager;
 
@@ -71,7 +71,7 @@
 @synthesize tabBarController;
 @synthesize window = _window;
 @synthesize mapViewController;
-@synthesize alertView;
+@synthesize alertController;
 @synthesize database;
 @synthesize databaseUpdateNotificationObservers;
 @synthesize memoryWarningNotificationObservers;
@@ -111,8 +111,10 @@
     CGRect frame = [[UIScreen mainScreen] bounds];
     self.window = [[UIWindow alloc] initWithFrame:frame];
     
+    self.tabBarController = [[TabBarController alloc] initWithTintColor:OS7_TINT_COLOR];
+
     if(errorMessage) {
-        [self showAlertViewWithTitle:NSLocalizedString(@"致命的なエラー", nil) message:NSLocalizedString(@"データベースを開けません", nil) buttonTitle:NSLocalizedString(@"確認", nil)];        
+        [self showAlertViewWithTitle:NSLocalizedString(@"致命的なエラー", nil) message:NSLocalizedString(@"データベースを開けません", nil) buttonTitle:NSLocalizedString(@"確認", nil) viewController:self.tabBarController];
     } else {
         NSMutableArray *viewControllers = [NSMutableArray arrayWithCapacity:7];
         NSMutableArray *customizableViewControllers = [NSMutableArray arrayWithCapacity:5];
@@ -127,7 +129,6 @@
         [self addTabViewControllerWithClass:[SyncViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         [self addTabViewControllerWithClass:[SettingsViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         
-        self.tabBarController = [[TabBarController alloc] initWithTintColor:OS7_TINT_COLOR];
         self.tabBarController.viewControllers = viewControllers;
         self.tabBarController.customizableViewControllers = customizableViewControllers;
         self.tabBarController.tabBar.tintColor = OS7_TINT_COLOR;
@@ -260,18 +261,23 @@
 
 - (void)cancelAlertView
 {
-    [self.alertView dismissWithClickedButtonIndex:self.alertView.cancelButtonIndex animated:NO];
-    self.alertView = nil;
+    [self.alertController dismissViewControllerAnimated:YES completion:nil];
+    self.alertController = nil;
 }
 
-- (void)showAlertViewWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle
+- (void)showAlertViewWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle viewController:(UIViewController *)viewController
 {
     [self cancelAlertView];
     if(!buttonTitle) {
         buttonTitle = NSLocalizedString(@"確認", nil);
     }
-    self.alertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:nil cancelButtonTitle:buttonTitle otherButtonTitles:nil];
-    [self.alertView show];
+    self.alertController = [UIAlertController alertControllerWithTitle:title
+                                                               message:message
+                                                        preferredStyle:UIAlertControllerStyleAlert];
+    [self.alertController addAction:[UIAlertAction actionWithTitle:buttonTitle
+                                                            style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}]];
+    [viewController presentViewController:self.alertController animated:YES completion:nil];
 }
 
 - (void)setDefaultSettings

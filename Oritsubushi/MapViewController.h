@@ -11,11 +11,9 @@
 #import "MapView.h"
 #import "MapWrapper.h"
 #import "GoogleMapsService.h"
-#import "PlaceSelectView.h"
 #import "PlaceSelectViewController.h"
 
 @interface MapViewController : UIViewController <MapViewDelegate, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, /*DatabaseUpdateNotificationProtocol*/DatabaseUpdateNotificationObserverProtocol, MapWrapperTouchDelegate, GoogleMapsServiceDelegate,
-    PlaceSelectViewDelegate,
     PlaceSelectViewControllerDelegate,
     LocationUpdatedDelegate
 >

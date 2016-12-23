@@ -16,7 +16,7 @@
 @property(nonatomic,strong) UIWebView *webView;
 @property(nonatomic,strong) LoadingView *loadingView;
 
-+ (void)showLoadingError:(NSString *)errorMessage;
+- (void)showLoadingError:(NSString *)errorMessage;
 - (void)load;
 
 @end
@@ -112,13 +112,13 @@
 - (void)webView:(UIWebView*)webView didFailLoadWithError:(NSError *)error
 {
     self.loadingView.hidden = YES;
-    [InformationViewController showLoadingError:[error localizedDescription]];
+    [self showLoadingError:[error localizedDescription]];
 }
 
-+ (void)showLoadingError:(NSString *)errorMessage
+- (void)showLoadingError:(NSString *)errorMessage
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate showAlertViewWithTitle:NSLocalizedString(@"エラー", nil) message:errorMessage buttonTitle:nil];
+    [appDelegate showAlertViewWithTitle:NSLocalizedString(@"エラー", nil) message:errorMessage buttonTitle:nil viewController:self];
 }
 
 - (void)load

@@ -32,6 +32,6 @@
 - (void)mapViewRequestUpdate;
 
 - (void)saveCookies;
-- (void)showAlertViewWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle;
+- (void)showAlertViewWithTitle:(NSString *)title message:(NSString *)message buttonTitle:(NSString *)buttonTitle viewController:(UIViewController *)viewController;
 
 @end

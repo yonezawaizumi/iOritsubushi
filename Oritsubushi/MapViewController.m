@@ -94,7 +94,6 @@ static void *settingsContext = (void *)2;
 @property(nonatomic,strong) NSNumber *reservedStationCode;
 @property(nonatomic,strong) SearchScopeBar *searchScopeBar;
 @property(nonatomic,strong) NSString *searchKeyword;
-@property(nonatomic,strong) PlaceSelectView *placeSelectView;
 @property(nonatomic,strong) GoogleMapsService *GMapService;
 @property(nonatomic,strong) UIActivityIndicatorView *mapIndicator;
 @property(nonatomic,assign) BOOL logoInitialized;
@@ -135,7 +134,6 @@ static void *settingsContext = (void *)2;
 @synthesize reservedStationCode;
 @synthesize searchScopeBar;
 @synthesize searchKeyword;
-@synthesize placeSelectView;
 @synthesize GMapService;
 @synthesize mapIndicator;
 
@@ -175,7 +173,6 @@ static void *settingsContext = (void *)2;
     self.reservedStationCode = nil;
     self.searchScopeBar = nil;
     self.searchKeyword = nil;
-    self.placeSelectView = nil;
     self.GMapService = nil;
     self.mapIndicator = nil;
 }
@@ -383,7 +380,6 @@ static void *settingsContext = (void *)2;
     self.reservedStationCode = nil;
     self.searchScopeBar = nil;
     self.searchKeyword = nil;
-    self.placeSelectView = nil;
     self.GMapService = nil;
     self.mapIndicator = nil;
 }
@@ -400,10 +396,10 @@ static void *settingsContext = (void *)2;
     //return YES;
 }
 
-+ (void)alertWithTitle:(NSString *)title message:(NSString *)message
+- (void)alertWithTitle:(NSString *)title message:(NSString *)message
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate showAlertViewWithTitle:NSLocalizedString(title, nil) message:message buttonTitle:nil];
+    [appDelegate showAlertViewWithTitle:NSLocalizedString(title, nil) message:message buttonTitle:nil viewController:self];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -812,14 +808,6 @@ static void *settingsContext = (void *)2;
     }
 }
 
-- (void)placeSelectView:(PlaceSelectView *)placeSelectView_ didSelected:(GoogleMapsLocation *)place atIndex:(NSInteger)index
-{
-    if(place) {
-        self.mapView.centerCoordinate = place.coordinate;
-    }
-    self.placeSelectView = nil;
-}
-
 - (void)placeSelectViewController:(PlaceSelectViewController *)placeSelectViewController_ didSelected:(GoogleMapsLocation *)place atIndex:(NSInteger)index
 {
     if(place) {
@@ -832,7 +820,7 @@ static void *settingsContext = (void *)2;
 {
     self.loadingView.hidden = YES;
     if(service.errorMessage) {
-        [MapViewController alertWithTitle:@"検索エラー" message:NSLocalizedString(service.errorMessage, nil)];
+        [self alertWithTitle:@"検索エラー" message:NSLocalizedString(service.errorMessage, nil)];
     } else if([service.locations count] > 1) {
         PlaceSelectViewController *placeSelectViewController = [[PlaceSelectViewController alloc] initWithPlaceCandidates:service.locations delegate:self];
         [self presentPopupViewController:placeSelectViewController animationType:MJPopupViewAnimationFade];
