@@ -27,7 +27,7 @@
 
 #define SINGLE_TAP_DELAY                0.3
 #define FIRST_LOCATING_DECIDE_DELAY     2
-#define FIRST_LOCATING_TERMINATE_DELAY  20
+#define FIRST_LOCATING_TERMINATE_DELAY  7
 
 #define BAR_COLOR                       [UIColor darkGrayColor]
 

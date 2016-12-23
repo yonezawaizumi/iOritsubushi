@@ -13,7 +13,8 @@
 
 @protocol LocationUpdatedDelegate
 
-- (void)locationWasUpdated:(BOOL)enabled location:(CLLocationCoordinate2D)location;
+- (void)beginLocating:(BOOL)enabled;
+- (void)locationWasUpdated:(CLLocationCoordinate2D)location;
 
 @end
 

@@ -47,7 +47,6 @@
 @interface AppDelegate () {
     id<LocationUpdatedDelegate> _locationDelegate;
     CLLocationCoordinate2D currentLocation;
-    BOOL locatingEnabled;
     BOOL firstLocatingDone;
 }
 
@@ -96,15 +95,7 @@
     NSArray *aOsVersions = [[[UIDevice currentDevice]systemVersion] componentsSeparatedByString:@"."];
     self.osVersion = [[aOsVersions objectAtIndex:0] intValue];
 
-    UIUserNotificationType types = UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
-    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
-    [application registerUserNotificationSettings:mySettings];
-    
-    [FIRApp configure];
-
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.delegate = self;
-    [self.locationManager requestWhenInUseAuthorization];
+    [self tryRegisterNotification:application];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(memoryWarningDidReceive) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 
@@ -176,14 +167,49 @@
     [self saveCookies];
 }
 
+- (void)tryRegisterNotification:(UIApplication *)application {
+    [FIRApp configure];
+    
+    UIUserNotificationType types = UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+    UIUserNotificationSettings *mySettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+    [application registerUserNotificationSettings:mySettings];
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+    [application registerForRemoteNotifications];
+    [[FIRMessaging messaging] subscribeToTopic:@"/topics/ioritsubushi"];
+    
+    [self tryRegisterLocationNotification:application];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo  {
+    if (application.applicationState == UIApplicationStateActive) {
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        notification.fireDate = [NSDate date];
+        notification.timeZone = [NSTimeZone defaultTimeZone];
+        notification.alertBody = userInfo[@"aps"][@"alert"][@"body"];
+        notification.alertTitle = userInfo[@"aps"][@"alert"][@"title"];
+        notification.soundName = UILocalNotificationDefaultSoundName;
+        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    }
+    //TODO: info表示
+}
+
+- (void)tryRegisterLocationNotification:(UIApplication *)application {
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager requestWhenInUseAuthorization];
+}
+
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     switch (status) {
         case kCLAuthorizationStatusAuthorizedWhenInUse:
+            [self.locationDelegate beginLocating:YES];
             [self.locationManager startUpdatingLocation];
             break;
         case kCLAuthorizationStatusDenied:
-            locatingEnabled = NO;
-            [self locatingWasUpdated];
+            firstLocatingDone = YES;
+            [self.locationDelegate beginLocating:NO];
             break;
         default:
             break;
@@ -192,46 +218,24 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation *location = [locations lastObject];
-    locatingEnabled = YES;
     NSLog(@"%f %f",
           location.coordinate.latitude,
           location.coordinate.longitude);
     currentLocation = [location coordinate];
-    [self locatingWasUpdated];
-}
-
-- (void)locatingWasUpdated {
     firstLocatingDone = YES;
-    [self.locationDelegate locationWasUpdated:locatingEnabled location:currentLocation];
     [self.locationManager stopUpdatingLocation];
+    [self.locationDelegate locationWasUpdated:currentLocation];
 }
 
 - (void)setLocationDelegate:(id<LocationUpdatedDelegate>)locationDelegate {
     _locationDelegate = locationDelegate;
     if (firstLocatingDone) {
-        [locationDelegate locationWasUpdated:locatingEnabled location:currentLocation];
+        [locationDelegate locationWasUpdated:currentLocation];
     }
 }
 
 - (id<LocationUpdatedDelegate>)getLocationDelegate {
     return _locationDelegate;
-}
-
-- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
-    [application registerForRemoteNotifications];
-    [[FIRMessaging messaging] subscribeToTopic:@"/topics/ioritsubushi"];
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    // If you are receiving a notification message while your app is in the background,
-    // this callback will not be fired till the user taps on the notification launching the application.
-    // TODO: Handle data of notification
-    
-    // Print message ID.
-    NSLog(@"Message ID: %@", userInfo[@"gcm.message_id"]);
-    
-    // Pring full message.
-    NSLog(@"%@", userInfo);
 }
 
 - (void)memoryWarningDidReceive

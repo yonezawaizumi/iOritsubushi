@@ -63,7 +63,6 @@ static NSString *visibilityTypeLabel[] = {
 
 static BOOL stringsAreLocalized = NO;
 
-static void *locationContext = (void *)1;
 static void *settingsContext = (void *)2;
 
 @interface MapViewController () {
@@ -296,20 +295,8 @@ static void *settingsContext = (void *)2;
                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                          [[UIBarButtonItem alloc] initWithCustomView:self.mapStyleModeSegmentedControl],
                          nil];
-    
-    /*if (os7) {
-        for (int index = 0; index < sizeof visibilityTypeLabelWidth / sizeof visibilityTypeLabelWidth[0]; ++index) {
-            [self.visibilitySegmentedControl setWidth:visibilityTypeLabelWidth[index] forSegmentAtIndex:index];
-        }
-    }*/
 
     [self updateFilterWithFilterType:recentFilterType filterValue:self.searchKeyword];
-    
-    // 位置変化
-    //[self.mapView.userLocation addObserver:self forKeyPath:@"location" options:0 context:locationContext];
-    //firstLocatingStatus = FirstLocatingWait;
-    //[self performSelector:@selector(finishFirstLocatingIfDecided) withObject:nil afterDelay:FIRST_LOCATING_DECIDE_DELAY];
-    //[self performSelector:@selector(terminateFirstLocating) withObject:nil afterDelay:FIRST_LOCATING_TERMINATE_DELAY];
 }
 
 #pragma mark - View lifecycle
@@ -328,12 +315,10 @@ static void *settingsContext = (void *)2;
     [userDefaults addObserver:self forKeyPath:SETTINGS_KEY_NUMBER_OF_ICONS options:0 context:settingsContext];
 
     [Database addObserver:self];
-    firstLocatingStatus = FirstLocatingWait;
-    [self performSelector:@selector(finishFirstLocatingIfDecided) withObject:nil afterDelay:FIRST_LOCATING_DECIDE_DELAY];
-    [self performSelector:@selector(terminateFirstLocating) withObject:nil afterDelay:FIRST_LOCATING_TERMINATE_DELAY];
     
     [self setLocation:[self.mapView.userLocation.location coordinate] setDelta:YES];
-
+    firstLocatingStatus = FirstLocatingWait;
+    [self performSelector:@selector(finishFirstLocatingIfDecided) withObject:nil afterDelay:FIRST_LOCATING_DECIDE_DELAY];
     ((AppDelegate *)[UIApplication sharedApplication].delegate).locationDelegate = self;
 }
 
@@ -423,19 +408,7 @@ static void *settingsContext = (void *)2;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if(context == locationContext) {
-        CLLocationCoordinate2D currentLocation = [self.mapView.userLocation.location coordinate];
-        switch(firstLocatingStatus) {
-            case FirstLocatingWait:
-                [self setLocation:currentLocation setDelta:NO];
-                break;
-            case FirstLocatingTemporary:
-                [self terminateFirstLocating];
-                break;
-            default:
-                break;
-        }
-    } else if(context == settingsContext) {
+    if(context == settingsContext) {
         numberOfIcons = [[NSUserDefaults standardUserDefaults] integerForKey:SETTINGS_KEY_NUMBER_OF_ICONS];
         [self requestUpdate];
     }
@@ -461,14 +434,28 @@ static void *settingsContext = (void *)2;
     }
 }
 
-- (void)locationWasUpdated:(BOOL)enabled location:(CLLocationCoordinate2D)location {
+- (void)beginLocating:(BOOL)enabled {
+    if (enabled) {
+        switch(firstLocatingStatus) {
+            case FirstLocatingWait:
+            case FirstLocatingTemporary:
+                firstLocatingStatus = FirstLocatingTemporary;
+                [self performSelector:@selector(terminateFirstLocating) withObject:nil afterDelay:FIRST_LOCATING_TERMINATE_DELAY];
+                break;
+            default:
+                break;
+        }
+    } else {
+        [self terminateFirstLocating];
+    }
+}
+
+- (void)locationWasUpdated:(CLLocationCoordinate2D)location {
     switch(firstLocatingStatus) {
         case FirstLocatingWait:
         case FirstLocatingTemporary:
-            if (enabled) {
-                [self setLocation:location setDelta:NO];
-                locatingEnabled = YES;
-            }
+            [self setLocation:location setDelta:NO];
+            locatingEnabled = YES;
             break;
         default:
             break;

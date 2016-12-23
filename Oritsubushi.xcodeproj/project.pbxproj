@@ -940,6 +940,7 @@
 				CODE_SIGN_ENTITLEMENTS = Oritsubushi/Oritsubushi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = YQ9QLVPTA3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Oritsubushi/Oritsubushi-Prefix.pch";
 				INFOPLIST_FILE = "Oritsubushi/Oritsubushi-Info.plist";
@@ -962,6 +963,7 @@
 				CODE_SIGN_ENTITLEMENTS = Oritsubushi/Oritsubushi.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = YQ9QLVPTA3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Oritsubushi/Oritsubushi-Prefix.pch";
 				INFOPLIST_FILE = "Oritsubushi/Oritsubushi-Info.plist";
