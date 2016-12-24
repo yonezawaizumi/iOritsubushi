@@ -48,10 +48,12 @@
     id<LocationUpdatedDelegate> _locationDelegate;
     CLLocationCoordinate2D currentLocation;
     BOOL firstLocatingDone;
+    NSString *initialFragment;
 }
 
 @property(nonatomic,strong) TabBarController *tabBarController;
 @property(nonatomic,strong) MapViewController *mapViewController;
+@property(nonatomic,strong) UINavigationController *informationNavigationController;
 @property(nonatomic,strong,readwrite) Database *database;
 @property(nonatomic,strong) NSMutableArray *databaseUpdateNotificationObservers;
 @property(nonatomic,strong) NSMutableArray *memoryWarningNotificationObservers;
@@ -77,7 +79,7 @@
 @synthesize memoryWarningNotificationObservers;
 @synthesize locationManager;
 
-- (void)addTabViewControllerWithClass:(Class)class viewControllers:(NSMutableArray *)viewControllers customizedViewControllers:(NSMutableArray *)customizedViewControllers
+- (UINavigationController *)addTabViewControllerWithClass:(Class)class viewControllers:(NSMutableArray *)viewControllers customizedViewControllers:(NSMutableArray *)customizedViewControllers
 {
     UIViewController *viewController = [[class alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
@@ -88,6 +90,7 @@
     if(customizedViewControllers) {
         [customizedViewControllers addObject:navigationController];
     }
+    return navigationController;
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -119,13 +122,12 @@
         NSMutableArray *viewControllers = [NSMutableArray arrayWithCapacity:7];
         NSMutableArray *customizableViewControllers = [NSMutableArray arrayWithCapacity:5];
 
-        [self addTabViewControllerWithClass:[MapViewController class] viewControllers:viewControllers customizedViewControllers:nil];
-        self.mapViewController = (MapViewController *)((UINavigationController *)[viewControllers objectAtIndex:0]).topViewController;
+        self.mapViewController = (MapViewController *)[self addTabViewControllerWithClass:[MapViewController class] viewControllers:viewControllers customizedViewControllers:nil].topViewController;
         [self addTabViewControllerWithClass:[OperatorTypesViewController class] viewControllers:viewControllers customizedViewControllers:nil];
         [self addTabViewControllerWithClass:[PlaceViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         [self addTabViewControllerWithClass:[CompletionYearViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         [self addTabViewControllerWithClass:[YomiViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
-        [self addTabViewControllerWithClass:[InformationViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
+        self.informationNavigationController = [self addTabViewControllerWithClass:[InformationViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         [self addTabViewControllerWithClass:[SyncViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         [self addTabViewControllerWithClass:[SettingsViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         
@@ -136,6 +138,11 @@
         self.window.rootViewController = self.tabBarController;
     }
     [self.window makeKeyAndVisible];
+
+    NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (userInfo) {
+        initialFragment = userInfo[@"fragment"];
+    }
     
     return YES;
 }
@@ -151,6 +158,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    initialFragment = nil;
     [self cancelAlertView];
     [self saveCookies];
 }
@@ -161,6 +169,10 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    if (initialFragment) {
+        [self changeTab:initialFragment];
+        initialFragment = nil;
+    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -185,15 +197,16 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo  {
     if (application.applicationState == UIApplicationStateActive) {
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        notification.fireDate = [NSDate date];
-        notification.timeZone = [NSTimeZone defaultTimeZone];
-        notification.alertBody = userInfo[@"aps"][@"alert"][@"body"];
-        notification.alertTitle = userInfo[@"aps"][@"alert"][@"title"];
-        notification.soundName = UILocalNotificationDefaultSoundName;
-        [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+        [self showPushNotificationAlertWithUserInfo:userInfo];
+    } else {
+        initialFragment = userInfo[@"fragment"];
     }
-    //TODO: info表示
+}
+
+- (void)changeTab:(NSString *)tabName {
+    if ([@"info" isEqualToString:tabName]) {
+        self.tabBarController.selectedViewController = self.informationNavigationController;
+    }
 }
 
 - (void)tryRegisterLocationNotification:(UIApplication *)application {
@@ -219,9 +232,6 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation *location = [locations lastObject];
-    NSLog(@"%f %f",
-          location.coordinate.latitude,
-          location.coordinate.longitude);
     currentLocation = [location coordinate];
     firstLocatingDone = YES;
     [self.locationManager stopUpdatingLocation];
@@ -278,6 +288,26 @@
                                                             style:UIAlertActionStyleDefault
                                                           handler:^(UIAlertAction * action) {}]];
     [viewController presentViewController:self.alertController animated:YES completion:nil];
+}
+
+- (void)showPushNotificationAlertWithUserInfo:(NSDictionary *)userInfo {
+    [self cancelAlertView];
+    self.alertController = [UIAlertController alertControllerWithTitle:userInfo[@"aps"][@"alert"][@"title"]
+                                                               message:userInfo[@"aps"][@"alert"][@"body"]
+                                                        preferredStyle:UIAlertControllerStyleAlert];
+    [self.alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"詳細を見る", nil)
+                                                             style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * action) {
+                                                               [self changeTab:userInfo[@"fragment"]];
+                                                           }]];
+    [self.alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"キャンセル", nil)
+                                                             style:UIAlertActionStyleCancel
+                                                           handler:^(UIAlertAction * action) {}]];
+    UIViewController *topController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    [topController presentViewController:self.alertController animated:YES completion:nil];
 }
 
 - (void)setDefaultSettings
