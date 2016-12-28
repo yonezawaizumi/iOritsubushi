@@ -48,7 +48,8 @@
     id<LocationUpdatedDelegate> _locationDelegate;
     CLLocationCoordinate2D currentLocation;
     BOOL firstLocatingDone;
-    NSString *initialFragment;
+    BOOL fromBg;
+    NSDictionary *initialUserInfo;
 }
 
 @property(nonatomic,strong) TabBarController *tabBarController;
@@ -141,9 +142,10 @@
 
     NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (userInfo) {
-        initialFragment = userInfo[@"fragment"];
+        initialUserInfo = userInfo;
     }
-    
+    fromBg = YES;
+
     return YES;
 }
 
@@ -158,20 +160,26 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    initialFragment = nil;
+    initialUserInfo = nil;
     [self cancelAlertView];
     [self saveCookies];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    fromBg = YES;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    if (initialFragment) {
-        [self changeTab:initialFragment];
-        initialFragment = nil;
+    if (initialUserInfo) {
+        if (fromBg) {
+            [self changeTab:initialUserInfo[@"fragment"]];
+            fromBg = NO;
+        } else {
+            [self showPushNotificationAlertWithUserInfo:initialUserInfo];
+        }
+        initialUserInfo = nil;
     }
 }
 
@@ -195,12 +203,13 @@
     [self tryRegisterLocationNotification:application];
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo  {
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     if (application.applicationState == UIApplicationStateActive) {
         [self showPushNotificationAlertWithUserInfo:userInfo];
     } else {
-        initialFragment = userInfo[@"fragment"];
+        initialUserInfo = userInfo;
     }
+    completionHandler(UIBackgroundFetchResultNoData);
 }
 
 - (void)changeTab:(NSString *)tabName {
