@@ -44,13 +44,7 @@
 
 @end
 
-@interface AppDelegate () {
-    id<LocationUpdatedDelegate> _locationDelegate;
-    CLLocationCoordinate2D currentLocation;
-    BOOL firstLocatingDone;
-    BOOL fromBg;
-    NSDictionary *initialUserInfo;
-}
+@interface AppDelegate ()
 
 @property(nonatomic,strong) TabBarController *tabBarController;
 @property(nonatomic,strong) MapViewController *mapViewController;
@@ -61,7 +55,11 @@
 @property(nonatomic,strong) UIAlertController *alertController;
 @property(nonatomic,readwrite) NSInteger osVersion;
 @property(nonatomic,strong) CLLocationManager *locationManager;
-
+@property(nonatomic,assign) BOOL fromBg;
+@property(nonatomic,strong) NSDictionary *initialUserInfo;
+@property(nonatomic,assign) BOOL firstLocatingDone;
+@property(nonatomic,assign) BOOL locatingEnabled;
+@property(nonatomic,assign) CLLocationCoordinate2D currentLocation;
 
 - (void)setDefaultSettings;
 - (void)loadCookies;
@@ -79,6 +77,7 @@
 @synthesize databaseUpdateNotificationObservers;
 @synthesize memoryWarningNotificationObservers;
 @synthesize locationManager;
+@synthesize locationDelegate = _locationDelegate;
 
 - (UINavigationController *)addTabViewControllerWithClass:(Class)class viewControllers:(NSMutableArray *)viewControllers customizedViewControllers:(NSMutableArray *)customizedViewControllers
 {
@@ -142,9 +141,9 @@
 
     NSDictionary *userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (userInfo) {
-        initialUserInfo = userInfo;
+        self.initialUserInfo = userInfo;
     }
-    fromBg = YES;
+    self.fromBg = YES;
 
     return YES;
 }
@@ -160,26 +159,26 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    initialUserInfo = nil;
+    self.initialUserInfo = nil;
     [self cancelAlertView];
     [self saveCookies];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    fromBg = YES;
+    self.fromBg = YES;
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    if (initialUserInfo) {
-        if (fromBg) {
-            [self changeTab:initialUserInfo[@"fragment"]];
-            fromBg = NO;
+    if (self.initialUserInfo) {
+        if (self.fromBg) {
+            [self changeTab:self.initialUserInfo[@"fragment"]];
+            self.fromBg = NO;
         } else {
-            [self showPushNotificationAlertWithUserInfo:initialUserInfo];
+            [self showPushNotificationAlertWithUserInfo:self.initialUserInfo];
         }
-        initialUserInfo = nil;
+        self.initialUserInfo = nil;
     }
 }
 
@@ -203,11 +202,15 @@
     [self tryRegisterLocationNotification:application];
 }
 
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    [self tryRegisterLocationNotification:application];
+}
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     if (application.applicationState == UIApplicationStateActive) {
         [self showPushNotificationAlertWithUserInfo:userInfo];
     } else {
-        initialUserInfo = userInfo;
+        self.initialUserInfo = userInfo;
     }
     completionHandler(UIBackgroundFetchResultNoData);
 }
@@ -227,11 +230,14 @@
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     switch (status) {
         case kCLAuthorizationStatusAuthorizedWhenInUse:
+            self.locatingEnabled = YES;
             [self.locationDelegate beginLocating:YES];
             [self.locationManager startUpdatingLocation];
             break;
+        case kCLAuthorizationStatusRestricted:
         case kCLAuthorizationStatusDenied:
-            firstLocatingDone = YES;
+            self.firstLocatingDone = YES;
+            self.locatingEnabled = NO;
             [self.locationDelegate beginLocating:NO];
             break;
         default:
@@ -241,21 +247,20 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation *location = [locations lastObject];
-    currentLocation = [location coordinate];
-    firstLocatingDone = YES;
+    self.currentLocation = [location coordinate];
+    self.firstLocatingDone = YES;
     [self.locationManager stopUpdatingLocation];
-    [self.locationDelegate locationWasUpdated:currentLocation];
+    [self.locationDelegate locationWasUpdated:self.currentLocation];
 }
 
 - (void)setLocationDelegate:(id<LocationUpdatedDelegate>)locationDelegate {
     _locationDelegate = locationDelegate;
-    if (firstLocatingDone) {
-        [locationDelegate locationWasUpdated:currentLocation];
+    if (self.firstLocatingDone) {
+        [locationDelegate beginLocating:self.locatingEnabled];
+        if (self.locatingEnabled) {
+            [locationDelegate locationWasUpdated:self.currentLocation];
+        }
     }
-}
-
-- (id<LocationUpdatedDelegate>)getLocationDelegate {
-    return _locationDelegate;
 }
 
 - (void)memoryWarningDidReceive

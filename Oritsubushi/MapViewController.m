@@ -216,8 +216,8 @@ static void *settingsContext = (void *)2;
     self.view = [[UIView alloc] initWithFrame:frame];
     self.navigationItem.titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
     self.mapView = [[MapView alloc] initWithFrame:frame];
+    self.mapView.showsUserLocation = NO;
     self.mapView.delegate = self;
-    self.mapView.showsUserLocation = YES;
     
     if(!self.logoInitialized) {
         [self initializeLogo];
@@ -426,7 +426,10 @@ static void *settingsContext = (void *)2;
         firstLocatingStatus = FirstLocatingDone;
         //[self.mapView.userLocation removeObserver:self forKeyPath:@"location"];
         [self setButtonsEnabled:YES];
-        [self mapView:self.mapView regionDidChangeAnimated:NO];
+        if (locatingEnabled) {
+            self.mapView.showsUserLocation = YES;
+            [self mapView:self.mapView regionDidChangeAnimated:NO];
+        }
     }
 }
 
