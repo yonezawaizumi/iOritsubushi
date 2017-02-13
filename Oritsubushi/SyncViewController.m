@@ -38,11 +38,11 @@ typedef enum {
 
 static NSString *UploadFileName = @"upload.txt";
 static NSString *DownloadFileName = @"download.sql";
-static NSString *SyncURL = @"http://oritsubushi.net/oritsubushi/sync.php";
-static NSString *UsersURL = @"http://oritsubushi.net/users.php";
-static NSString *LogoutURL = @"http://oritsubushi.net/users.php?mode=logout";
+static NSString *SyncURL = @"https://oritsubushi.net/oritsubushi/sync.php";
+static NSString *UsersURL = @"https://oritsubushi.net/users.php";
+static NSString *LogoutURL = @"https://oritsubushi.net/users.php?mode=logout";
 static NSString *OritsubushiHost = @"oritsubushi.net";
-static NSString *OritsubushiSiteURL = @"http://oritsubushi.net/";
+static NSString *OritsubushiSiteURL = @"https://oritsubushi.net/";
 static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
 
 /*

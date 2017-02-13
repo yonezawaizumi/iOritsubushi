@@ -60,7 +60,7 @@
 
 #define LOADING_VIEW_COLOR              [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:0.5]
 
-#define INFORMATION_URL                 @"http://timeline.oritsubushi.net/oritsubushi/timeline.php"
+#define INFORMATION_URL                 @"https://ss1.coressl.jp/timeline.oritsubushi.net/oritsubushi/timeline.php"
 
 // 地名検索結果の複数候補の選択画面での、テーブルビューの背景色（RGBα）
 #define PLACE_SELECT_BACKGROUND_COLOR [UIColor colorWithRed:1 green:1 blue:1 alpha:0.9]
