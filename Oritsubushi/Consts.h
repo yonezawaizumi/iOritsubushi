@@ -10,6 +10,7 @@
 #define Oritsubushi_Header_h
 
 #include "DatabaseVersion.h"
+#include "PpVersion.h"
 
 #define ANIMATION_DURATION              0.25
 
@@ -78,4 +79,9 @@
 #define AMBIGOUS_DATE_STRING            @"不明"
 #define CONCAT_ANBIGOUS_DATE_STRING(str)    str "不明"
 #define CONCAT_2_ANBIGOUS_DATE_STRING(pre, suf)    pre "不明" suf
+
+#define SYNC_PP_READ_WAIT_NSEC          (int64_t)(2.0 * NSEC_PER_SEC)
+#define SYNC_PP_CONFIRM_ANIM_DELAY      0.1
+#define SYNC_PP_CONFIRM_ANIM_DULATION   0.3
+
 #endif

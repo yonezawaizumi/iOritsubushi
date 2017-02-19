@@ -44,6 +44,7 @@ static NSString *LogoutURL = @"https://oritsubushi.net/users.php?mode=logout";
 static NSString *OritsubushiHost = @"oritsubushi.net";
 static NSString *OritsubushiSiteURL = @"https://oritsubushi.net/";
 static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
+static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
 
 /*
 @interface HtmlLoader
@@ -141,6 +142,8 @@ static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
     queue = dispatch_queue_create("com.wsf-lp.oritsubushi.sync", NULL);
     NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(currentLocaleDidChange:) name:NSCurrentLocaleDidChangeNotification object:nil];
+    
+    self.ppVersionLabel.text = [NSString stringWithFormat:NSLocalizedString(@"(%04d/%02d/%02d版)", nil), PP_VERSION / 10000, PP_VERSION / 100 % 100, PP_VERSION % 100];
 }
 
 - (void)viewDidUnload
@@ -165,6 +168,7 @@ static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self testPp];
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.toolbar.translucent = NO;
     [self.navigationController setNavigationBarHidden:NO animated:animated];
@@ -584,6 +588,41 @@ static NSString *UpdateDateHeader = @"X-Oritsubushi-Updated";
     self.userName_ = userName;
     [[NSUserDefaults standardUserDefaults] setValue:userName forKey:SETTINGS_KEY_SERVER_USER_NAME];
     [self setLabelString:userName tag:HeaderViewTagUserName];
+}
+
+- (void)testPp {
+    NSInteger ppVersion = [[NSUserDefaults standardUserDefaults] integerForKey:SETTINGS_KEY_PP_VERSION];
+    self.confirmView.hidden = ppVersion >= PP_VERSION;
+}
+
+- (void)ppLinkButtonDidClick:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:ppUrl]];
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, SYNC_PP_READ_WAIT_NSEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        self.ppConfirmButton.enabled = YES;
+    });
+}
+
+- (void)ppConfirmButtonDidClick:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setInteger:PP_VERSION forKey:SETTINGS_KEY_PP_VERSION];
+    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem: self.view
+                       attribute:  NSLayoutAttributeBottom
+                       relatedBy:  NSLayoutRelationEqual
+                       toItem:     self.confirmView
+                       attribute:  NSLayoutAttributeTop
+                       multiplier: 1.0
+                       constant:   0.0
+     ];
+    [self.view removeConstraint:self.confirmViewTopConstraint];
+    [self.view addConstraint:constraint];
+    [UIView animateWithDuration:0.5
+                               delay:0.3
+                               options:UIViewAnimationOptionCurveEaseOut
+                               animations: ^{
+                                   [self.view layoutIfNeeded];
+                               }
+                               completion: nil
+                               ];
 }
 
 @end

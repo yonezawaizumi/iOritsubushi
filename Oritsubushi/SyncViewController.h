@@ -16,7 +16,13 @@
 @property(nonatomic,strong) IBOutlet UIButton *logoutButton;
 @property(nonatomic,strong) IBOutlet UIWebView *webView;
 @property(nonatomic,strong) IBOutlet UIButton *resetButton;
+@property(nonatomic,strong) IBOutlet UIView *confirmView;
+@property(nonatomic,strong) IBOutlet UIButton *ppConfirmButton;
+@property(nonatomic,strong) IBOutlet NSLayoutConstraint *confirmViewTopConstraint;
+@property(nonatomic,strong) IBOutlet UILabel *ppVersionLabel;
 
 - (IBAction)buttonDidClick:(id)sender;
+- (IBAction)ppLinkButtonDidClick:(id)sender;
+- (IBAction)ppConfirmButtonDidClick:(id)sender;
 
 @end

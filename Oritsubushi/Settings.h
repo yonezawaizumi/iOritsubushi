@@ -14,5 +14,6 @@
 #define SETTINGS_KEY_COOKIES                @"_HTTPCookies"
 #define SETTINGS_KEY_RECENT_UPDATED_DATE    @"_RecentUpdatedDate"
 #define SETTINGS_KEY_SERVER_USER_NAME       @"_ServerUserName"
+#define SETTINGS_KEY_PP_VERSION             @"_PpVersion"
 
 #endif

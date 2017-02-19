@@ -218,6 +218,7 @@
 		06B1C3CF1498132A00E8462B /* NSFileHandle+TextReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileHandle+TextReader.m"; path = "Oritsubushi/NSFileHandle+TextReader.m"; sourceTree = "<group>"; };
 		06B1C3D214981ABD00E8462B /* NSString+CountSubstrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+CountSubstrings.h"; path = "Oritsubushi/NSString+CountSubstrings.h"; sourceTree = "<group>"; };
 		06B1C3D314981ABD00E8462B /* NSString+CountSubstrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+CountSubstrings.m"; path = "Oritsubushi/NSString+CountSubstrings.m"; sourceTree = "<group>"; };
+		06B3AD571E595DC100D6AD56 /* PpVersion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PpVersion.h; sourceTree = "<group>"; };
 		06B4BDF5145F639E00F57858 /* Oritsubushi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Oritsubushi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		06B4BDF9145F639E00F57858 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		06B4BDFB145F639E00F57858 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -450,6 +451,7 @@
 			children = (
 				0685479B1E02DCB900C70A6E /* Oritsubushi.entitlements */,
 				06B4BEAF146199E000F57858 /* Consts.h */,
+				06B3AD571E595DC100D6AD56 /* PpVersion.h */,
 				06CA69F714C0A3DB008C5F43 /* DatabaseVersion.h */,
 				065207091AAACE5200C7A4DF /* DatabaseVersion.c */,
 				06C73F2A14872DBD002AEB71 /* Settings.h */,
