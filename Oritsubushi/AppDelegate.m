@@ -48,6 +48,7 @@
 
 @property(nonatomic,strong) TabBarController *tabBarController;
 @property(nonatomic,strong) MapViewController *mapViewController;
+@property(nonatomic,strong) InformationViewController *informationViewController;
 @property(nonatomic,strong) UINavigationController *informationNavigationController;
 @property(nonatomic,strong,readwrite) Database *database;
 @property(nonatomic,strong) NSMutableArray *databaseUpdateNotificationObservers;
@@ -128,6 +129,7 @@
         [self addTabViewControllerWithClass:[CompletionYearViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         [self addTabViewControllerWithClass:[YomiViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         self.informationNavigationController = [self addTabViewControllerWithClass:[InformationViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
+        self.informationViewController = (InformationViewController *)[self.informationNavigationController.viewControllers firstObject];
         [self addTabViewControllerWithClass:[SyncViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         [self addTabViewControllerWithClass:[SettingsViewController class] viewControllers:viewControllers customizedViewControllers:customizableViewControllers];
         
@@ -202,6 +204,10 @@
     [self tryRegisterLocationNotification:application];
 }
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken {
+    NSLog(@"%@", [[FIRInstanceID instanceID] token]);
+}
+
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     [self tryRegisterLocationNotification:application];
 }
@@ -217,7 +223,11 @@
 
 - (void)changeTab:(NSString *)tabName {
     if ([@"info" isEqualToString:tabName]) {
-        self.tabBarController.selectedViewController = self.informationNavigationController;
+        if (self.tabBarController.selectedViewController == self.informationNavigationController) {
+            [self.informationViewController load];
+        } else {
+            self.tabBarController.selectedViewController = self.informationNavigationController;
+        }
     }
 }
 

@@ -10,4 +10,6 @@
 
 @interface InformationViewController : UIViewController <UIWebViewDelegate>
 
+- (void)load;
+
 @end
