@@ -111,6 +111,7 @@
 		06CA69F014B50B8B008C5F43 /* statusicon_notload.png in Resources */ = {isa = PBXBuildFile; fileRef = 06CA69EE14B50B8B008C5F43 /* statusicon_notload.png */; };
 		06CA69F114B50B8B008C5F43 /* statusicon_notload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 06CA69EF14B50B8B008C5F43 /* statusicon_notload@2x.png */; };
 		06CC92BA17E1C319000DB811 /* CompletionViewController7.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06CC92B917E1C319000DB811 /* CompletionViewController7.xib */; };
+		06ED8D421F957B2F00ED8FD8 /* icon_1024x1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 06ED8D411F957B2E00ED8FD8 /* icon_1024x1024.png */; };
 		06F1946A1E002445004303F7 /* FMDBHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 06F194691E002445004303F7 /* FMDBHelper.m */; };
 		06F5A0E017E2D00900AD7AA5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06F5A0DF17E2D00800AD7AA5 /* QuartzCore.framework */; };
 		06F5A0E217E2D02F00AD7AA5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06F5A0E117E2D02F00AD7AA5 /* Accelerate.framework */; };
@@ -271,6 +272,7 @@
 		06CA69EF14B50B8B008C5F43 /* statusicon_notload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusicon_notload@2x.png"; path = "Oritsubushi/assets/statusicon_notload@2x.png"; sourceTree = "<group>"; };
 		06CA69F714C0A3DB008C5F43 /* DatabaseVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseVersion.h; sourceTree = "<group>"; };
 		06CC92B917E1C319000DB811 /* CompletionViewController7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CompletionViewController7.xib; path = Oritsubushi/CompletionViewController7.xib; sourceTree = "<group>"; };
+		06ED8D411F957B2E00ED8FD8 /* icon_1024x1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_1024x1024.png; sourceTree = "<group>"; };
 		06F194681E002445004303F7 /* FMDBHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FMDBHelper.h; path = Oritsubushi/FMDBHelper.h; sourceTree = "<group>"; };
 		06F194691E002445004303F7 /* FMDBHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FMDBHelper.m; path = Oritsubushi/FMDBHelper.m; sourceTree = "<group>"; };
 		06F5A0DF17E2D00800AD7AA5 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -519,6 +521,7 @@
 		06B4BEC214701FD300F57858 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				06ED8D411F957B2E00ED8FD8 /* icon_1024x1024.png */,
 				0603B0701BA99B2E005F3C99 /* Defaults-667h@2x.png */,
 				0603B0711BA99B2E005F3C99 /* Defaults-736h@3x.png */,
 				0603B0661BA99AE3005F3C99 /* Icon-29.png */,
@@ -620,7 +623,7 @@
 		06B4BDEC145F639E00F57858 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "合資会社ダブルエスエフ";
 				TargetAttributes = {
 					06B4BDF4145F639E00F57858 = {
@@ -670,6 +673,7 @@
 				06195EDF147A5BD100C97DB8 /* tabicon_place.png in Resources */,
 				06195EE0147A5BD100C97DB8 /* tabicon_settings.png in Resources */,
 				06195EE1147A5BD100C97DB8 /* tabicon_sync.png in Resources */,
+				06ED8D421F957B2F00ED8FD8 /* icon_1024x1024.png in Resources */,
 				06661F0F17E885B200861C52 /* PlaceSelectViewController.xib in Resources */,
 				06195EE2147A5BD100C97DB8 /* tabicon_yomi.png in Resources */,
 				06BDC71117E96E160024BCB0 /* Icon-76@2x.png in Resources */,
@@ -836,12 +840,18 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -887,12 +897,18 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
