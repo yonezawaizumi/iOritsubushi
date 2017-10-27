@@ -50,7 +50,7 @@
 
 - (void)geocodeWithAddress:(NSString *)address country:(NSString *)country
 {
-    NSString *URLString = [NSString stringWithFormat:@"https://maps.google.com/maps/api/geocode/json?address=%@&sensor=false&language=%@", [Misc URLEncode:address], country];
+    NSString *URLString = [NSString stringWithFormat:@"https://maps.google.com/maps/api/geocode/json?address=%@&sensor=false&language=%@&key=AIzaSyBRza3-I2Yippvkl3tc0Sh5ea9kRChRbZA", [Misc URLEncode:address], country];
     
     self.locations = nil;
     self.errorMessage = nil;
@@ -102,7 +102,7 @@
                     [self delegateResult:@"地点が見つかりません"];
                 } else if([@"ZERO_RESULTS" isEqualToString:value]) {
                     [self delegateResult:@"地点が見つかりません"];
-                } else if([@"REQUEST_DENIED" isEqualToString:value]) {
+                } else if([@"REQUEST_DENIED" isEqualToString:value] || [@"QUERY_OVER_LIMIT" isEqualToString:value]) {
                     [self delegateResult:@"実行制限回数に達しました"];
                 } else {
                     [self delegateResult:@"サーバーエラー"];

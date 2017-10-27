@@ -78,7 +78,6 @@
     
     //20120919
     CGSize screenSize = [[UIScreen mainScreen] applicationFrame].size;
-    CGFloat navBarHeight = self.navigationController.navigationBar.frame.size.height;
     CGFloat tableY;
     CGFloat tableHeight;
     UIEdgeInsets insets;
@@ -96,7 +95,7 @@
     
     //self.promptHolder = [[Prompt7View alloc] initWithFrame:CGRectMake(0, navBarHeight + 20, screenSize.width, promptHeight) parent:self.tableView];
     //self.prompt = self.promptHolder.textLabel;
-    self.prompt = [[UILabel alloc] initWithFrame:CGRectMake(0, navBarHeight + 20, screenSize.width, promptHeight)];
+    self.prompt = [[UILabel alloc] initWithFrame:CGRectMake(0, IS_IPHONE_X ? 88 : 64, screenSize.width, promptHeight)];
     self.prompt.textAlignment = NSTextAlignmentCenter;
     self.prompt.font = PROMPT_FONT;
     self.prompt.textColor = OS7_PROMPT_TEXT_COLOR;

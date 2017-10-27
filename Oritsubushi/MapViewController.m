@@ -179,29 +179,14 @@ static void *settingsContext = (void *)2;
 
 - (void)initializeLogo
 {
-    //20120919
-    NSArray *aOsVersions = [[[UIDevice currentDevice]systemVersion] componentsSeparatedByString:@"."];
-    NSInteger iOsVersionMajor = [[aOsVersions objectAtIndex:0] intValue];
-    //20120120
-    if(iOsVersionMajor >= 6) {
-        for(UIView *v in self.mapView.subviews) {
-            if([v isKindOfClass:[UILabel class]]) {
-                CGRect frame = v.frame;
-                frame.origin.y -= 44;
-                v.frame = frame;
-                self.logoInitialized = YES;
-                return;
-            }
-        }
-    } else {
-        for(UIView *v in self.mapView.subviews) {
-            if([v isMemberOfClass:[UIImageView class]]) {
-                CGRect frame = v.frame;
-                frame.origin.y -= 44;
-                v.frame = frame;
-                self.logoInitialized = YES;
-                return;
-            }
+    //TODO: iPhoneX pseudo correction
+    for(UIView *v in self.mapView.subviews) {
+        if([v isKindOfClass:[UILabel class]]) {
+            CGRect frame = v.frame;
+            frame.origin.y -= 44;
+            v.frame = frame;
+            self.logoInitialized = YES;
+            return;
         }
     }
 }
@@ -219,10 +204,7 @@ static void *settingsContext = (void *)2;
     self.mapView.showsUserLocation = NO;
     self.mapView.delegate = self;
     
-    if(!self.logoInitialized) {
-        [self initializeLogo];
-    }
-    
+   
     [self.view addSubview:self.mapView];
     self.mapIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.mapIndicator.hidesWhenStopped = YES;
@@ -242,14 +224,24 @@ static void *settingsContext = (void *)2;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     //AD HOC!!!
-    self.tableView.scrollIndicatorInsets = self.tableView.contentInset = UIEdgeInsetsMake(69, 0, 88 + 4, 0);
-
+    if (IS_OS_11_OR_LATER) {
+        //TODO: psuedo correction
+        if (IS_IPHONE_X_SIZE) {
+            self.tableView.scrollIndicatorInsets = self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44, 0);
+        }
+    } else {
+        self.tableView.scrollIndicatorInsets = self.tableView.contentInset = UIEdgeInsetsMake(69, 0, 88 + 4, 0);
+    }
     [self.listView addSubview:self.tableView];
     
     self.mapWrapper = [[MapWrapper alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
     self.mapWrapper.delegate = self;
     [self.view addSubview:self.mapWrapper];
-    self.searchScopeBar = [[SearchScopeBar alloc] initWithFrame:CGRectMake(0, 64 - SCOPE_BAR_HEIGHT, frame.size.width, SCOPE_BAR_HEIGHT)];
+    self.searchScopeBar = [[SearchScopeBar alloc] initWithFrame:CGRectMake(
+                                                                           0,
+                                                                           (IS_IPHONE_X ? 88 : 64) - SCOPE_BAR_HEIGHT,
+                                                                           frame.size.width,
+                                                                           SCOPE_BAR_HEIGHT)];
     [self.view addSubview:self.searchScopeBar];
     self.searchScopeBar.filterType = recentFilterType = DatabaseFilterTypeNone;
     

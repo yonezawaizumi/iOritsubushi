@@ -54,7 +54,6 @@
 @property(nonatomic,strong) NSMutableArray *databaseUpdateNotificationObservers;
 @property(nonatomic,strong) NSMutableArray *memoryWarningNotificationObservers;
 @property(nonatomic,strong) UIAlertController *alertController;
-@property(nonatomic,readwrite) NSInteger osVersion;
 @property(nonatomic,strong) CLLocationManager *locationManager;
 @property(nonatomic,assign) BOOL fromBg;
 @property(nonatomic,strong) NSDictionary *initialUserInfo;
@@ -96,9 +95,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    NSArray *aOsVersions = [[[UIDevice currentDevice]systemVersion] componentsSeparatedByString:@"."];
-    self.osVersion = [[aOsVersions objectAtIndex:0] intValue];
-
     [self tryRegisterNotification:application];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(memoryWarningDidReceive) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];

@@ -11,6 +11,17 @@
 #import "Settings.h"
 #import <CoreLocation/CoreLocation.h>
 
+NS_INLINE BOOL checkScreenSize (CGFloat d1, CGFloat d2) {
+    CGSize nativeSize = UIScreen.mainScreen.nativeBounds.size;
+    CGFloat w =  nativeSize.width;
+    CGFloat h =  nativeSize.height;
+    return (w == d1 && h == d2) || (w == d2 && h == d1);
+}
+#define IS_IPHONE           UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone
+#define IS_OS_11_OR_LATER   (UIDevice.currentDevice.systemVersion.floatValue >= 11.0)
+#define IS_IPHONE_X_SIZE    checkScreenSize(1125, 2436)
+#define IS_IPHONE_X         (IS_IPHONE && IS_OS_11_OR_LATER && IS_IPHONE_X_SIZE)
+
 @protocol LocationUpdatedDelegate
 
 - (void)beginLocating:(BOOL)enabled;
@@ -24,7 +35,6 @@
 
 @property(strong, nonatomic) UIWindow *window;
 @property(nonatomic,strong,readonly) Database *database;
-@property(nonatomic,readonly) NSInteger osVersion;
 @property(nonatomic) id<LocationUpdatedDelegate> locationDelegate;
 
 - (void)mapViewUpdateFilterWithFilterType:(DatabaseFilterType)type filterValue:(NSString *)value;
