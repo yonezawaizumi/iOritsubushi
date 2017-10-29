@@ -96,6 +96,7 @@ static void *settingsContext = (void *)2;
 @property(nonatomic,strong) NSString *searchKeyword;
 @property(nonatomic,strong) GoogleMapsService *GMapService;
 @property(nonatomic,strong) UIActivityIndicatorView *mapIndicator;
+@property(nonatomic,strong) UIToolbar *myToolbar;
 @property(nonatomic,assign) BOOL logoInitialized;
 
 @property(assign) MKCoordinateRegion recentRegion;
@@ -179,14 +180,19 @@ static void *settingsContext = (void *)2;
 
 - (void)initializeLogo
 {
-    //TODO: iPhoneX pseudo correction
-    for(UIView *v in self.mapView.subviews) {
-        if([v isKindOfClass:[UILabel class]]) {
-            CGRect frame = v.frame;
-            frame.origin.y -= 44;
-            v.frame = frame;
-            self.logoInitialized = YES;
-            return;
+    //iOS11のMkMapViewの著作権表示リンクはツールバーの高さを勝手に忖度してSafeAreaに基づいてずれる
+    //かつ、それ以外にずらす方法がないので、なにもしないでよい
+    if (IS_OS_11_OR_LATER) {
+        self.logoInitialized = YES;
+    } else {
+        for(UIView *v in self.mapView.subviews) {
+            if([v isKindOfClass:[UILabel class]]) {
+                CGRect frame = v.frame;
+                frame.origin.y -= 44;
+                v.frame = frame;
+                self.logoInitialized = YES;
+                return;
+            }
         }
     }
 }
@@ -203,8 +209,7 @@ static void *settingsContext = (void *)2;
     self.mapView = [[MapView alloc] initWithFrame:frame];
     self.mapView.showsUserLocation = NO;
     self.mapView.delegate = self;
-    
-   
+
     [self.view addSubview:self.mapView];
     self.mapIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.mapIndicator.hidesWhenStopped = YES;
@@ -214,7 +219,7 @@ static void *settingsContext = (void *)2;
     [self.view addSubview:self.loadingView];
 
     //TODO: 仮の実装 iPad版では動的に算出しなければならない！
-    self.listView = [[UIView alloc] initWithFrame:frame];
+    self.listView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height - (IS_IPHONE_X ? 44 : 0))];
     self.listView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.listView.backgroundColor = [UIColor whiteColor];
     self.listView.hidden = YES;
@@ -224,14 +229,17 @@ static void *settingsContext = (void *)2;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     //AD HOC!!!
+    UIEdgeInsets insets = UIEdgeInsetsMake(69, 0, 88 + 4, 0);
     if (IS_OS_11_OR_LATER) {
-        //TODO: psuedo correction
-        if (IS_IPHONE_X_SIZE) {
-            self.tableView.scrollIndicatorInsets = self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44, 0);
+        if (@available(iOS 11.0, *)) {
+            self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
         }
-    } else {
-        self.tableView.scrollIndicatorInsets = self.tableView.contentInset = UIEdgeInsetsMake(69, 0, 88 + 4, 0);
+        if (IS_IPHONE_X_SIZE) {
+            insets.top += 20;
+            insets.bottom += 44;
+        }
     }
+    self.tableView.scrollIndicatorInsets = self.tableView.contentInset = insets;
     [self.listView addSubview:self.tableView];
     
     self.mapWrapper = [[MapWrapper alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
@@ -279,11 +287,31 @@ static void *settingsContext = (void *)2;
     self.visibilitySegmentedControl.tintColor = OS7_TINT_COLOR;
     [self.visibilitySegmentedControl addTarget:self action:@selector(visibilityWantsToChange) forControlEvents:UIControlEventValueChanged];
 
-    self.toolbarItems = [NSArray arrayWithObjects:
+    NSArray* toolbarItems = [NSArray arrayWithObjects:
                          [[UIBarButtonItem alloc] initWithCustomView:self.visibilitySegmentedControl],
                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                          [[UIBarButtonItem alloc] initWithCustomView:self.mapStyleModeSegmentedControl],
                          nil];
+    if (IS_IPHONE_X) {
+        //iPhone Xでは、タブバーとナビゲーションコントローラーのツールバーが両方あるとこの計算にバグる
+        //そのため、メインビューに直接ツールバーを貼ってごまかす
+        CGRect rect = self.view.bounds;
+        rect.origin.y = rect.size.height - 44 - 62 - 20;
+        rect.size.height = 44;
+        self.myToolbar = [[UIToolbar alloc]  initWithFrame:rect];
+        self.myToolbar.items = toolbarItems;
+        self.myToolbar.hidden = YES;
+        [self.view addSubview:self.myToolbar];
+        //iOS11のMkMapViewの著作権表示リンクはツールバーの高さを勝手に忖度してSafeAreaに基づいてずれる
+        //かつ、それ以外にずらす方法がない
+        //なので、iPhone Xではとりあえず透明にしたカラのナビゲーションツールバーを表示した上でずらさせる
+        [self.navigationController.toolbar setBackgroundImage:[UIImage new]
+                        forToolbarPosition:UIBarPositionAny
+                                barMetrics:UIBarMetricsDefault];
+        [self.navigationController.toolbar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
+    } else {
+        self.toolbarItems = toolbarItems;
+    }
 
     [self updateFilterWithFilterType:recentFilterType filterValue:self.searchKeyword];
 }
@@ -726,7 +754,36 @@ static void *settingsContext = (void *)2;
 {
     isShowBars = show;
     [self.navigationController setNavigationBarHidden:!show animated:animated];
-    [self.navigationController setToolbarHidden:!show animated:animated];
+    if (IS_IPHONE_X) {
+        if (show) {
+            self.myToolbar.hidden = NO;
+            if (animated) {
+                CGRect frame = self.myToolbar.frame;
+                frame.origin.y += frame.size.height;
+                self.myToolbar.frame = frame;
+                frame.origin.y -= frame.size.height;
+                [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+                    self.myToolbar.frame = frame;
+                }];
+            }
+        } else {
+            if (animated) {
+                CGRect origFrame = self.myToolbar.frame;
+                CGRect frame = origFrame;
+                frame.origin.y += frame.size.height;
+                [UIView animateWithDuration:ANIMATION_DURATION animations:^{
+                    self.myToolbar.frame = frame;
+                } completion:^(BOOL finished) {
+                    self.myToolbar.frame = origFrame;
+                    self.myToolbar.hidden = YES;
+                }];
+            } else {
+                self.myToolbar.hidden = YES;
+            }
+        }
+    } else {
+        [self.navigationController setToolbarHidden:!show animated:animated];
+    }
 }
 
 
