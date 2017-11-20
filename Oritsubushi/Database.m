@@ -88,6 +88,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
     }
     
     static NSString *databaseName = @"oritsubushi.sqlite";
+    [FMDBHelper moveOldDatabase:databaseName];
     NSString *writableDBPath = [FMDBHelper getWritablePath:databaseName];
     BOOL copied;
     NSError *error = [FMDBHelper prepareDatabase:databaseName writableDBPath:writableDBPath userVersion:DATABASE_USER_VERSION fileCopied:&copied];
@@ -99,6 +100,7 @@ static NSString *DATABASE_UPDATE_NOTIFICATION = @"DatabaseUpdateNotification";
             //self.database.shouldCacheStatements = YES;
             self.database.shouldCacheStatements = NO;
             databaseName = @"completions.sqlite";
+            [FMDBHelper moveOldDatabase:databaseName];
             writableDBPath = [FMDBHelper getWritablePath:databaseName];
             /*error = [FMDBHelper prepareDatabase:databaseName writableDBPath:writableDBPath userVersion:0];
             if(!error) {

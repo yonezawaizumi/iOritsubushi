@@ -629,6 +629,9 @@
 					06B4BDF4145F639E00F57858 = {
 						DevelopmentTeam = YQ9QLVPTA3;
 						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};

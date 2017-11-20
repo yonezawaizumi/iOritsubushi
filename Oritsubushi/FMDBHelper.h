@@ -12,5 +12,6 @@
 
 + (NSString *)getWritablePath:(NSString *)databaseFileName;
 + (NSError *)prepareDatabase:(NSString *)databaseFileName writableDBPath:(NSString *)writableDBPath userVersion:(NSInteger)userVersion fileCopied:(BOOL *)copied;
++ (NSError *)moveOldDatabase:(NSString *)databaseFileName;
 
 @end

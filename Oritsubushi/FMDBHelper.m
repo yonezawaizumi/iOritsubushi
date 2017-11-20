@@ -8,15 +8,21 @@
 
 #import "FMDatabase.h"
 #import "FMDBHelper.h"
-
+#import "Consts.h"
 
 @implementation FMDBHelper
 
-+ (NSString *)getWritablePath:(NSString *)databaseFileName
++ (NSString *)getOlderWritablePath:(NSString *)databaseFileName
 {
     NSArray  *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    return [documentsDirectory stringByAppendingPathComponent:databaseFileName];    
+    return [documentsDirectory stringByAppendingPathComponent:databaseFileName];
+}
+
++ (NSString *)getWritablePath:(NSString *)databaseFileName
+{
+    NSURL *url = [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:GROUP_NAME];
+    return [[url URLByAppendingPathComponent:databaseFileName] path];
 }
 
 + (NSError *)prepareDatabase:(NSString *)databaseFileName writableDBPath:(NSString *)writableDBPath userVersion:(NSInteger)userVersion fileCopied:(BOOL *)copied
@@ -53,6 +59,27 @@
         return nil;
     } else {
         return error;
+    }
+}
+
++ (NSError *)moveOldDatabase:(NSString *)databaseFileName
+{
+    NSString *curPath = [self getWritablePath:databaseFileName];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:curPath]) {
+        return nil;
+    }
+    NSString *oldPath = [self getOlderWritablePath:databaseFileName];
+    if ([fileManager fileExistsAtPath:oldPath]) {
+        NSError *error;
+        if ([fileManager copyItemAtPath:oldPath toPath:curPath error:&error]) {
+            //[fileManager removeItemAtPath:oldPath error:&error];
+            return nil;
+        } else {
+            return error;
+        }
+    } else {
+        return nil;
     }
 }
 

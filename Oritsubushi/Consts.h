@@ -57,7 +57,7 @@
 #define MAP_WRAPPER_ALPHA               0.6
 
 #define NUMBER_OF_ICONS_DEFAULT         100
-#define NUMBER_OF_ICONS_LIST            { 50, 100, 150, 200, 300, 500, -1 }
+#define NUMBER_OF_ICONS_LIST            { 50, 100, 150, 200, 300, 500 }
 
 #define LOADING_VIEW_COLOR              [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:0.5]
 
@@ -83,5 +83,7 @@
 #define SYNC_PP_READ_WAIT_NSEC          (int64_t)(2.0 * NSEC_PER_SEC)
 #define SYNC_PP_CONFIRM_ANIM_DELAY      0.1
 #define SYNC_PP_CONFIRM_ANIM_DULATION   0.3
+
+#define GROUP_NAME                      @"group.com.wsf-lp.iOritsubushi"
 
 #endif
