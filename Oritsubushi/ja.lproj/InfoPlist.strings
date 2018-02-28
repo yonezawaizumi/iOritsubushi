@@ -1,4 +1,4 @@
 /* Localized versions of Info.plist keys */
 
 "CFBundleDisplayName" = "i降りつぶし";
-NSLocationWhenInUseUsageDescription = "起動中のみ";
+NSLocationWhenInUseUsageDescription = "地図上に現在位置を表示するため";
