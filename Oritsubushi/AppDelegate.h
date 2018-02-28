@@ -19,8 +19,10 @@ NS_INLINE BOOL checkScreenSize (CGFloat d1, CGFloat d2) {
 }
 #define IS_IPHONE           UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone
 #define IS_OS_11_OR_LATER   (UIDevice.currentDevice.systemVersion.floatValue >= 11.0)
+#define IS_OS_11_X_TAB_BUG  (IS_OS_11_OR_LATER && UIDevice.currentDevice.systemVersion.floatValue < 11.19)
 #define IS_IPHONE_X_SIZE    checkScreenSize(1125, 2436)
 #define IS_IPHONE_X         (IS_IPHONE && IS_OS_11_OR_LATER && IS_IPHONE_X_SIZE)
+#define IS_IPHONE_X_TAB_BUG (IS_IPHONE_X && IS_OS_11_X_TAB_BUG)
 
 @protocol LocationUpdatedDelegate
 

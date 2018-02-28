@@ -292,7 +292,7 @@ static void *settingsContext = (void *)2;
                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                          [[UIBarButtonItem alloc] initWithCustomView:self.mapStyleModeSegmentedControl],
                          nil];
-    if (IS_IPHONE_X) {
+    if (IS_IPHONE_X_TAB_BUG) {
         //iPhone Xでは、タブバーとナビゲーションコントローラーのツールバーが両方あるとこの計算にバグる
         //そのため、メインビューに直接ツールバーを貼ってごまかす
         CGRect rect = self.view.bounds;
@@ -754,7 +754,7 @@ static void *settingsContext = (void *)2;
 {
     isShowBars = show;
     [self.navigationController setNavigationBarHidden:!show animated:animated];
-    if (IS_IPHONE_X) {
+    if (IS_IPHONE_X_TAB_BUG) {
         if (show) {
             self.myToolbar.hidden = NO;
             if (animated) {
