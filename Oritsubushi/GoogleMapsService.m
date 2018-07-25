@@ -50,7 +50,7 @@
 
 - (void)geocodeWithAddress:(NSString *)address country:(NSString *)country
 {
-    NSString *URLString = [NSString stringWithFormat:@"https://maps.google.com/maps/api/geocode/json?address=%@&sensor=false&language=%@&key=AIzaSyBRza3-I2Yippvkl3tc0Sh5ea9kRChRbZA", [Misc URLEncode:address], country];
+    NSString *URLString = [NSString stringWithFormat:@"https://oritsubushi.net/oritsubushi/yahoomap.php?k=%@", [Misc URLEncode:address]];
     
     self.locations = nil;
     self.errorMessage = nil;
@@ -70,52 +70,24 @@
 - (void)parseData:(NSData *)data;
 {
     if(data) {
-        id parser = [SBJson4Parser parserWithBlock:^(id v, BOOL *stop) {
-            if ([(NSObject *)v isKindOfClass:[NSDictionary class]]) {
-                id value = [(NSDictionary *)v objectForKey:@"status"];
-                if(![value isKindOfClass:[NSString class]]) {
-                    [self delegateResult:@"検索できませんでした"];
-                } else if([@"OK" isEqualToString:value]) {
-                    id results = [(NSDictionary *)v objectForKey:@"results"];
-                    if([results isKindOfClass:[NSArray class]]) {
-                        NSMutableArray *locations = [[NSMutableArray alloc] init];
-                        for (NSDictionary *placemark in results) {
-                            id address = [placemark objectForKey:@"formatted_address"];
-                            if(![address isKindOfClass:[NSString class]] || ![(NSString *)address length]) {
-                                continue;
-                            }
-                            id loc = [[placemark objectForKey:@"geometry"] objectForKey:@"location"];
-                            id lat = [loc objectForKey:@"lat"];
-                            id lng = [loc objectForKey:@"lng"];
-                            if(![lat isKindOfClass:[NSNumber class]] || ![lng isKindOfClass:[NSNumber class]]) {
-                                continue;
-                            }
-                            GoogleMapsLocation *location = [[GoogleMapsLocation alloc] initWithAddress:address coordinate:CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue])];
-                            [locations addObject:location];
-                        }
-                        if([locations count]) {
-                            self.locations = locations;
-                            [self delegateResult:nil];
-                            return;
-                        }
-                    }
-                    [self delegateResult:@"地点が見つかりません"];
-                } else if([@"ZERO_RESULTS" isEqualToString:value]) {
-                    [self delegateResult:@"地点が見つかりません"];
-                } else if([@"REQUEST_DENIED" isEqualToString:value] || [@"QUERY_OVER_LIMIT" isEqualToString:value]) {
-                    [self delegateResult:@"実行制限回数に達しました"];
-                } else {
-                    [self delegateResult:@"サーバーエラー"];
+        NSString *locsStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSMutableArray *locations = [[NSMutableArray alloc] init];
+        for (NSString *loc in [locsStr componentsSeparatedByString:@"\n"]) {
+            if ([loc length]) {
+                NSArray *chunks = [loc componentsSeparatedByString:@"\t"];
+                if ([chunks count] == 3) {
+                    CLLocationCoordinate2D coords = CLLocationCoordinate2DMake([chunks[1] doubleValue] / 1000000, [chunks[2] doubleValue] / 1000000);
+                    [locations addObject:[[GoogleMapsLocation alloc] initWithAddress:chunks[0]
+                                                                                    coordinate:coords]];
                 }
             }
         }
-                                    allowMultiRoot:NO
-                                   unwrapRootArray:NO
-                                      errorHandler:^(NSError *err) {
-                                          [self delegateResult:@"サーバーからの結果が不正です"];
-                                      }];
-        if ([parser parse:data] != SBJson4ParserComplete) {
-            [self delegateResult:@"サーバーからの結果が不正です"];
+        if([locations count]) {
+            self.locations = locations;
+            [self delegateResult:nil];
+            return;
+        } else {
+            [self delegateResult:@"地点が見つかりません"];
         }
     } else {
         [self delegateResult:@"サーバーにつながりません"];
