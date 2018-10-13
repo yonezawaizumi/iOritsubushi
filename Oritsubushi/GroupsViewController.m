@@ -124,33 +124,6 @@
     active = YES;
 }
 
-- (void)viewDidUnload
-{
-    active = NO;
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;    
-    self.prompt = nil;
-    //self.promptHolder = nil;
-    self.tableView = nil;
-    self.mapFilterWord = nil;
-    self.indicator = nil;
-}
-
-- (void)dealloc
-{
-    [Database removeObserver:self];
-    self.prompt = nil;
-    //self.promptHolder = nil;
-    self.tableView = nil;
-    self.selectedIndexPath = nil;
-    self.mapFilterWord = nil;
-    self.headerGroup = nil;
-    self.groups = nil;
-    self.promptText = nil;
-    self.indicator = nil;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -166,13 +139,6 @@
     [super viewDidDisappear:animated];
     //[self.promptHolder pauseBlur];
 }
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 
 #pragma mark - Table view data source
 

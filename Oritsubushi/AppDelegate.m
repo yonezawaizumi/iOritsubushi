@@ -200,10 +200,6 @@
     [self tryRegisterLocationNotification:application];
 }
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken {
-    NSLog(@"%@", [[FIRInstanceID instanceID] token]);
-}
-
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     [self tryRegisterLocationNotification:application];
 }

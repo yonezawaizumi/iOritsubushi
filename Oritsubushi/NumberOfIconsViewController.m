@@ -52,11 +52,6 @@ static int selectionList[] = NUMBER_OF_ICONS_LIST;
 
 #pragma mark - View lifecycle
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -68,12 +63,6 @@ static int selectionList[] = NUMBER_OF_ICONS_LIST;
 {
     [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInteger:self.numberOfIcons] forKey:SETTINGS_KEY_NUMBER_OF_ICONS];
     [super viewWillDisappear:animated];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 #pragma mark - Table view data source

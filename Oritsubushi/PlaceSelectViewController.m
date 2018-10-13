@@ -80,14 +80,6 @@ enum {
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewDidUnload
-{
-    self.placeCandidates = nil;
-    self.selectDelegate = nil;
-    self.locationsTableView = nil;
-    self.bottomSeparator = nil;
-}
-
 - (void)applicationDidEnterBackground:(NSNotification *)notification
 {
     [self.selectDelegate placeSelectViewController:self didSelected:nil atIndex:PlaceSelectViewControllerIndexKilled];

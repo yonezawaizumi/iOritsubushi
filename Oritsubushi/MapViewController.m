@@ -67,11 +67,8 @@ static void *settingsContext = (void *)2;
 
 @interface MapViewController () {
     FirstLocatingStatus firstLocatingStatus;
-    BOOL mustSearch;
-    BOOL inAnimation;
     BOOL isShowBars;
     BOOL annotationWasTappedRecently;
-    DatabaseFilterType recentFilterType;
     NSInteger numberOfIcons;
     
     BOOL locatingEnabled;
@@ -98,6 +95,9 @@ static void *settingsContext = (void *)2;
 @property(nonatomic,strong) UIActivityIndicatorView *mapIndicator;
 @property(nonatomic,strong) UIToolbar *myToolbar;
 @property(nonatomic,assign) BOOL logoInitialized;
+@property(nonatomic,assign) BOOL inAnimation;
+@property(nonatomic,assign) DatabaseFilterType recentFilterType;
+@property(nonatomic,assign) BOOL mustSearch;
 
 @property(assign) MKCoordinateRegion recentRegion;
 
@@ -251,7 +251,7 @@ static void *settingsContext = (void *)2;
                                                                            frame.size.width,
                                                                            SCOPE_BAR_HEIGHT)];
     [self.view addSubview:self.searchScopeBar];
-    self.searchScopeBar.filterType = recentFilterType = DatabaseFilterTypeNone;
+    self.searchScopeBar.filterType = self.recentFilterType = DatabaseFilterTypeNone;
     
     isShowBars = YES;
     
@@ -313,7 +313,7 @@ static void *settingsContext = (void *)2;
         self.toolbarItems = toolbarItems;
     }
 
-    [self updateFilterWithFilterType:recentFilterType filterValue:self.searchKeyword];
+    [self updateFilterWithFilterType:self.recentFilterType filterValue:self.searchKeyword];
 }
 
 #pragma mark - View lifecycle
@@ -364,56 +364,6 @@ static void *settingsContext = (void *)2;
         [self.tableView deselectRowAtIndexPath:self.selectedIndexPath animated:YES];
         self.selectedIndexPath = nil;
     }
-}
-
-- (void)viewDidUnload
-{
-    if(queue) {
-        //dispatch_release(queue);
-        queue = nil;    //20111229
-    }
-    
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
-    [[NSUserDefaults standardUserDefaults] removeObserver:self forKeyPath:SETTINGS_KEY_NUMBER_OF_ICONS];
-    //AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    //[appDelegate removeDatabaseUpdateNotificationObserver:self];
-    [Database removeObserver:self];
-    
-    [super viewDidUnload];
-
-    
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    self.mapView.delegate = nil;
-    self.mapView = nil;
-    self.mapWrapper = nil;
-    self.loadingView = nil;
-    self.searchBar = nil;
-    self.presentButton = nil;
-    self.mapStyleModeSegmentedControl = nil;
-    self.visibilitySegmentedControl = nil;
-    self.stations = nil;
-    self.stationsForList = nil;
-    self.listView = nil;
-    self.tableView = nil;
-    self.selectedIndexPath = nil;
-    self.reservedStationCode = nil;
-    self.searchScopeBar = nil;
-    self.searchKeyword = nil;
-    self.GMapService = nil;
-    self.mapIndicator = nil;
-}
-
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
-{
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-    //return YES;
 }
 
 - (void)alertWithTitle:(NSString *)title message:(NSString *)message
@@ -883,19 +833,19 @@ static void *settingsContext = (void *)2;
 
 - (void)updateFilterWithFilterType:(DatabaseFilterType)type filterValue:(NSString *)value
 {
-    recentFilterType = type;
+    self.recentFilterType = type;
     self.searchKeyword = value ? value : @"";
     [self setFormattedSearchText];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [appDelegate.database updateFilterWithFilterType:recentFilterType filterValue:self.searchKeyword];
+    [appDelegate.database updateFilterWithFilterType:self.recentFilterType filterValue:self.searchKeyword];
 }
 
 - (void)doSearch
 {
     if(![self.searchKeyword length]) {
-        recentFilterType = DatabaseFilterTypeNone;
+        self.recentFilterType = DatabaseFilterTypeNone;
         [self.searchScopeBar setFilterType:DatabaseFilterTypeNone];
-    } else if(recentFilterType == DatabaseFilterTypeNone) {
+    } else if(self.recentFilterType == DatabaseFilterTypeNone) {
         if(!self.GMapService) {
             self.GMapService = [[GoogleMapsService alloc] initWithDelegate:self];
         }
@@ -903,7 +853,7 @@ static void *settingsContext = (void *)2;
         return;
     }
     self.loadingView.hidden = YES;
-    [self updateFilterWithFilterType:recentFilterType filterValue:self.searchKeyword];
+    [self updateFilterWithFilterType:self.recentFilterType filterValue:self.searchKeyword];
     [self requestUpdate];
     if(!self.tableView.hidden) {
         [self.tableView reloadData];
@@ -912,21 +862,21 @@ static void *settingsContext = (void *)2;
 
 - (void)setFormattedSearchText
 {
-    self.searchBar.text = [DatabaseFilterTypes formattedStringWithFilterType:recentFilterType searchKeyword:self.searchKeyword];
+    self.searchBar.text = [DatabaseFilterTypes formattedStringWithFilterType:self.recentFilterType searchKeyword:self.searchKeyword];
 }
 
 - (BOOL)beginEndSearchInput:(BOOL)beginning
 {
-    if(inAnimation || firstLocatingStatus != FirstLocatingDone) {
+    if(self.inAnimation || firstLocatingStatus != FirstLocatingDone) {
         return NO;
     }
-    inAnimation = YES;
+    self.inAnimation = YES;
     
     if(beginning) {
-        mustSearch = NO;
+        self.mustSearch = NO;
         [self setButtonsEnabled:NO];
         self.searchBar.text = self.searchKeyword;
-        self.searchScopeBar.filterType = recentFilterType;
+        self.searchScopeBar.filterType = self.recentFilterType;
     }
     
     [self.mapWrapper prepareAnimationWithShowing:beginning];
@@ -938,13 +888,13 @@ static void *settingsContext = (void *)2;
                          [self.searchScopeBar setAnimationWithShowing:beginning];
 					 }
                      completion:^(BOOL finished){
-                         inAnimation = NO;
+                         self.inAnimation = NO;
                          [self.mapWrapper finishAnimationWithShowing:beginning];
                          [self.searchScopeBar finishAnimationWithShowing:beginning];
                          if(!beginning) {
                              [self setButtonsEnabled:YES];
-                             if(mustSearch) {
-                                 recentFilterType = self.searchScopeBar.filterType;
+                             if(self.mustSearch) {
+                                 self.recentFilterType = self.searchScopeBar.filterType;
                                  self.searchKeyword = [self.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                                  self.loadingView.hidden = NO;
                                  [self setFormattedSearchText];
@@ -973,21 +923,21 @@ static void *settingsContext = (void *)2;
 //検索文字列入力時に「検索」ボタンがタップされる
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar_
 {
-    if(firstLocatingStatus == FirstLocatingDone && !inAnimation) {
+    if(firstLocatingStatus == FirstLocatingDone && !self.inAnimation) {
         [searchBar_ endEditing:YES];
-        mustSearch = YES;
+        self.mustSearch = YES;
     }
 }
 
 
 - (void)mapWrapperWasTouched:(MapWrapper *)mapWrapper
 {
-    if(!inAnimation) {
+    if(!self.inAnimation) {
         if ([self.searchBar.text length] || ![self.searchKeyword length]) {
             self.searchBar.text = self.searchKeyword;
-            mustSearch = NO;
+            self.mustSearch = NO;
         } else {
-            mustSearch = YES;
+            self.mustSearch = YES;
         }
         [self.searchBar endEditing:NO];
     } 

@@ -79,35 +79,6 @@
     [Database addObserver:self];
 }
 
-- (void)viewDidUnload
-{
-    /*NSLog(@"%d:%p:%ld", __LINE__, (__bridge void*)self, CFGetRetainCount((__bridge void*)self));
-    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    [appDelegate removeDatabaseUpdateNotificationObserver:self];
-    NSLog(@"%d:%p:%ld", __LINE__, (__bridge void*)self, CFGetRetainCount((__bridge void*)self));*/
-    //[Database removeObserver:self];
-    [super viewDidUnload];
-//    NSLog(@"%d:%p:%ld", __LINE__, (__bridge void*)self, CFGetRetainCount((__bridge void*)self));
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    self.titleView = nil;
-    self.memoCell = nil;
-    self.updatedDateLabel = nil;
-    self.selectedIndexPath = nil;
-}
-
-- (void)dealloc
-{
-//    NSLog(@"%d:%p:%ld", __LINE__, (__bridge void*)self, CFGetRetainCount((__bridge void*)self));
-    [Database removeObserver:self];
-    self.titleView = nil;
-    self.updatedDateLabel = nil;
-    self.memoCell = nil;
-    self.selectedIndexPath = nil;
-    self.station = nil;
-    self.completionCell = nil;    
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -122,12 +93,6 @@
     [self updateUpdatedDate];
 }
 
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
 
 #pragma mark - Table view data source
 

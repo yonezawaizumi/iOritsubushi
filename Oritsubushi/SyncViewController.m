@@ -146,25 +146,6 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     self.ppVersionLabel.text = [NSString stringWithFormat:NSLocalizedString(@"(%04d/%02d/%02d版)", nil), PP_VERSION / 10000, PP_VERSION / 100 % 100, PP_VERSION % 100];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    if(queue) {
-        //dispatch_release(queue);
-        queue = nil;
-    }
-    NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
-    [center removeObserver:self];
-    self.headerView = nil;
-    self.webView = nil;
-    self.startButton = nil;
-    self.logoutButton = nil;
-    self.userName = nil;
-    self.request = nil;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -198,12 +179,6 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
             break;
         }
     }
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)currentLocaleDidChange:(NSNotification *)notification

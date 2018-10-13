@@ -55,30 +55,6 @@
 
 #pragma mark - View lifecycle
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    self.tableView = nil;
-    self.pickerView = nil;
-    self.compCell = nil;
-    self.compLabel = nil;
-    self.compSwitch = nil;
-    self.titleLabel = nil;
-}
-
-- (void)dealloc
-{
-    self.tableView = nil;
-    self.pickerView = nil;
-    self.compCell = nil;
-    self.compLabel = nil;
-    self.compSwitch = nil;
-    self.titleLabel = nil;
-    self.station = nil;
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -110,14 +86,6 @@
     [delegate.database updateCompletion:self.station];
     [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInteger:[self intPickerValue]] forKey:SETTINGS_KEY_RECENT_DATE];
     [super viewWillDisappear:animated];
-}
-
-
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)valueDidChange

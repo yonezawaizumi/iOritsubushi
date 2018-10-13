@@ -84,21 +84,6 @@
     [self.navigationController setToolbarHidden:YES animated:animated];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    self.webView = nil;
-    self.loadingView = nil;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 - (void)webViewDidStartLoad:(UIWebView *)webView
 {
     self.loadingView.hidden = NO;

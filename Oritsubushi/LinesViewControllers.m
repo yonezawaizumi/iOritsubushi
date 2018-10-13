@@ -88,25 +88,6 @@
     [super viewDidLoad];
 }
 
-- (void)viewDidUnload
-{
-    self.cacheKey = nil;
-    self.controllerIsEnabled = NO;
-    [super viewDidUnload];
-    if(queue) {
-        //dispatch_release(queue);
-        queue = nil;
-    }
-}
-
-- (void)dealloc
-{
-    self.cacheKey = nil;
-    if(queue) {
-        //dispatch_release(queue);
-    }
-}
-
 - (void)reloadIfNeededDelayed
 {
     [super reloadIfNeeded];
