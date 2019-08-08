@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1000"
+   LastUpgradeVersion = "1030"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "954F1400EC3F629A68A6CE2FE7B0B39E"
+               BlueprintIdentifier = "3C88D33177E6623C3A72D462C5F84C83"
                BuildableName = "libSBJson.a"
                BlueprintName = "SBJson"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "954F1400EC3F629A68A6CE2FE7B0B39E"
+            BlueprintIdentifier = "3C88D33177E6623C3A72D462C5F84C83"
             BuildableName = "libSBJson.a"
             BlueprintName = "SBJson"
             ReferencedContainer = "container:Pods.xcodeproj">
