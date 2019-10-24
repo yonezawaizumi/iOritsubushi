@@ -98,9 +98,14 @@
     self.prompt = [[UILabel alloc] initWithFrame:CGRectMake(0, IS_IPHONE_X ? 88 : 64, screenSize.width, promptHeight)];
     self.prompt.textAlignment = NSTextAlignmentCenter;
     self.prompt.font = PROMPT_FONT;
-    self.prompt.textColor = OS7_PROMPT_TEXT_COLOR;
-    self.prompt.backgroundColor = OS7_PROMPT_COLOR_TEMP;
-    //self.prompt.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.0];
+    if (@available(iOS 13.0, *)) {
+        self.prompt.textColor = OS13_PROMPT_TEXT_COLOR;
+        self.prompt.backgroundColor = OS13_PROMPT_COLOR_TEMP;
+    } else {
+        self.prompt.textColor = OS7_PROMPT_TEXT_COLOR;
+        self.prompt.backgroundColor = OS7_PROMPT_COLOR_TEMP;
+        //self.prompt.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.0];
+    }
     UIView *edge = [[UIView alloc] initWithFrame:CGRectMake(0, promptHeight - 0.5, screenSize.width, 0.5)];
     edge.backgroundColor = OS7_PROPMT_BOTTOM_EDGE_COLOR;
     [self.prompt addSubview:edge];

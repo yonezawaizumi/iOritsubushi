@@ -34,7 +34,6 @@
 
 #define OS7_TINT_COLOR                  [UIColor colorWithRed:0.0 green:(122.0/255) blue:1.0 alpha:1.0]
 
-#define SCOPE_BAR_COLOR                 [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.8]
 #define SCOPE_BAR_HEIGHT                88
 #define SCOPE_BAR_HORIZONTAL_MARGIN     10
 
@@ -44,8 +43,12 @@
 #define PROMPT_FONT                     [UIFont systemFontOfSize:14]
 #define PROMPT_INDICATOR_MARGIN         8
 
+#define OS13_PROMPT_TEXT_COLOR          [UIColor labelColor]
 #define OS7_PROMPT_TEXT_COLOR           [UIColor blackColor]
+#define OS13_PROMPT_COLOR               [UIColor systemGray4Color]
 #define OS7_PROMPT_COLOR                [UIColor colorWithRed:(239.0/255) green:(239.0/255) blue:(244.0/255) alpha:1.0]
+
+#define OS13_PROMPT_COLOR_TEMP          [UIColor systemGroupedBackgroundColor]
 //iOS7 GMでDNRRealTimeBlurが激しくメモリリークするための緊急避難
 #define OS7_PROMPT_COLOR_TEMP           [UIColor colorWithRed:(239.0/255) green:(239.0/255) blue:(244.0/255) alpha:0.98]
 #define OS7_PROPMT_BOTTOM_EDGE_COLOR    /*[UIColor colorWithRed:(167.0/255) green:(167.0/255) blue:(170.0/255) alpha:1.0]*/[UIColor lightGrayColor]

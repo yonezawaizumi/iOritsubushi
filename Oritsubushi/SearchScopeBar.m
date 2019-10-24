@@ -73,12 +73,24 @@ static BOOL initialized = NO;
         // Initialization code
         originalOriginY = frame.origin.y;
         self.hidden = YES;
-        self.backgroundColor = OS7_PROMPT_COLOR;
+        if (@available(iOS 13.0, *)) {
+            self.backgroundColor = OS13_PROMPT_COLOR;
+        } else {
+            self.backgroundColor = OS7_PROMPT_COLOR;
+        }
         self.typeControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:typeLabels count:countof(typeLabels)]];
-        self.typeControl.tintColor = OS7_TINT_COLOR;
+        if (@available(iOS 13.0, *)) {
+            ;
+        } else {
+            self.typeControl.tintColor = OS7_TINT_COLOR;
+        }
         [self.typeControl addTarget:self action:@selector(valueDidChange) forControlEvents:UIControlEventValueChanged];
         self.matchControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:matchLabels count:countof(matchLabels)]];
-        self.matchControl.tintColor = OS7_TINT_COLOR;
+        if (@available(iOS 13.0, *)) {
+            ;
+        } else {
+            self.matchControl.tintColor = OS7_TINT_COLOR;
+        }
         [self.matchControl addTarget:self action:@selector(valueDidChange) forControlEvents:UIControlEventValueChanged];
         CGRect typeRect = self.typeControl.frame;
         CGRect matchRect = self.matchControl.frame;
