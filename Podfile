@@ -12,4 +12,5 @@ target 'Oritsubushi' do
   pod 'ASIHTTPRequest'
   pod 'Firebase/Core'
   pod 'Firebase/Messaging'
+  pod 'AFNetworking', '~> 3.0'
 end

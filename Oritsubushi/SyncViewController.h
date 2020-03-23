@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ASIFormDataRequest.h"
+#import <WebKit/WebKit.h>
+#import "AFNetworking.h"
 
-@interface SyncViewController : UIViewController <UIWebViewDelegate, ASIHTTPRequestDelegate>
+@interface SyncViewController : UIViewController <WKNavigationDelegate>
 
 @property(nonatomic,strong) IBOutlet UIView *headerView;
 @property(nonatomic,strong) IBOutlet UIButton *startButton;
 @property(nonatomic,strong) IBOutlet UIButton *logoutButton;
-@property(nonatomic,strong) IBOutlet UIWebView *webView;
 @property(nonatomic,strong) IBOutlet UIButton *resetButton;
 @property(nonatomic,strong) IBOutlet UIView *confirmView;
 @property(nonatomic,strong) IBOutlet UIButton *ppConfirmButton;

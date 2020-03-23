@@ -15,15 +15,24 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <SystemConfiguration/SystemConfiguration.h>
 
+#if !TARGET_OS_WATCH
+#import <SystemConfiguration/SystemConfiguration.h>
+#endif
 #if TARGET_OS_IOS || TARGET_OS_TV
 #import <UIKit/UIKit.h>
 #elif TARGET_OS_OSX
 #import <AppKit/AppKit.h>
 #endif  // TARGET_OS_IOS || TARGET_OS_TV
 
+#if TARGET_OS_IOS
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#endif
+
 NS_ASSUME_NONNULL_BEGIN
+
+/** The GoogleDataTransport library version. */
+FOUNDATION_EXPORT NSString *const kGDTCORVersion;
 
 /** A notification sent out if the app is backgrounding. */
 FOUNDATION_EXPORT NSString *const kGDTCORApplicationDidEnterBackgroundNotification;
@@ -34,12 +43,50 @@ FOUNDATION_EXPORT NSString *const kGDTCORApplicationWillEnterForegroundNotificat
 /** A notification sent out if the app is terminating. */
 FOUNDATION_EXPORT NSString *const kGDTCORApplicationWillTerminateNotification;
 
+/** The different possible network connection type. */
+typedef NS_ENUM(NSInteger, GDTCORNetworkType) {
+  GDTCORNetworkTypeUNKNOWN = 0,
+  GDTCORNetworkTypeWIFI = 1,
+  GDTCORNetworkTypeMobile = 2,
+};
+
+/** The different possible network connection mobile subtype. */
+typedef NS_ENUM(NSInteger, GDTCORNetworkMobileSubtype) {
+  GDTCORNetworkMobileSubtypeUNKNOWN = 0,
+  GDTCORNetworkMobileSubtypeGPRS = 1,
+  GDTCORNetworkMobileSubtypeEdge = 2,
+  GDTCORNetworkMobileSubtypeWCDMA = 3,
+  GDTCORNetworkMobileSubtypeHSDPA = 4,
+  GDTCORNetworkMobileSubtypeHSUPA = 5,
+  GDTCORNetworkMobileSubtypeCDMA1x = 6,
+  GDTCORNetworkMobileSubtypeCDMAEVDORev0 = 7,
+  GDTCORNetworkMobileSubtypeCDMAEVDORevA = 8,
+  GDTCORNetworkMobileSubtypeCDMAEVDORevB = 9,
+  GDTCORNetworkMobileSubtypeHRPD = 10,
+  GDTCORNetworkMobileSubtypeLTE = 11,
+};
+
+#if !TARGET_OS_WATCH
 /** Compares flags with the WWAN reachability flag, if available, and returns YES if present.
  *
  * @param flags The set of reachability flags.
  * @return YES if the WWAN flag is set, NO otherwise.
  */
 BOOL GDTCORReachabilityFlagsContainWWAN(SCNetworkReachabilityFlags flags);
+#endif
+
+/** Generates an enum message GDTCORNetworkType representing network connection type.
+ *
+ * @return A GDTCORNetworkType representing network connection type.
+ */
+GDTCORNetworkType GDTCORNetworkTypeMessage(void);
+
+/** Generates an enum message GDTCORNetworkMobileSubtype representing network connection mobile
+ * subtype.
+ *
+ * @return A GDTCORNetworkMobileSubtype representing network connection mobile subtype.
+ */
+GDTCORNetworkMobileSubtype GDTCORNetworkMobileSubTypeMessage(void);
 
 /** A typedef identify background identifiers. */
 typedef volatile NSUInteger GDTCORBackgroundIdentifier;
@@ -61,6 +108,9 @@ FOUNDATION_EXPORT const GDTCORBackgroundIdentifier GDTCORBackgroundIdentifierInv
 /** A cross-platform application class. */
 @interface GDTCORApplication : NSObject <GDTCORApplicationDelegate>
 
+/** Flag to determine if the application is running in the background. */
+@property(atomic, readonly) BOOL isRunningInBackground;
+
 /** Creates and/or returns the shared application instance.
  *
  * @return The shared application instance.
@@ -69,12 +119,13 @@ FOUNDATION_EXPORT const GDTCORBackgroundIdentifier GDTCORBackgroundIdentifierInv
 
 /** Creates a background task with the returned identifier if on a suitable platform.
  *
+ * @name name The name of the task, useful for debugging which background tasks are running.
  * @param handler The handler block that is called if the background task expires.
  * @return An identifier for the background task, or GDTCORBackgroundIdentifierInvalid if one
  * couldn't be created.
  */
-- (GDTCORBackgroundIdentifier)beginBackgroundTaskWithExpirationHandler:
-    (void (^__nullable)(void))handler;
+- (GDTCORBackgroundIdentifier)beginBackgroundTaskWithName:(NSString *)name
+                                        expirationHandler:(void (^__nullable)(void))handler;
 
 /** Ends the background task if the identifier is valid.
  *

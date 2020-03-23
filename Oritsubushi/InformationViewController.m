@@ -13,7 +13,7 @@
 
 @interface InformationViewController () 
 
-@property(nonatomic,strong) UIWebView *webView;
+@property(nonatomic,strong) WKWebView *webView;
 @property(nonatomic,strong) LoadingView *loadingView;
 
 - (void)showLoadingError:(NSString *)errorMessage;
@@ -59,10 +59,10 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     CGRect frame = appDelegate.window.frame;
     self.view = [[UIView alloc] initWithFrame:frame];
-    self.webView = [[UIWebView alloc] initWithFrame:frame];
+    self.webView = [[WKWebView alloc] initWithFrame:frame];
     self.webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.webView.delegate = self;
-    self.webView.scalesPageToFit = YES;
+    self.webView.navigationDelegate = self;
+    //self.webView.scalesPageToFit = YES;
     [self.view addSubview:self.webView];
     self.loadingView = [[LoadingView alloc] initWithFrame:frame];
     self.loadingView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -84,17 +84,17 @@
     [self.navigationController setToolbarHidden:YES animated:animated];
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView
+- (void)webViewDidStartLoad:(WKWebView *)webView
 {
     self.loadingView.hidden = NO;
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView_
+- (void)webViewDidFinishLoad:(WKWebView *)webView_
 {
     self.loadingView.hidden = YES;
 }
 
-- (void)webView:(UIWebView*)webView didFailLoadWithError:(NSError *)error
+- (void)webView:(WKWebView*)webView didFailLoadWithError:(NSError *)error
 {
     self.loadingView.hidden = YES;
     [self showLoadingError:[error localizedDescription]];
@@ -111,17 +111,18 @@
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:INFORMATION_URL]]];    
 }
 
-- (BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
-    NSString *URLString = [[request URL] absoluteString];
+    NSURL* URL = navigationAction.request.URL;
+    NSString *URLString = [URL absoluteString];
     if([URLString isEqualToString:INFORMATION_URL] || [URLString isEqualToString:@"about:blank"]
        || [URLString rangeOfString:@"/twitter.com/i/jot"].location != NSNotFound
        || [URLString rangeOfString:@"/platform.twitter.com/widgets/"].location != NSNotFound
         || [URLString rangeOfString:@"/platform.twitter.com/jot.html"].location != NSNotFound) {
-        return YES;
+        decisionHandler(WKNavigationActionPolicyAllow);
     } else {
-        [[UIApplication sharedApplication] openURL:[request URL]];
-        return NO;
+        decisionHandler(WKNavigationActionPolicyCancel);
+        [[UIApplication sharedApplication] openURL:URL];
     }
 }
 

@@ -70,6 +70,7 @@
 		06661F2217E93E8B00861C52 /* SyncViewController7.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06661F2117E93E8B00861C52 /* SyncViewController7.xib */; };
 		067241691485BA0100B49CCC /* statusicon_comp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 067241671485BA0100B49CCC /* statusicon_comp@2x.png */; };
 		0672416A1485BA0100B49CCC /* statusicon_incomp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 067241681485BA0100B49CCC /* statusicon_incomp@2x.png */; };
+		0674126F24206285002CBFBE /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0674126E24206285002CBFBE /* WebKit.framework */; };
 		0677CAF617E97B7D00994164 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0677CAF417E97B7D00994164 /* Icon@2x.png */; };
 		0697326A148D25D10042F3D5 /* SyncViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 06973268148D25D10042F3D5 /* SyncViewController.m */; };
 		06A5649A1482FCEC001A041D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 06A564981482FCEC001A041D /* Default.png */; };
@@ -204,6 +205,7 @@
 		06661F2117E93E8B00861C52 /* SyncViewController7.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SyncViewController7.xib; path = Oritsubushi/SyncViewController7.xib; sourceTree = "<group>"; };
 		067241671485BA0100B49CCC /* statusicon_comp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusicon_comp@2x.png"; path = "Oritsubushi/assets/statusicon_comp@2x.png"; sourceTree = "<group>"; };
 		067241681485BA0100B49CCC /* statusicon_incomp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "statusicon_incomp@2x.png"; path = "Oritsubushi/assets/statusicon_incomp@2x.png"; sourceTree = "<group>"; };
+		0674126E24206285002CBFBE /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		0677CAF417E97B7D00994164 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Oritsubushi/icon/Icon@2x.png"; sourceTree = "<group>"; };
 		0685479B1E02DCB900C70A6E /* Oritsubushi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Oritsubushi.entitlements; sourceTree = "<group>"; };
 		06973267148D25D10042F3D5 /* SyncViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncViewController.h; path = Oritsubushi/SyncViewController.h; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0674126F24206285002CBFBE /* WebKit.framework in Frameworks */,
 				06F5A0E217E2D02F00AD7AA5 /* Accelerate.framework in Frameworks */,
 				06F5A0E017E2D00900AD7AA5 /* QuartzCore.framework in Frameworks */,
 				06272933148EF9C400BB3B58 /* MobileCoreServices.framework in Frameworks */,
@@ -430,6 +433,7 @@
 		06B4BDF8145F639E00F57858 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0674126E24206285002CBFBE /* WebKit.framework */,
 				06F5A0E117E2D02F00AD7AA5 /* Accelerate.framework */,
 				06F5A0DF17E2D00800AD7AA5 /* QuartzCore.framework */,
 				0627292E148EF5B800BB3B58 /* CFNetwork.framework */,

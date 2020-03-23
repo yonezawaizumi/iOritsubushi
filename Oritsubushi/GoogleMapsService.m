@@ -13,7 +13,7 @@
 
 @interface GoogleMapsService ()
 
-@property(nonatomic,strong) ASIHTTPRequest *request;
+@property(nonatomic,strong) AFHTTPSessionManager *request;
 
 @end
 
@@ -44,7 +44,7 @@
 {
     self.locations = nil;
     self.errorMessage = nil;
-    [self.request cancel];
+    [self.request.session invalidateAndCancel];
     self.request = nil;
 }
 
@@ -54,12 +54,13 @@
     
     self.locations = nil;
     self.errorMessage = nil;
-    self.request = nil;
-    
-    self.request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:URLString]];
-    self.request.delegate = self;
-    [self.request startAsynchronous];
-    
+    self.request = [AFHTTPSessionManager manager];
+    self.request.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [self.request GET:URLString parameters:nil success:^(NSURLSessionDataTask* task, id responseObject) {
+        [self parseData:responseObject];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [self delegateResult:[error localizedDescription]];
+    }];
 }
 
 - (void)geocodeInJapanWithAddress:(NSString *)address
@@ -96,24 +97,7 @@
 
 - (void)delegateResult:(NSString *)errorMessage
 {
-    dispatch_async(
-                   dispatch_get_main_queue(),
-                   ^{
-                       self.errorMessage = errorMessage;
-                       [self.delegate GoogleMapsServiceDidFinish:self];
-                   }
-                   );
-}
-
-- (void)requestFinished:(ASIHTTPRequest *)request
-{
-    [self parseData:request.responseData];
-}
-
-- (void)requestFailed:(ASIHTTPRequest *)request
-{
-    self.errorMessage = [[request error] localizedDescription];
+    self.errorMessage = errorMessage;
     [self.delegate GoogleMapsServiceDidFinish:self];
 }
-
 @end

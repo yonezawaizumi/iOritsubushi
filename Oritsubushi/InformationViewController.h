@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
-@interface InformationViewController : UIViewController <UIWebViewDelegate>
+@interface InformationViewController : UIViewController <WKNavigationDelegate>
 
 - (void)load;
 

@@ -66,10 +66,10 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     NSInteger newUpdateDate;
 }
 
+@property(nonatomic,strong) WKWebView *webView;
+
 @property(nonatomic,strong) NSString *userName;
-@property(nonatomic,strong) NSString *userName_;
-@property(nonatomic,strong) ASIHTTPRequest *request;
-@property(nonatomic,strong) ASIHTTPRequest *request_;
+@property(nonatomic,strong) AFHTTPSessionManager *request;
 
 - (void)setLabelString:(NSString *)string tag:(HeaderViewTag)tag;
 - (void)startStopIndicator:(BOOL)start;
@@ -90,8 +90,8 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
 @synthesize startButton;
 @synthesize logoutButton;
 @synthesize resetButton;
-@synthesize userName_;
-@synthesize request_;
+@synthesize userName = _userName;
+@synthesize request;
 
 - (id)init
 {
@@ -130,6 +130,19 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
 }
 
 #pragma mark - View lifecycle
+
+- (void)loadView
+{
+    [super loadView];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    CGRect frame = appDelegate.window.frame;
+    self.webView = [[WKWebView alloc] initWithFrame:frame];
+    self.webView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.webView.hidden = NO;
+    self.webView.navigationDelegate = self;
+    //self.webView.scalesPageToFit = YES;
+    [self.view addSubview:self.webView];
+}
 
 - (void)viewDidLoad
 {
@@ -175,7 +188,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
         {
             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             [appDelegate showAlertViewWithTitle:nil message:NSLocalizedString(@"同期は中断されました", nil) buttonTitle:nil viewController:self];
-            [self.request cancel];
+            [self.request.session invalidateAndCancel];
             break;
         }
     }
@@ -223,7 +236,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
 - (void)cancel
 {
     state = SyncStateCancel;
-    [self.request cancel];
+    [self.request.session invalidateAndCancel];
     [self setReady];
 }
 
@@ -259,18 +272,28 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     if(errorMessage) {
         [URLString appendFormat:@"?msg=%@", [Misc URLEncode:errorMessage]];
     }
-    self.request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:URLString]];
-    [self.request startAsynchronous];
+    self.request = [AFHTTPSessionManager manager];
+    self.request.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [self.request GET:URLString parameters:nil success:^(NSURLSessionDataTask* task, id responseObject) {
+        [self requestFinished:responseObject task:task];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [self requestFailed:error];
+    }];
 }
 
 - (void)logout
 {
-    [self.request cancel];
+    [self.request.session invalidateAndCancel];
     [self setLabelString:NSLocalizedString(@"サーバー接続中", nil) tag:HeaderViewTagTitle];
     state = SyncStateLogout;
     [self startStopIndicator:YES];
-    self.request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:LogoutURL]];
-    [self.request startAsynchronous];
+    self.request = [AFHTTPSessionManager manager];
+    self.request.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [self.request GET:LogoutURL parameters:nil success:^(NSURLSessionDataTask* task, id responseObject) {
+        [self requestFinished:responseObject task:task];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [self requestFailed:error];
+    }];
 }
 
 - (void)writeUploadFile
@@ -302,19 +325,34 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     NSInteger version = [database userVersion];
     state = SyncStateUploadFile;
     [self setLabelString:NSLocalizedString(@"データアップロード中", nil) tag:HeaderViewTagTitle];
-    ASIFormDataRequest *request =[ASIFormDataRequest requestWithURL:[NSURL URLWithString:SyncURL]];
-    [request setPostValue:[NSString stringWithFormat:@"%d", (int)recentUpdateDate] forKey:@"d"];
-    [request setPostValue:[NSString stringWithFormat:@"%d", (int)version] forKey:@"v"];
+    self.request = [AFHTTPSessionManager manager];
+    NSDictionary *params = @{
+        @"d": [NSNumber numberWithInt:(int)recentUpdateDate],
+        @"v": [NSNumber numberWithInt:(int)version]
+    };
     NSString *tempDir = NSTemporaryDirectory();
-    [request setFile:[tempDir stringByAppendingPathComponent:UploadFileName] forKey:@"f"];
     NSString *downloadFilePath = [tempDir stringByAppendingPathComponent:DownloadFileName];
     NSFileManager* fileManager = [NSFileManager defaultManager];
     if([fileManager fileExistsAtPath:downloadFilePath]) {
         [fileManager removeItemAtPath:downloadFilePath error:NULL];
     }
-    [request setDownloadDestinationPath:downloadFilePath];
-    self.request = request;
-    [self.request startAsynchronous];
+    NSOutputStream *output = [NSOutputStream outputStreamToFileAtPath:downloadFilePath append:NO];
+    [output open];
+    self.request.responseSerializer = [[AFHTTPResponseSerializer alloc] init];
+    self.request.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/plain"];
+    [self.request setDataTaskDidReceiveDataBlock:^(NSURLSession *session, NSURLSessionDataTask *dataTask, NSData * data) {
+        [output write:[data bytes] maxLength:data.length];
+    }];
+    [self.request POST:SyncURL parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:UploadFileName];
+        [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"f" error:nil];
+    } success:^(NSURLSessionTask *task, id responseObject) {
+        [output close];
+        [self requestFinished:responseObject task:task];
+    } failure:^(NSURLSessionTask *task, NSError *error) {
+        [output close];
+        [self requestFailed:error];
+    }];
 }
 
 - (void)updateDatabase
@@ -350,7 +388,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     return NO;
 }
 
-- (void)requestFinished:(ASIHTTPRequest *)request
+- (void)requestFinished:(id)responseObject task:(NSURLSessionDataTask *)task
 {
     //NSLog(@"response %@", request.url);
     //NSLog(@"%@", [request responseString]);
@@ -360,7 +398,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
         [self showHideWebView:NO];
         switch(state) {
             case SyncStateBeginAuth:
-                self.userName = request.responseString;
+                self.userName = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
                 [self writeUploadFile];
                 break;
             case SyncStateAuth:
@@ -371,9 +409,12 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
                 [self uploadFile];
                 break;
             case SyncStateUploadFile:
-                newUpdateDate = [[[request responseHeaders] objectForKey:UpdateDateHeader] intValue];
+            {
+                NSDictionary *headers = ((NSHTTPURLResponse *)task.response).allHeaderFields;
+                newUpdateDate = [[headers objectForKey:UpdateDateHeader] intValue];
                 [self updateDatabase];
                 break;
+            }
             default:
                 ;
         }
@@ -390,21 +431,24 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
                 [self performSelector:@selector(authWithErrorMessage:) withObject:NSLocalizedString(@"ログインに失敗しました。", nil) afterDelay:0];
                 break;
             default:
+            {
                 //ログイン画面か、またはリダイレクトでtwitter.comのアプリ認証画面
-                [self.webView loadHTMLString:request.responseString baseURL:request.url];
+                NSString *HTMLString = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+                [self.webView loadHTMLString:HTMLString baseURL:self.request.baseURL];
                 break;
+            }
         }
     }
 }
 
-- (void)requestFailed:(ASIHTTPRequest *)request
+- (void)requestFailed:(NSError *)error
 {
     state = SyncStateFail;
-    [self.request cancel];
+    [self.request.session invalidateAndCancel];
     [self setReady];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)webViewDidFinishLoad:(WKWebView *)webView  didFinishNavigation:(WKNavigation *)navigation
 {
     if([self testAuthed]) {
         switch(state) {
@@ -424,64 +468,79 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
 
 - (void)postRequestWithNSURLRequest:(NSURLRequest *)request
 {
-    self.request = [[ASIHTTPRequest alloc] initWithURL:request.URL];
-    self.request.requestMethod = @"POST";
-    [self.request appendPostData:request.HTTPBody];
-    [self.request addRequestHeader:@"Content-Type" value:@"application/x-www-form-urlencoded"];
-    [self.request startAsynchronous];
+    self.request = [AFHTTPSessionManager manager];
+    [self.request.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [self.request.requestSerializer setQueryStringSerializationWithBlock:^NSString *(NSURLRequest *request_, id parameters, NSError * __autoreleasing * error) {
+        return [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
+    }];
+    [self.request POST:request.URL.absoluteString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        [self requestFinished:responseObject task:task];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        [self requestFailed:error];
+    }];
 }
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
 {
     switch(state) {
         case SyncStateBeginAuth:
-            switch(navigationType) {
+            switch(navigationAction.navigationType) {
                 //パスワード認証もTwitter認証もここで呼ばれる
-                case UIWebViewNavigationTypeFormSubmitted:
+                case WKNavigationTypeFormSubmitted:
                 {
                     [self showHideWebView:NO];
                     [self startStopIndicator:YES];
-                    NSRange range = [request.URL.relativeString rangeOfString:@"twitter" options:NSCaseInsensitiveSearch];
+                    NSRange range = [navigationAction.request.URL.relativeString rangeOfString:@"twitter" options:NSCaseInsensitiveSearch];
                     //NSLog(@"request: %d / %@", range.length, request.URL.relativeString);
                     state = range.length ? SyncStateAuthTwitter : SyncStateAuth;
-                    [self postRequestWithNSURLRequest:request];
-                    return NO;
-                    //return YES;
-                case UIWebViewNavigationTypeLinkClicked:
-                    [[UIApplication sharedApplication] openURL:request.URL];
-                    return NO;
+                    [self postRequestWithNSURLRequest:navigationAction.request];
+                    decisionHandler(WKNavigationActionPolicyCancel);
+                    break;
+                case WKNavigationTypeLinkActivated:
+                    decisionHandler(WKNavigationActionPolicyCancel);
+                    [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
+                    break;
                 //文字列からのロードはここを通る
-                case UIWebViewNavigationTypeOther:
-                    return YES;
+                case WKNavigationTypeOther:
+                    decisionHandler(WKNavigationActionPolicyAllow);
+                    break;
                 default:
-                    return NO;                    
+                    decisionHandler(WKNavigationActionPolicyCancel);
+                    break;
                 }
             }
+            break;
         case SyncStateAuthTwitter:
         {
-            NSRange range = [request.URL.absoluteString rangeOfString:@"oritsubushi.net" options:NSCaseInsensitiveSearch];
+            NSRange range = [navigationAction.request.URL.absoluteString rangeOfString:@"oritsubushi.net" options:NSCaseInsensitiveSearch];
             //NSLog(@"request: %d / %@", range.length, request.URL.relativeString);
-            switch(navigationType) {
-                case UIWebViewNavigationTypeFormSubmitted:
+            switch(navigationAction.navigationType) {
+                case WKNavigationTypeFormSubmitted:
                     [self showHideWebView:NO];
                     [self startStopIndicator:YES];
-                    [self postRequestWithNSURLRequest:request];
-                    return NO;
-                case UIWebViewNavigationTypeLinkClicked:
+                    [self postRequestWithNSURLRequest:navigationAction.request];
+                    decisionHandler(WKNavigationActionPolicyCancel);
+                    break;
+                case WKNavigationTypeLinkActivated:
+                    decisionHandler(WKNavigationActionPolicyCancel);
                     if(range.length) {
                         [self performSelector:@selector(authWithErrorMessage:) withObject:NSLocalizedString(@"Twitterログインがキャンセルされました", nil) afterDelay:0];
                     } else {
-                        [[UIApplication sharedApplication] openURL:request.URL];                        
+                        [[UIApplication sharedApplication] openURL:navigationAction.request.URL];
                     }
-                    return NO;
-                case UIWebViewNavigationTypeOther:
-                    return YES;
+                    break;
+                case WKNavigationTypeOther:
+                    decisionHandler(WKNavigationActionPolicyAllow);
+                    break;
                 default:
-                    return NO;
+                    decisionHandler(WKNavigationActionPolicyCancel);
+                    break;
             }
+            break;
         }
         default:
-            return NO;
+            decisionHandler(WKNavigationActionPolicyCancel);
+            break;
     }
 }
 
@@ -541,26 +600,9 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     state = SyncStateReady;
 }
 
-- (ASIHTTPRequest *)request
-{
-    return self.request_;
-}
-
-- (void)setRequest:(ASIHTTPRequest *)request
-{
-    [self.request_ clearDelegatesAndCancel];
-    self.request_ = request;
-    self.request_.delegate = self;
-}
-
-- (NSString *)userName
-{
-    return self.userName_;
-}
-
 - (void)setUserName:(NSString *)userName
 {
-    self.userName_ = userName;
+    _userName = userName;
     [[NSUserDefaults standardUserDefaults] setValue:userName forKey:SETTINGS_KEY_SERVER_USER_NAME];
     [self setLabelString:userName tag:HeaderViewTagUserName];
 }

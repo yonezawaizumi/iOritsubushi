@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-#import "ASIHTTPRequest.h"
+#import "AFNetworking.h"
 
 @class GoogleMapsService;
 
@@ -18,7 +18,7 @@
 
 @end
 
-@interface GoogleMapsService : NSObject <ASIHTTPRequestDelegate>
+@interface GoogleMapsService : NSObject
 
 @property(nonatomic,assign) CGFloat timeoutSecond;
 @property(nonatomic,strong) NSArray *locations;
