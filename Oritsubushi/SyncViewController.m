@@ -70,6 +70,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
 
 @property(nonatomic,strong) NSString *userName;
 @property(nonatomic,strong) AFHTTPSessionManager *request;
+@property(nonatomic,assign) NSInteger geeklogID;
 
 - (void)setLabelString:(NSString *)string tag:(HeaderViewTag)tag;
 - (void)startStopIndicator:(BOOL)start;
@@ -92,6 +93,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
 @synthesize resetButton;
 @synthesize userName = _userName;
 @synthesize request;
+@synthesize geeklogID;
 
 - (id)init
 {
@@ -142,6 +144,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     self.webView.navigationDelegate = self;
     //self.webView.scalesPageToFit = YES;
     [self.view addSubview:self.webView];
+    //[self.view bringSubviewToFront:self.webView];
 }
 
 - (void)viewDidLoad
@@ -348,7 +351,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
         [formData appendPartWithFileURL:[NSURL fileURLWithPath:filePath] name:@"f" error:nil];
     } success:^(NSURLSessionTask *task, id responseObject) {
         [output close];
-        [self requestFinished:responseObject task:task];
+        [self requestFinished:responseObject task:(NSURLSessionDataTask *)task];
     } failure:^(NSURLSessionTask *task, NSError *error) {
         [output close];
         [self requestFailed:error];
@@ -378,10 +381,26 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     [self setReady];
 }
 
-- (BOOL)testAuthed
+- (BOOL)testAuthed:(NSDictionary *)headers
 {
-    for(NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:OritsubushiSiteURL]]) {
+    if (self.geeklogID > 1) {
+        return YES;
+    };
+    NSURL *URL = [NSURL URLWithString:OritsubushiSiteURL];
+    if (headers != nil) {
+        NSLog(@"%@", headers);
+        for (NSHTTPCookie *cookie in [NSHTTPCookie cookiesWithResponseHeaderFields:headers forURL:URL]) {
+            NSLog(@"#cookie %@ / %@", cookie.name, cookie.value);
+            if([cookie.name isEqualToString:@"geeklog"] && [cookie.value integerValue] > 1) {
+                self.geeklogID = [cookie.value integerValue];
+                return YES;
+            }
+        }
+    }
+    for(NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:URL]) {
+        NSLog(@"cookie %@ / %@", cookie.name, cookie.value);
         if([cookie.name isEqualToString:@"geeklog"] && [cookie.value integerValue] > 1) {
+            self.geeklogID = [cookie.value integerValue];
             return YES;
         }
     }
@@ -392,7 +411,8 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
 {
     //NSLog(@"response %@", request.url);
     //NSLog(@"%@", [request responseString]);
-    BOOL login = [self testAuthed];
+    NSDictionary *headers = ((NSHTTPURLResponse *)task.response).allHeaderFields;
+    BOOL login = [self testAuthed:headers];
     if(login) {
         [self startStopIndicator:NO];
         [self showHideWebView:NO];
@@ -409,12 +429,9 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
                 [self uploadFile];
                 break;
             case SyncStateUploadFile:
-            {
-                NSDictionary *headers = ((NSHTTPURLResponse *)task.response).allHeaderFields;
                 newUpdateDate = [[headers objectForKey:UpdateDateHeader] intValue];
                 [self updateDatabase];
                 break;
-            }
             default:
                 ;
         }
@@ -424,6 +441,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
                 //ログアウト成功
                 state = SyncStateLogoutDone;
                 self.userName = nil;
+                self.geeklogID = 0;
                 [self setReady];
                 break;
             case SyncStateAuth:
@@ -434,7 +452,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
             {
                 //ログイン画面か、またはリダイレクトでtwitter.comのアプリ認証画面
                 NSString *HTMLString = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-                [self.webView loadHTMLString:HTMLString baseURL:self.request.baseURL];
+                [self.webView loadHTMLString:HTMLString baseURL:((NSHTTPURLResponse *)task.response).URL];
                 break;
             }
         }
@@ -448,9 +466,9 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     [self setReady];
 }
 
-- (void)webViewDidFinishLoad:(WKWebView *)webView  didFinishNavigation:(WKNavigation *)navigation
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
-    if([self testAuthed]) {
+    if([self testAuthed:nil]) {
         switch(state) {
             case SyncStateAuth:
             case SyncStateAuthTwitter:
@@ -468,12 +486,34 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
 
 - (void)postRequestWithNSURLRequest:(NSURLRequest *)request
 {
+    NSData *body;
+    NSLog(@"%@", request);
+    if (request.HTTPBodyStream) {
+        NSInputStream *stream = request.HTTPBodyStream;
+        uint8_t byteBuffer[4096];
+        [stream open];
+        NSMutableData *data = [[NSMutableData alloc] init];
+        while (stream.hasBytesAvailable) {
+            NSInteger len = [stream read:byteBuffer maxLength:sizeof(byteBuffer)];
+            if (len > 0) {
+                [data appendData:[NSData dataWithBytes:byteBuffer length:len]];
+            }
+        }
+        [stream close];
+    } else {
+        body = request.HTTPBody;
+    }
     self.request = [AFHTTPSessionManager manager];
     [self.request.requestSerializer setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    NSLog(@"%@", body);
     [self.request.requestSerializer setQueryStringSerializationWithBlock:^NSString *(NSURLRequest *request_, id parameters, NSError * __autoreleasing * error) {
-        return [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding];
+        NSString *body = [[NSString alloc] initWithData:parameters encoding:NSUTF8StringEncoding];
+        NSLog(@"%@", body);
+        return body;
     }];
-    [self.request POST:request.URL.absoluteString parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+    self.request.responseSerializer = [AFHTTPResponseSerializer serializer];
+    [self.request POST:request.URL.absoluteString parameters:body success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSLog(@"%@", [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding]);
         [self requestFinished:responseObject task:task];
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [self requestFailed:error];
@@ -542,6 +582,13 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
             decisionHandler(WKNavigationActionPolicyCancel);
             break;
     }
+}
+
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler
+{
+    NSDictionary *headers = ((NSHTTPURLResponse *)navigationResponse.response).allHeaderFields;
+    [self testAuthed:headers];
+    decisionHandler(WKNavigationResponsePolicyAllow);
 }
 
 - (NSString *)dateString
