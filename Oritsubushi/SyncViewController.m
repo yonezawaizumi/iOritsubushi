@@ -257,7 +257,11 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
         self.startButton.hidden = YES;
         self.logoutButton.hidden = YES;
         self.resetButton.hidden = YES;
-        [self logout];
+        if ([self.userName length]) {
+            [self logout];
+        } else {
+            [self login];
+        }
     } else if(sender == self.resetButton) {
         newUpdateDate = recentUpdateDate = 0;
         [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithInt:0] forKey:SETTINGS_KEY_RECENT_UPDATED_DATE];
@@ -282,6 +286,11 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         [self requestFailed:error];
     }];
+}
+
+- (void)login
+{
+    
 }
 
 - (void)logout
@@ -642,7 +651,7 @@ static NSString *ppUrl = @"https://oritsubushi.net/staticpages/index.php/pp";
     [self setLabelString:[NSString stringWithFormat:dateFormat, [self dateString]] tag:HeaderViewTagStatus];
     [self.startButton setTitle:first ? NSLocalizedString(@"同期を開始する", nil) : NSLocalizedString(@"改めて同期を開始する", nil) forState:UIControlStateNormal];
     self.startButton.hidden = NO;
-    self.logoutButton.hidden = ![self.userName length];
+    [self.logoutButton setTitle:[self.userName length] ? NSLocalizedString(@"ログアウトする", nil) : NSLocalizedString(@"ログインする", nil) forState:UIControlStateNormal];
     [self startStopIndicator:NO];
     state = SyncStateReady;
 }
